@@ -63,6 +63,17 @@ export default {
         },
         terracotta: {
           500: '#B5472F', // Sale/Alert Muted Terracotta
+        },
+        dark: {
+          900: '#070A11',
+          800: '#0B0F17',
+          700: '#0F172A',
+          600: '#1E293B',
+          500: '#334155',
+          400: '#475569',
+          300: '#64748B',
+          200: '#94A3B8',
+          100: '#CBD5E1',
         }
       },
       fontFamily: {

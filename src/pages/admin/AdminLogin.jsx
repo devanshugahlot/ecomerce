@@ -5,7 +5,7 @@ import { SEO } from '../../components/common/SEO';
 import { useAuth } from '../../context/AuthContext';
 
 export const AdminLogin = () => {
-  const [email, setEmail] = useState('admin@vyro.men');
+  const [email, setEmail] = useState('admin@hypril.com');
   const [password, setPassword] = useState('Admin@123');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -22,15 +22,15 @@ export const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-dark-700 flex items-center justify-center p-4">
-      <SEO title="Admin Staff Portal Login" />
+    <div className="min-h-screen bg-dark-900 flex items-center justify-center p-4">
+      <SEO title="Hypril Admin Portal Login" />
 
-      <div className="bg-dark-500 border border-dark-400 rounded-3xl p-8 max-w-md w-full space-y-6 shadow-premium">
+      <div className="bg-dark-800 border border-dark-600 rounded-3xl p-8 max-w-md w-full space-y-6 shadow-2xl">
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 mx-auto flex items-center justify-center font-bold">
-            <ShieldCheck className="w-6 h-6" />
+          <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 mx-auto flex items-center justify-center font-bold">
+            <ShieldCheck className="w-7 h-7" />
           </div>
-          <h1 className="text-2xl font-extrabold text-white">VYRO Admin Portal</h1>
+          <h1 className="text-2xl font-extrabold text-white">Hypril™ Admin Portal</h1>
           <p className="text-xs text-slate-400">Sign in with administrator credentials.</p>
         </div>
 
@@ -44,7 +44,7 @@ export const AdminLogin = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-dark-600 border border-dark-400 rounded-xl pl-10 pr-4 py-3 text-xs text-white"
+                className="w-full bg-dark-700 border border-dark-600 rounded-xl pl-10 pr-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
               />
             </div>
           </div>
@@ -58,23 +58,25 @@ export const AdminLogin = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-dark-600 border border-dark-400 rounded-xl pl-10 pr-4 py-3 text-xs text-white"
+                className="w-full bg-dark-700 border border-dark-600 rounded-xl pl-10 pr-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
               />
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="btn-primary bg-amber-500 hover:bg-amber-600 text-dark-900 w-full py-3 text-xs font-bold">
+          <button type="submit" disabled={loading} className="btn-primary bg-amber-500 hover:bg-amber-600 text-dark-900 w-full py-3.5 text-xs font-extrabold shadow-glow-amber">
             <span>Login as Administrator</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
 
-        <div className="p-3 rounded-xl bg-dark-600/60 border border-dark-400/60 text-[11px] text-slate-400 space-y-1">
-          <p className="font-semibold text-amber-400">Demo Credentials Loaded:</p>
-          <p>Email: <strong className="text-white">admin@vyro.men</strong></p>
+        <div className="p-3.5 rounded-xl bg-dark-700/80 border border-dark-600 text-[11px] text-slate-300 space-y-1">
+          <p className="font-semibold text-amber-400">Demo Admin Credentials:</p>
+          <p>Email: <strong className="text-white">admin@hypril.com</strong></p>
           <p>Password: <strong className="text-white">Admin@123</strong></p>
         </div>
       </div>
     </div>
   );
 };
+
+export default AdminLogin;

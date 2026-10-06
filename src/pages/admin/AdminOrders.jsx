@@ -1,84 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { ShoppingBag, Search, Edit2, Truck, CheckCircle, Package, RefreshCw } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShoppingBag, Search, Truck, CheckCircle, Package, X, Sparkles } from 'lucide-react';
 import { SEO } from '../../components/common/SEO';
 import { formatCurrency } from '../../utils/currency';
 import { useToast } from '../../context/ToastContext';
-import api from '../../services/api';
+import { useProducts } from '../../context/ProductContext';
 
 export const AdminOrders = () => {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { orders, updateOrderStatus } = useProducts();
   const [query, setQuery] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [newStatus, setNewStatus] = useState('');
   const [trackingNo, setTrackingNo] = useState('');
   const { addToast } = useToast();
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const fetchOrders = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get('/orders');
-      if (res.data && Array.isArray(res.data)) {
-        setOrders(res.data);
-      }
-    } catch (err) {
-      console.log('Error fetching orders from API');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleUpdateStatus = async (e) => {
+  const handleUpdateStatus = (e) => {
     e.preventDefault();
     if (!selectedOrder) return;
     const orderId = selectedOrder._id || selectedOrder.id;
 
-    try {
-      await api.put(`/orders/${orderId}/status`, {
-        status: newStatus,
-        trackingNumber: trackingNo,
-      });
-
-      setOrders(
-        orders.map((o) =>
-          (o._id || o.id) === orderId
-            ? { ...o, status: newStatus || o.status, trackingNumber: trackingNo || o.trackingNumber }
-            : o
-        )
-      );
-      addToast(`Order ${selectedOrder.orderNumber || orderId} status updated to ${newStatus}!`, 'success');
-      setSelectedOrder(null);
-    } catch (err) {
-      addToast('Failed to update order status', 'error');
-    }
+    updateOrderStatus(orderId, newStatus);
+    addToast(`Order ${selectedOrder.orderNumber || orderId} status updated to '${newStatus}'!`, 'success');
+    setSelectedOrder(null);
   };
 
   const filtered = orders.filter(
     (o) =>
       (o.orderNumber || o._id || '').toLowerCase().includes(query.toLowerCase()) ||
-      (o.shippingAddress?.fullName || o.customer || '').toLowerCase().includes(query.toLowerCase())
+      (o.customer?.name || o.shippingAddress?.fullName || '').toLowerCase().includes(query.toLowerCase())
   );
 
   return (
-    <div className="space-y-6">
-      <SEO title="Order Fulfillment Management" />
+    <div className="space-y-6 bg-dark-900 min-h-screen p-2 sm:p-6 text-slate-100">
+      <SEO title="Admin — Hypril Order Fulfillment" />
 
-      <div className="flex justify-between items-center">
+      <div className="bg-dark-800 p-6 rounded-3xl border border-dark-600 shadow-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <ShoppingBag className="w-6 h-6 text-brand-400" />
-            Order Management ({orders.length})
+          <h1 className="text-2xl font-extrabold text-white flex items-center gap-2.5">
+            <ShoppingBag className="w-7 h-7 text-amber-400" />
+            Customer Orders Management ({orders.length})
           </h1>
-          <p className="text-xs text-slate-400">Live order fulfillment connected to real customer checkouts.</p>
+          <p className="text-xs text-slate-400 mt-1">
+            Real-time customer orders and express fulfillment status.
+          </p>
         </div>
-        <button onClick={fetchOrders} className="btn-secondary text-xs px-3 py-2">
-          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-          <span>Refresh Orders</span>
-        </button>
       </div>
 
       <div className="max-w-md relative">
@@ -88,58 +52,65 @@ export const AdminOrders = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search by Order ID or Customer Name..."
-          className="w-full bg-dark-500 border border-dark-400 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500"
+          className="w-full bg-dark-800 border border-dark-600 rounded-2xl pl-10 pr-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
         />
       </div>
 
-      <div className="bg-dark-500 rounded-3xl border border-dark-400 overflow-hidden shadow-premium">
+      <div className="bg-dark-800 rounded-3xl border border-dark-600 overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-dark-600 text-slate-400 font-semibold border-b border-dark-400 uppercase tracking-wider text-[10px]">
+            <thead className="bg-dark-700 text-amber-400 font-extrabold border-b border-dark-600 uppercase tracking-wider text-[10px]">
               <tr>
                 <th className="p-4">Order ID</th>
                 <th className="p-4">Customer</th>
+                <th className="p-4">Items</th>
                 <th className="p-4">Total Amount</th>
-                <th className="p-4">Payment Method</th>
+                <th className="p-4">Payment</th>
                 <th className="p-4">Fulfillment Status</th>
-                <th className="p-4">Tracking No.</th>
-                <th className="p-4 text-right">Action</th>
+                <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-dark-400/60">
+            <tbody className="divide-y divide-dark-600/70">
               {filtered.map((ord) => {
                 const ordId = ord._id || ord.id;
-                const customerName = ord.shippingAddress?.fullName || ord.customer || 'Customer';
-                const phone = ord.shippingAddress?.phone || ord.phone || '';
+                const customerName = ord.customer?.name || ord.shippingAddress?.fullName || 'Customer';
+                const phone = ord.customer?.phone || ord.shippingAddress?.phone || '';
+                const itemsCount = ord.orderItems ? ord.orderItems.length : 1;
                 return (
-                  <tr key={ordId} className="hover:bg-dark-600/50">
-                    <td className="p-4 font-bold text-white">{ord.orderNumber || ordId}</td>
+                  <tr key={ordId} className="hover:bg-dark-700/50 transition-colors">
+                    <td className="p-4 font-black text-white">{ord.orderNumber || ordId}</td>
                     <td className="p-4">
-                      <span className="font-semibold text-white block">{customerName}</span>
+                      <span className="font-extrabold text-white block">{customerName}</span>
                       <span className="text-[10px] text-slate-400">{phone}</span>
                     </td>
-                    <td className="p-4 font-bold text-brand-400">{formatCurrency(ord.totalPrice || ord.total)}</td>
-                    <td className="p-4">{ord.paymentMethod}</td>
+                    <td className="p-4 text-slate-300 font-medium">
+                      {ord.orderItems && ord.orderItems[0] ? (
+                        <span>{ord.orderItems[0].name} {itemsCount > 1 ? `(+${itemsCount - 1} more)` : ''}</span>
+                      ) : (
+                        <span>Hypril™ Package ({itemsCount})</span>
+                      )}
+                    </td>
+                    <td className="p-4 font-black text-amber-400 text-sm">{formatCurrency(ord.totalPrice || ord.total || 799)}</td>
+                    <td className="p-4 font-semibold text-slate-300">{ord.paymentMethod || 'COD'}</td>
                     <td className="p-4">
-                      <span className={`px-2.5 py-1 rounded-full font-bold text-[10px] ${
+                      <span className={`px-3 py-1 rounded-full font-extrabold text-[10px] uppercase border ${
                         ord.status === 'Shipped'
-                          ? 'bg-brand-500/20 text-brand-400'
+                          ? 'bg-blue-500/10 text-blue-400 border-blue-500/30'
                           : ord.status === 'Delivered'
-                          ? 'bg-emerald-500/20 text-emerald-400'
-                          : 'bg-amber-500/20 text-amber-400'
+                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                          : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
                       }`}>
                         {ord.status || 'Confirmed'}
                       </span>
                     </td>
-                    <td className="p-4 text-slate-400 font-mono text-[11px]">{ord.trackingNumber || 'Pending'}</td>
                     <td className="p-4 text-right">
                       <button
                         onClick={() => {
                           setSelectedOrder(ord);
                           setNewStatus(ord.status || 'Confirmed');
-                          setTrackingNo(ord.trackingNumber || 'Pending');
+                          setTrackingNo(ord.trackingNumber || 'EXP-904128IN');
                         }}
-                        className="btn-secondary text-[11px] px-3 py-1.5"
+                        className="btn-primary bg-amber-500 hover:bg-amber-600 text-dark-900 text-[11px] py-1.5 px-3.5 font-extrabold shadow-glow-amber"
                       >
                         Update Status
                       </button>
@@ -147,6 +118,13 @@ export const AdminOrders = () => {
                   </tr>
                 );
               })}
+              {filtered.length === 0 && (
+                <tr>
+                  <td colSpan="7" className="p-8 text-center text-slate-400">
+                    No orders found matching "{query}".
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -154,16 +132,22 @@ export const AdminOrders = () => {
 
       {/* Update Status Modal */}
       {selectedOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-dark-900/80 backdrop-blur-sm">
-          <div className="bg-dark-500 border border-dark-400 rounded-3xl p-6 max-w-md w-full space-y-4">
-            <h3 className="font-bold text-lg text-white">Update Status: {selectedOrder.orderNumber || selectedOrder._id}</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-dark-900/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-dark-800 border border-dark-600 rounded-3xl p-6 max-w-md w-full space-y-5 shadow-2xl">
+            <div className="flex justify-between items-center border-b border-dark-600 pb-3">
+              <h3 className="font-extrabold text-base text-white">Update Status: {selectedOrder.orderNumber || selectedOrder._id}</h3>
+              <button onClick={() => setSelectedOrder(null)} className="text-slate-400 hover:text-white p-1">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
             <form onSubmit={handleUpdateStatus} className="space-y-4 text-xs">
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Status</label>
+                <label className="block text-slate-300 font-semibold mb-1">Fulfillment Status</label>
                 <select
                   value={newStatus}
                   onChange={(e) => setNewStatus(e.target.value)}
-                  className="w-full bg-dark-600 border border-dark-400 rounded-xl px-3 py-2 text-white"
+                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 font-bold"
                 >
                   <option value="Confirmed">Confirmed</option>
                   <option value="Processing">Processing</option>
@@ -181,15 +165,15 @@ export const AdminOrders = () => {
                   value={trackingNo}
                   onChange={(e) => setTrackingNo(e.target.value)}
                   placeholder="e.g. EXP-9041284IN"
-                  className="w-full bg-dark-600 border border-dark-400 rounded-xl px-3 py-2 text-white"
+                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500"
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-3 border-t border-dark-400">
-                <button type="button" onClick={() => setSelectedOrder(null)} className="btn-secondary text-xs py-2 px-4">
+              <div className="flex justify-end gap-3 pt-3 border-t border-dark-600">
+                <button type="button" onClick={() => setSelectedOrder(null)} className="px-5 py-2.5 rounded-full bg-dark-700 hover:bg-dark-600 text-slate-300 font-bold">
                   Cancel
                 </button>
-                <button type="submit" className="btn-primary text-xs py-2 px-6">
+                <button type="submit" className="btn-primary bg-amber-500 hover:bg-amber-600 text-dark-900 py-2.5 px-6 font-extrabold shadow-glow-amber">
                   Save Changes
                 </button>
               </div>
@@ -200,3 +184,5 @@ export const AdminOrders = () => {
     </div>
   );
 };
+
+export default AdminOrders;

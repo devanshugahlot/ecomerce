@@ -3,17 +3,14 @@ import { useSearchParams } from 'react-router-dom';
 import { Filter, SlidersHorizontal, Search, X, Check, PackageCheck } from 'lucide-react';
 import { SEO } from '../components/common/SEO';
 import { ProductCard } from '../components/common/ProductCard';
-import { MOCK_PRODUCTS } from '../utils/mockProducts';
-import { CATEGORIES } from '../utils/constants';
-
-import api from '../services/api';
+import { useProducts } from '../context/ProductContext';
 
 export const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialCategory = searchParams.get('category') || '';
   const initialBestseller = searchParams.get('bestseller') === 'true';
 
-  const [productsList, setProductsList] = useState(MOCK_PRODUCTS);
+  const { products: productsList } = useProducts();
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [searchQuery, setSearchQuery] = useState('');
   const [priceRange, setPriceRange] = useState(3000);
@@ -21,20 +18,7 @@ export const Shop = () => {
   const [sortBy, setSortBy] = useState('featured');
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
-  const fetchProducts = async () => {
-    try {
-      const res = await api.get('/products');
-      if (res.data && Array.isArray(res.data) && res.data.length > 0) {
-        setProductsList(res.data);
-      }
-    } catch (err) {
-      console.log('Using local products catalog');
-    }
-  };
 
   useEffect(() => {
     const cat = searchParams.get('category');

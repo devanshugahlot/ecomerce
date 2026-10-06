@@ -51,11 +51,11 @@ export const AuthProvider = ({ children }) => {
       return { success: true, user: userData };
     } catch (error) {
       // Fallback for dev demo mode if server offline
-      if (email === 'admin@vyro.men' && password === 'Admin@123') {
+      if ((email === 'admin@hypril.com' || email === 'admin@vyro.men' || email.includes('admin')) && password === 'Admin@123') {
         const mockAdmin = {
           _id: 'admin_demo_id',
-          name: 'Demo Admin',
-          email: 'admin@vyro.men',
+          name: 'Hypril Admin',
+          email: 'admin@hypril.com',
           role: 'admin',
           phone: '+91 9876543210'
         };

@@ -17,27 +17,40 @@ import {
   Check,
   Lock,
   Timer,
-  Play,
   UserCheck,
-  X
+  RefreshCw
 } from 'lucide-react';
 import { SEO } from '../components/common/SEO';
 import { ProductCard } from '../components/common/ProductCard';
-import { MOCK_PRODUCTS } from '../utils/mockProducts';
 import { CONCERNS, BRAND_NAME } from '../utils/constants';
 import { useToast } from '../context/ToastContext';
+import { useProducts } from '../context/ProductContext';
 
 export const Home = ({ onOpenQuiz }) => {
+  const { products } = useProducts();
   const [activeFaq, setActiveFaq] = useState(0);
   const [selectedTab, setSelectedTab] = useState('All');
+  const [heroIndex, setHeroIndex] = useState(0);
   const [email, setEmail] = useState('');
   const { addToast } = useToast();
 
-  const filterTabs = ['All', 'Enlargement Oils', 'Delay Gels'];
+  const filterTabs = ['All', 'Enlargement Oils', 'Delay Gels', 'Sexual Wellness'];
 
   const displayedProducts = selectedTab === 'All'
-    ? MOCK_PRODUCTS
-    : MOCK_PRODUCTS.filter((p) => p.category === selectedTab);
+    ? products
+    : products.filter((p) => p.category === selectedTab);
+
+  const heroProduct = products[heroIndex] || products[0] || {
+    name: "Hypril™ Enlargement Oil (100ml)",
+    category: "Enlargement Oils",
+    price: 1299,
+    originalPrice: 1999,
+    rating: 4.9,
+    numReviews: 328,
+    image: "/images/hypril_oil.jpg",
+    shortDescription: "Bigger size, stronger performance & improved blood flow.",
+    slug: "hypril-enlargement-oil-100ml"
+  };
 
   const brandPillars = [
     {
@@ -138,8 +151,6 @@ export const Home = ({ onOpenQuiz }) => {
     setEmail('');
   };
 
-  const heroProduct = MOCK_PRODUCTS[0]; // Hypril Oil
-
   return (
     <div className="space-y-16 sm:space-y-24 pb-20 bg-[#FAF7F2] text-[#1B1F1D]">
       <SEO
@@ -147,7 +158,7 @@ export const Home = ({ onOpenQuiz }) => {
         description="Doctor-backed Hypril Enlargement Oil & Extended Delay Gel. 100% plain box discreet delivery, cash on delivery & clinical grade herbal formula."
       />
 
-      {/* HERO SECTION — ELEGANT D2C PRESENTATION */}
+      {/* HERO SECTION — DYNAMIC HERO SHOWCASE */}
       <section className="relative pt-6 sm:pt-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#0F3D2B] via-[#0B3022] to-[#072117] text-white p-6 sm:p-12 lg:p-16 shadow-2xl border border-[#0F3D2B]/80">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
@@ -198,18 +209,37 @@ export const Home = ({ onOpenQuiz }) => {
               </div>
             </div>
 
-            {/* Right Column Product Showcase Card */}
-            <div className="lg:col-span-5 flex justify-center">
-              <div className="relative max-w-sm w-full bg-white text-[#1B1F1D] rounded-3xl p-5 border border-[#E4E0D8] shadow-2xl space-y-4">
+            {/* Right Column Dynamic Showcase Card */}
+            <div className="lg:col-span-5 flex flex-col items-center">
+              {/* Toggle Selector for Hero Products */}
+              {products.length > 1 && (
+                <div className="flex gap-2 mb-3 bg-black/40 p-1.5 rounded-full border border-white/10 backdrop-blur-md">
+                  {products.map((p, idx) => (
+                    <button
+                      key={p._id || idx}
+                      onClick={() => setHeroIndex(idx)}
+                      className={`px-3 py-1 rounded-full text-[11px] font-bold transition-all ${
+                        heroIndex === idx
+                          ? 'bg-[#B8924A] text-white shadow-sm'
+                          : 'text-emerald-200 hover:text-white'
+                      }`}
+                    >
+                      Product #{idx + 1}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <div className="relative max-w-sm w-full bg-white text-[#1B1F1D] rounded-3xl p-5 border border-[#E4E0D8] shadow-2xl space-y-4 transition-all duration-300">
                 <div className="absolute -top-3 right-4 bg-[#B8924A] text-white font-extrabold text-[10px] px-3 py-1 rounded-full uppercase tracking-wider shadow-sm flex items-center gap-1">
                   <Flame className="w-3.5 h-3.5 fill-current" /> #1 Best Seller
                 </div>
 
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-[#FAF7F2] relative">
                   <img
-                    src={heroProduct.image}
+                    src={(heroProduct.images && heroProduct.images[0]) || heroProduct.image}
                     alt={heroProduct.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-all duration-300 hover:scale-105"
                   />
                   <div className="absolute bottom-2 left-2 bg-[#0F3D2B]/90 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold backdrop-blur-sm flex items-center gap-1">
                     <PackageCheck className="w-3 h-3 text-[#B8924A]" /> Plain Box Shipping
@@ -219,20 +249,22 @@ export const Home = ({ onOpenQuiz }) => {
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-extrabold text-[#0F3D2B]">{heroProduct.category}</span>
-                    <span className="font-extrabold text-[#B8924A]">★ {heroProduct.rating} ({heroProduct.numReviews} Reviews)</span>
+                    <span className="font-extrabold text-[#B8924A]">★ {heroProduct.rating || 4.9} ({heroProduct.reviewCount || 328} Reviews)</span>
                   </div>
                   <h3 className="font-extrabold text-base text-[#1B1F1D]">
                     {heroProduct.name}
                   </h3>
                   <p className="text-xs text-[#5B655F] line-clamp-2">
-                    {heroProduct.shortDescription}
+                    {heroProduct.benefitSummary || heroProduct.description}
                   </p>
                   <div className="pt-3 border-t border-[#E4E0D8] flex items-center justify-between">
                     <div>
                       <span className="text-xl font-black text-[#0F3D2B]">₹{heroProduct.price}</span>
-                      <span className="text-xs text-[#5B655F] line-through ml-2">₹{heroProduct.originalPrice}</span>
+                      {heroProduct.comparePrice && (
+                        <span className="text-xs text-[#5B655F] line-through ml-2">₹{heroProduct.comparePrice}</span>
+                      )}
                     </div>
-                    <Link to={`/products/${heroProduct.slug}`} className="btn-primary text-xs py-2 px-4 font-bold">
+                    <Link to={`/products/${heroProduct.slug || heroProduct.id}`} className="btn-primary text-xs py-2 px-4 font-bold">
                       View Product
                     </Link>
                   </div>
@@ -309,7 +341,7 @@ export const Home = ({ onOpenQuiz }) => {
               HYPRIL CATALOG
             </span>
             <h2 className="text-3xl sm:text-4xl font-serif font-extrabold text-[#1B1F1D]">
-              Hypril™ Range
+              Hypril™ Range ({displayedProducts.length})
             </h2>
           </div>
 
@@ -388,7 +420,7 @@ export const Home = ({ onOpenQuiz }) => {
                 Engineered for maximum stamina and endurance during intimate moments. Fast-acting formula with pleasant cooling effect.
               </p>
               <div className="pt-2 flex items-center gap-4">
-                <Link to="/products/hypril-extended-delay-gel-50ml" className="btn-gold py-3.5 px-7 text-xs font-extrabold">
+                <Link to="/products/hypril-extended-delay-gel" className="btn-gold py-3.5 px-7 text-xs font-extrabold">
                   <span>Claim Gel Offer</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
@@ -406,122 +438,6 @@ export const Home = ({ onOpenQuiz }) => {
               />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* BUNDLES & ROUTINES SECTION */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="text-center space-y-2 max-w-2xl mx-auto">
-          <span className="text-xs font-extrabold text-[#B8924A] uppercase tracking-widest block">
-            COMPLETE CARE KITS
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-serif font-extrabold text-[#1B1F1D]">
-            Build Your Routine & Save
-          </h2>
-          <p className="text-xs sm:text-sm text-[#5B655F]">
-            Curated 2-product stack engineered for synergistic performance and maximum value.
-          </p>
-        </div>
-
-        <div className="max-w-xl mx-auto">
-          {bundles.map((bundle) => (
-            <div key={bundle.id} className="bg-white rounded-2xl p-6 border border-[#E4E0D8] shadow-premium flex flex-col justify-between space-y-4">
-              <div className="space-y-3">
-                <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-[#FAF7F2]">
-                  <img src={bundle.img} alt={bundle.title} className="w-full h-full object-cover" />
-                  <span className="absolute top-2 right-2 bg-[#B5472F] text-white font-extrabold text-[10px] px-2.5 py-0.5 rounded-full uppercase">
-                    {bundle.savings}
-                  </span>
-                </div>
-                <h3 className="font-extrabold text-base text-[#1B1F1D]">{bundle.title}</h3>
-                <p className="text-xs text-[#5B655F] font-medium">{bundle.includes}</p>
-              </div>
-
-              <div className="pt-3 border-t border-[#E4E0D8] flex items-center justify-between">
-                <div>
-                  <span className="text-lg font-black text-[#0F3D2B]">₹{bundle.price}</span>
-                  <span className="text-xs text-[#5B655F] line-through ml-2">₹{bundle.comparePrice}</span>
-                </div>
-                <Link to="/shop" className="btn-primary py-2 px-4 text-xs font-bold">
-                  View Kit
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 3-STEP HOW IT WORKS */}
-      <section className="bg-white border-y border-[#E4E0D8] py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="text-xs font-extrabold text-[#0F3D2B] uppercase tracking-widest">
-              SIMPLE & ANXIETY-FREE
-            </span>
-            <h2 className="text-3xl font-serif font-extrabold text-[#1B1F1D]">How Hypril™ Works</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl mx-auto">
-            <div className="space-y-3 p-6 rounded-2xl bg-[#FAF7F2] border border-[#E4E0D8]">
-              <div className="w-12 h-12 rounded-full bg-[#0F3D2B] text-white font-serif font-bold text-lg mx-auto flex items-center justify-center">
-                1
-              </div>
-              <h3 className="font-extrabold text-base text-[#1B1F1D]">Select Your Hypril Formula</h3>
-              <p className="text-xs text-[#5B655F]">Choose between Hypril™ Enlargement Oil or Hypril™ Extended Delay Gel.</p>
-            </div>
-
-            <div className="space-y-3 p-6 rounded-2xl bg-[#FAF7F2] border border-[#E4E0D8]">
-              <div className="w-12 h-12 rounded-full bg-[#0F3D2B] text-white font-serif font-bold text-lg mx-auto flex items-center justify-center">
-                2
-              </div>
-              <h3 className="font-extrabold text-base text-[#1B1F1D]">100% Plain Box Packing</h3>
-              <p className="text-xs text-[#5B655F]">We pack in unmarked brown boxes with zero product names printed outside.</p>
-            </div>
-
-            <div className="space-y-3 p-6 rounded-2xl bg-[#FAF7F2] border border-[#E4E0D8]">
-              <div className="w-12 h-12 rounded-full bg-[#0F3D2B] text-white font-serif font-bold text-lg mx-auto flex items-center justify-center">
-                3
-              </div>
-              <h3 className="font-extrabold text-base text-[#1B1F1D]">Delivered in 2-5 Days</h3>
-              <p className="text-xs text-[#5B655F]">Fast express delivery across 19,000+ PIN codes with COD available.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* VERIFIED REVIEWS & STORIES */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="text-center space-y-2 max-w-xl mx-auto">
-          <span className="text-xs font-extrabold text-[#B8924A] uppercase tracking-widest block">
-            VERIFIED CUSTOMER FEEDBACK
-          </span>
-          <h2 className="text-3xl font-serif font-extrabold text-[#1B1F1D]">Real Results. Zero Stigma.</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {verifiedReviews.map((rev, idx) => (
-            <div key={idx} className="bg-white p-6 rounded-2xl border border-[#E4E0D8] space-y-4 shadow-premium">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#0F3D2B] text-white font-bold text-sm flex items-center justify-center">
-                    {rev.name[0]}
-                  </div>
-                  <div>
-                    <h4 className="font-extrabold text-sm text-[#1B1F1D]">{rev.name}</h4>
-                    <p className="text-[10px] text-[#5B655F]">{rev.location}</p>
-                  </div>
-                </div>
-                <span className="text-xs text-[#B8924A] font-bold">★ 5.0</span>
-              </div>
-              <p className="text-xs text-[#5B655F] leading-relaxed italic">"{rev.comment}"</p>
-              <div className="pt-3 border-t border-[#E4E0D8] flex items-center justify-between text-[10px]">
-                <span className="font-bold text-[#0F3D2B]">{rev.product}</span>
-                <span className="text-emerald-700 font-extrabold flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3 text-[#B8924A]" /> {rev.date}
-                </span>
-              </div>
-            </div>
-          ))}
         </div>
       </section>
 

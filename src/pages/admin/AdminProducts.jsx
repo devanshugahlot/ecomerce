@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Package, Plus, Search, Edit3, Trash2, Check, X, RefreshCw } from 'lucide-react';
+import React, { useState } from 'react';
+import { Package, Plus, Search, Edit3, Trash2, Check, X, Sparkles, Image as ImageIcon } from 'lucide-react';
 import { SEO } from '../../components/common/SEO';
 import { formatCurrency } from '../../utils/currency';
 import { useToast } from '../../context/ToastContext';
-import api from '../../services/api';
+import { useProducts } from '../../context/ProductContext';
 
 export const AdminProducts = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { products, addProduct, updateProduct, deleteProduct } = useProducts();
   const [query, setQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -15,33 +14,15 @@ export const AdminProducts = () => {
 
   const [form, setForm] = useState({
     name: '',
-    category: 'Sexual Wellness',
+    category: 'Enlargement Oils',
     price: '',
     comparePrice: '',
     stock: 50,
     description: '',
     benefitSummary: '',
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800',
-    isBestSeller: false,
+    image: '/images/hypril_oil.jpg',
+    isBestSeller: true,
   });
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get('/products');
-      if (res.data && Array.isArray(res.data)) {
-        setProducts(res.data);
-      }
-    } catch (err) {
-      console.log('Error fetching products from API');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const filtered = products.filter(
     (p) =>
@@ -53,14 +34,14 @@ export const AdminProducts = () => {
     setEditingId(null);
     setForm({
       name: '',
-      category: 'Sexual Wellness',
+      category: 'Enlargement Oils',
       price: '',
       comparePrice: '',
       stock: 50,
       description: '',
       benefitSummary: '',
-      image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800',
-      isBestSeller: false,
+      image: '/images/hypril_oil.jpg',
+      isBestSeller: true,
     });
     setShowModal(true);
   };
@@ -75,26 +56,20 @@ export const AdminProducts = () => {
       stock: p.stock || 50,
       description: p.description || '',
       benefitSummary: p.benefitSummary || '',
-      image: p.images?.[0] || p.image,
-      isBestSeller: p.isBestSeller || false,
+      image: (p.images && p.images[0]) || p.image || '/images/hypril_oil.jpg',
+      isBestSeller: p.isBestSeller ?? true,
     });
     setShowModal(true);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
-      try {
-        await api.delete(`/products/${id}`);
-        setProducts(products.filter((p) => (p._id || p.id) !== id));
-        addToast('Product deleted from catalog', 'info');
-      } catch (err) {
-        setProducts(products.filter((p) => (p._id || p.id) !== id));
-        addToast('Product deleted from catalog', 'info');
-      }
+      deleteProduct(id);
+      addToast('Product removed from Hypril catalog', 'info');
     }
   };
 
-  const handleSave = async (e) => {
+  const handleSave = (e) => {
     e.preventDefault();
     if (!form.name || !form.price) {
       addToast('Product name and price are required', 'error');
@@ -106,62 +81,44 @@ export const AdminProducts = () => {
       slug: form.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       category: form.category,
       price: Number(form.price),
-      comparePrice: Number(form.comparePrice) || 0,
+      comparePrice: Number(form.comparePrice) || Number(form.price * 1.4),
       stock: Number(form.stock),
-      description: form.description,
-      benefitSummary: form.benefitSummary,
+      description: form.description || form.name,
+      benefitSummary: form.benefitSummary || form.name,
       isBestSeller: form.isBestSeller,
+      image: form.image,
       images: [form.image],
     };
 
     if (editingId) {
-      try {
-        const res = await api.put(`/products/${editingId}`, payload);
-        setProducts(
-          products.map((p) => ((p._id || p.id) === editingId ? res.data || { ...p, ...payload } : p))
-        );
-      } catch (err) {
-        setProducts(
-          products.map((p) => ((p._id || p.id) === editingId ? { ...p, ...payload } : p))
-        );
-      }
+      updateProduct(editingId, payload);
       addToast('Product updated successfully!', 'success');
     } else {
-      try {
-        const res = await api.post('/products', payload);
-        setProducts([res.data, ...products]);
-      } catch (err) {
-        const newProd = { _id: 'prod_' + Date.now(), ...payload, rating: 5.0, reviewCount: 1 };
-        setProducts([newProd, ...products]);
-      }
-      addToast('New product added to catalog!', 'success');
+      addProduct(payload);
+      addToast('New Hypril product added to live storefront!', 'success');
     }
     setShowModal(false);
   };
 
   return (
-    <div className="space-y-6">
-      <SEO title="Product Catalog Management" />
+    <div className="space-y-6 bg-dark-900 min-h-screen p-2 sm:p-6 text-slate-100">
+      <SEO title="Admin — Hypril Products Catalog" />
 
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-dark-800 p-6 rounded-3xl border border-dark-600 shadow-2xl">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Package className="w-6 h-6 text-brand-400" />
-            Products Catalog ({products.length})
+          <h1 className="text-2xl font-extrabold text-white flex items-center gap-2.5">
+            <Package className="w-7 h-7 text-amber-400" />
+            Live Products Catalog ({products.length})
           </h1>
-          <p className="text-xs text-slate-400">Live products connected to the backend database & website shop.</p>
+          <p className="text-xs text-slate-400 mt-1">
+            Manage Hypril products in real-time. Any changes made here reflect instantly on the live website.
+          </p>
         </div>
 
-        <div className="flex gap-2">
-          <button onClick={fetchProducts} className="btn-secondary text-xs py-2.5 px-4">
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-            <span>Sync Catalog</span>
-          </button>
-          <button onClick={handleOpenAdd} className="btn-primary text-xs py-2.5 px-5">
-            <Plus className="w-4 h-4" />
-            <span>Add New Product</span>
-          </button>
-        </div>
+        <button onClick={handleOpenAdd} className="btn-primary bg-amber-500 hover:bg-amber-600 text-dark-900 py-3 px-6 text-xs font-extrabold shadow-glow-amber">
+          <Plus className="w-4 h-4" />
+          <span>Add New Product</span>
+        </button>
       </div>
 
       {/* Search Input */}
@@ -171,80 +128,107 @@ export const AdminProducts = () => {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search products by name or category..."
-          className="w-full bg-dark-500 border border-dark-400 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500"
+          placeholder="Search catalog by product name or category..."
+          className="w-full bg-dark-800 border border-dark-600 rounded-2xl pl-10 pr-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
         />
       </div>
 
-      {/* Responsive Products Table */}
-      <div className="bg-dark-500 rounded-3xl border border-dark-400 overflow-hidden shadow-premium">
+      {/* Dark Products Table */}
+      <div className="bg-dark-800 rounded-3xl border border-dark-600 overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-dark-600 text-slate-400 font-semibold border-b border-dark-400 uppercase tracking-wider text-[10px]">
+            <thead className="bg-dark-700 text-amber-400 font-extrabold border-b border-dark-600 uppercase tracking-wider text-[10px]">
               <tr>
-                <th className="p-4">Product Info</th>
+                <th className="p-4">Product</th>
                 <th className="p-4">Category</th>
-                <th className="p-4">Price</th>
+                <th className="p-4">Selling Price</th>
+                <th className="p-4">Compare Price</th>
                 <th className="p-4">Stock</th>
-                <th className="p-4">Rating</th>
                 <th className="p-4">Status</th>
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-dark-400/60">
+            <tbody className="divide-y divide-dark-600/70">
               {filtered.map((p) => {
                 const pId = p._id || p.id;
+                const pImg = (p.images && p.images[0]) || p.image || '/images/hypril_oil.jpg';
                 return (
-                  <tr key={pId} className="hover:bg-dark-600/50 transition-colors">
-                    <td className="p-4 flex items-center gap-3">
-                      <img src={p.images?.[0] || p.image} alt={p.name} className="w-10 h-10 rounded-lg object-cover bg-dark-700 shrink-0" />
-                      <div>
-                        <span className="font-bold text-white block line-clamp-1">{p.name}</span>
-                        <span className="text-[10px] text-slate-400">SKU: {pId}</span>
+                  <tr key={pId} className="hover:bg-dark-700/50 transition-colors">
+                    <td className="p-4">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={pImg}
+                          alt={p.name}
+                          className="w-12 h-12 rounded-xl object-cover bg-dark-700 border border-dark-600 shrink-0"
+                        />
+                        <div>
+                          <span className="font-extrabold text-white text-sm block leading-tight">{p.name}</span>
+                          <span className="text-[10px] text-slate-400 block line-clamp-1">{p.benefitSummary}</span>
+                        </div>
                       </div>
                     </td>
-                    <td className="p-4 text-brand-400 font-medium">{p.category}</td>
-                    <td className="p-4 font-bold text-white">{formatCurrency(p.price)}</td>
                     <td className="p-4">
-                      <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
-                        p.stock < 30 ? 'bg-red-500/20 text-red-400' : 'bg-emerald-500/20 text-emerald-400'
-                      }`}>
+                      <span className="px-3 py-1 rounded-full bg-dark-700 text-slate-300 border border-dark-600 text-[11px] font-semibold">
+                        {p.category}
+                      </span>
+                    </td>
+                    <td className="p-4 font-black text-amber-400 text-sm">{formatCurrency(p.price)}</td>
+                    <td className="p-4 text-slate-400 line-through">{p.comparePrice ? formatCurrency(p.comparePrice) : '-'}</td>
+                    <td className="p-4">
+                      <span className={`font-bold ${p.stock > 10 ? 'text-emerald-400' : 'text-red-400'}`}>
                         {p.stock} units
                       </span>
                     </td>
-                    <td className="p-4 text-amber-400 font-bold">{p.rating || 4.9} ★</td>
                     <td className="p-4">
                       {p.isBestSeller && (
-                        <span className="text-[10px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full font-bold">
-                          Best Seller
+                        <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 text-[10px] font-extrabold border border-amber-500/30 uppercase">
+                          Bestseller
                         </span>
                       )}
                     </td>
-                    <td className="p-4 text-right space-x-2">
-                      <button onClick={() => handleOpenEdit(p)} className="p-1.5 rounded-lg bg-dark-400 hover:text-white text-slate-300">
-                        <Edit3 className="w-3.5 h-3.5" />
-                      </button>
-                      <button onClick={() => handleDelete(pId)} className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400">
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+                    <td className="p-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => handleOpenEdit(p)}
+                          className="p-2 rounded-xl bg-dark-700 hover:bg-dark-600 text-amber-400 border border-dark-600 transition-colors"
+                          title="Edit Product"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(pId)}
+                          className="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 transition-colors"
+                          title="Delete Product"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
               })}
+              {filtered.length === 0 && (
+                <tr>
+                  <td colSpan="7" className="p-8 text-center text-slate-400">
+                    No products found matching "{query}".
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Product Add/Edit Modal */}
+      {/* Modern Dark Modal Dialog for Add / Edit Product */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-dark-900/80 backdrop-blur-sm">
-          <div className="bg-dark-500 border border-dark-400 rounded-3xl p-6 max-w-xl w-full space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div className="flex justify-between items-center pb-3 border-b border-dark-400">
-              <h3 className="font-bold text-lg text-white">
-                {editingId ? 'Edit Product' : 'Add New Product'}
-              </h3>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-dark-900/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-dark-800 border border-dark-600 rounded-3xl p-6 sm:p-8 max-w-xl w-full max-h-[90vh] overflow-y-auto space-y-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-dark-600 pb-4">
+              <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-amber-400" />
+                {editingId ? 'Edit Product' : 'Add New Hypril™ Product'}
+              </h2>
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-white p-1">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -255,111 +239,124 @@ export const AdminProducts = () => {
                 <input
                   type="text"
                   required
+                  placeholder="e.g. Hypril™ Enlargement Oil (100 ml)"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="VYRO Surge Gummies"
-                  className="w-full bg-dark-600 border border-dark-400 rounded-xl px-3 py-2 text-white"
+                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-slate-300 font-semibold mb-1">Category</label>
                   <select
                     value={form.category}
                     onChange={(e) => setForm({ ...form, category: e.target.value })}
-                    className="w-full bg-dark-600 border border-dark-400 rounded-xl px-3 py-2 text-white"
+                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-amber-500"
                   >
+                    <option value="Enlargement Oils">Enlargement Oils</option>
+                    <option value="Delay Gels">Delay Gels</option>
                     <option value="Sexual Wellness">Sexual Wellness</option>
-                    <option value="Daily Performance">Daily Performance</option>
-                    <option value="Grooming & Beard">Grooming & Beard</option>
-                    <option value="Intimate Care">Intimate Care</option>
-                    <option value="Recovery & Sleep">Recovery & Sleep</option>
                   </select>
                 </div>
+
                 <div>
                   <label className="block text-slate-300 font-semibold mb-1">Stock Quantity</label>
                   <input
                     type="number"
                     value={form.stock}
                     onChange={(e) => setForm({ ...form, stock: e.target.value })}
-                    className="w-full bg-dark-600 border border-dark-400 rounded-xl px-3 py-2 text-white"
+                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-slate-300 font-semibold mb-1">Selling Price (₹)</label>
                   <input
                     type="number"
                     required
+                    placeholder="799"
                     value={form.price}
                     onChange={(e) => setForm({ ...form, price: e.target.value })}
-                    className="w-full bg-dark-600 border border-dark-400 rounded-xl px-3 py-2 text-white"
+                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 font-bold text-amber-400"
                   />
                 </div>
+
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Compare Price (₹)</label>
+                  <label className="block text-slate-300 font-semibold mb-1">Original MRP Price (₹)</label>
                   <input
                     type="number"
+                    placeholder="1299"
                     value={form.comparePrice}
                     onChange={(e) => setForm({ ...form, comparePrice: e.target.value })}
-                    className="w-full bg-dark-600 border border-dark-400 rounded-xl px-3 py-2 text-white"
+                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Image URL</label>
-                <input
-                  type="text"
-                  value={form.image}
-                  onChange={(e) => setForm({ ...form, image: e.target.value })}
-                  className="w-full bg-dark-600 border border-dark-400 rounded-xl px-3 py-2 text-white"
-                />
+                <label className="block text-slate-300 font-semibold mb-1">Product Image URL / Path</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={form.image}
+                    onChange={(e) => setForm({ ...form, image: e.target.value })}
+                    placeholder="/images/hypril_oil.jpg"
+                    className="flex-1 bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white text-xs"
+                  />
+                </div>
               </div>
 
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Benefit Summary</label>
+                <label className="block text-slate-300 font-semibold mb-1">Short Benefit Summary</label>
                 <input
                   type="text"
+                  placeholder="Bigger size, stronger performance & improved blood flow."
                   value={form.benefitSummary}
                   onChange={(e) => setForm({ ...form, benefitSummary: e.target.value })}
-                  placeholder="Short 1-line benefit"
-                  className="w-full bg-dark-600 border border-dark-400 rounded-xl px-3 py-2 text-white"
+                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white placeholder-slate-500"
                 />
               </div>
 
               <div>
                 <label className="block text-slate-300 font-semibold mb-1">Full Description</label>
                 <textarea
-                  rows={3}
+                  rows="3"
+                  placeholder="Doctor formulated high-potency male enhancement oil..."
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  className="w-full bg-dark-600 border border-dark-400 rounded-xl p-3 text-white"
-                />
+                  className="w-full bg-dark-700 border border-dark-600 rounded-xl p-3 text-white placeholder-slate-500"
+                ></textarea>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 pt-2">
                 <input
                   type="checkbox"
-                  id="bestseller-check"
+                  id="isBestSeller"
                   checked={form.isBestSeller}
                   onChange={(e) => setForm({ ...form, isBestSeller: e.target.checked })}
-                  className="w-4 h-4 rounded border-dark-300 text-brand-500"
+                  className="w-4 h-4 accent-amber-500 rounded"
                 />
-                <label htmlFor="bestseller-check" className="text-slate-300 cursor-pointer font-semibold">
-                  Mark as Best Seller Product
+                <label htmlFor="isBestSeller" className="text-slate-300 font-semibold cursor-pointer">
+                  Mark as #1 Bestseller Badge
                 </label>
               </div>
 
-              <div className="flex justify-end gap-2 pt-3 border-t border-dark-400">
-                <button type="button" onClick={() => setShowModal(false)} className="btn-secondary text-xs py-2 px-4">
+              <div className="flex justify-end gap-3 pt-4 border-t border-dark-600">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="px-5 py-3 rounded-full bg-dark-700 hover:bg-dark-600 text-slate-300 font-bold"
+                >
                   Cancel
                 </button>
-                <button type="submit" className="btn-primary text-xs py-2 px-6">
-                  Save Product
+                <button
+                  type="submit"
+                  className="btn-primary bg-amber-500 hover:bg-amber-600 text-dark-900 px-7 py-3 font-extrabold shadow-glow-amber"
+                >
+                  {editingId ? 'Save Changes' : 'Add to Catalog'}
                 </button>
               </div>
             </form>
@@ -369,3 +366,5 @@ export const AdminProducts = () => {
     </div>
   );
 };
+
+export default AdminProducts;

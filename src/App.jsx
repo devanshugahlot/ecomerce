@@ -6,6 +6,7 @@ import { ToastProvider } from './context/ToastContext';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
+import { ProductProvider, useProducts } from './context/ProductContext';
 
 // Layouts & Modals
 import { AnnouncementBar } from './components/layout/AnnouncementBar';
@@ -17,7 +18,7 @@ import { SearchModal } from './components/common/SearchModal';
 import { NeedsQuizModal } from './components/common/NeedsQuizModal';
 import { AgeGateModal } from './components/common/AgeGateModal';
 import { WhatsAppFloat } from './components/common/WhatsAppFloat';
-import { MOCK_PRODUCTS } from './utils/mockProducts';
+import { ScrollToTop } from './components/common/ScrollToTop';
 
 // Pages
 import { Home } from './pages/Home';
@@ -91,6 +92,7 @@ class ErrorBoundary extends Component {
 const StorefrontLayout = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const { products } = useProducts();
 
   return (
     <div className="flex flex-col min-h-screen bg-[#FAF7F2] text-[#1B1F1D] font-sans">
@@ -126,7 +128,7 @@ const StorefrontLayout = () => {
       <SearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
-        products={MOCK_PRODUCTS}
+        products={products}
       />
     </div>
   );
@@ -137,30 +139,33 @@ export function App() {
     <ErrorBoundary>
       <ToastProvider>
         <AuthProvider>
-          <CartProvider>
-            <WishlistProvider>
-              <Router>
-                <Routes>
-                  {/* Admin Auth Route */}
-                  <Route path="/admin/login" element={<AdminLogin />} />
+          <ProductProvider>
+            <CartProvider>
+              <WishlistProvider>
+                <Router>
+                  <ScrollToTop />
+                  <Routes>
+                    {/* Admin Auth Route */}
+                    <Route path="/admin/login" element={<AdminLogin />} />
 
-                  {/* Admin Control Panel Nested Routes */}
-                  <Route path="/admin" element={<AdminLayout />}>
-                    <Route index element={<AdminDashboard />} />
-                    <Route path="products" element={<AdminProducts />} />
-                    <Route path="orders" element={<AdminOrders />} />
-                    <Route path="categories" element={<AdminCategories />} />
-                    <Route path="coupons" element={<AdminCoupons />} />
-                    <Route path="reviews" element={<AdminReviews />} />
-                    <Route path="customers" element={<AdminCustomers />} />
-                  </Route>
+                    {/* Admin Control Panel Nested Routes */}
+                    <Route path="/admin" element={<AdminLayout />}>
+                      <Route index element={<AdminDashboard />} />
+                      <Route path="products" element={<AdminProducts />} />
+                      <Route path="orders" element={<AdminOrders />} />
+                      <Route path="categories" element={<AdminCategories />} />
+                      <Route path="coupons" element={<AdminCoupons />} />
+                      <Route path="reviews" element={<AdminReviews />} />
+                      <Route path="customers" element={<AdminCustomers />} />
+                    </Route>
 
-                  {/* Main Storefront Routes */}
-                  <Route path="/*" element={<StorefrontLayout />} />
-                </Routes>
-              </Router>
-            </WishlistProvider>
-          </CartProvider>
+                    {/* Main Storefront Routes */}
+                    <Route path="/*" element={<StorefrontLayout />} />
+                  </Routes>
+                </Router>
+              </WishlistProvider>
+            </CartProvider>
+          </ProductProvider>
         </AuthProvider>
       </ToastProvider>
     </ErrorBoundary>
