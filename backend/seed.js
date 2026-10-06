@@ -9,61 +9,62 @@ dotenv.config();
 
 const demoProducts = [
   {
-    name: "VYRO Surge — Endurance & Stamina Gummies",
-    slug: "vyro-surge-endurance-stamina-gummies",
-    category: "Sexual Wellness",
-    price: 699,
-    comparePrice: 999,
-    stock: 45,
-    rating: 4.9,
-    reviewCount: 342,
-    isBestSeller: true,
-    isFeatured: true,
-    benefitSummary: "L-Arginine, Gokshura & Safed Musli gummies for elevated blood flow & lasting vigor.",
-    description: "Doctor-formulated daily gummies engineered for natural nitric oxide elevation, increased circulation, and enhanced bedroom endurance. Formulated with pure Gokshura, Safed Musli, and L-Arginine.",
-    images: ["https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800"],
-    ingredients: "Gokshura Extract (250mg), Safed Musli (200mg), L-Arginine (500mg), Zinc Monomethionine (12mg).",
-    usage: "Chew 2 gummies daily after meals."
-  },
-  {
-    name: "Pure Himalayan Shilajit Gold Resin",
-    slug: "pure-himalayan-shilajit-gold-resin",
-    category: "Daily Performance",
+    name: "Hypril™ Enlargement Oil (100ml)",
+    slug: "hypril-enlargement-oil-100ml",
+    category: "Enlargement Oils",
     price: 1299,
-    comparePrice: 1799,
-    stock: 28,
-    rating: 4.95,
-    reviewCount: 512,
+    comparePrice: 1999,
+    originalPrice: 1999,
+    stock: 50,
+    rating: 4.9,
+    numReviews: 328,
+    reviewCount: 328,
     isBestSeller: true,
     isFeatured: true,
-    benefitSummary: ">75% Fulvic Acid purified soft resin enriched with 24K edible Gold Vasma.",
-    description: "Harvested from high-altitude Himalayan peaks above 18,000 ft. Purified using traditional Shodhana methods and lab-tested for heavy metals and purity.",
-    images: ["https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&q=80&w=800"],
-    ingredients: "100% Pure Himalayan Shilajit Resin (75% Fulvic Acid), Swarna Bhasma (24K Gold).",
-    usage: "Dissolve pea-sized portion in warm milk once daily."
+    benefitSummary: "Bigger size, stronger performance & improved blood flow for men.",
+    description: "Doctor-formulated Hypril™ Enlargement Oil (100ml) engineered with pure herbal botanical extracts to boost circulation, tissue responsiveness, and stamina during intimate moments.",
+    images: ["/images/hypril_oil.jpg"],
+    image: "/images/hypril_oil.jpg",
+    ingredients: "Gokshura, Ashwagandha, Jaiphal Oil, Malkangani Oil, Clove Oil, Sesame Base Oil.",
+    usage: "Take 5-10 drops, massage gently twice daily till fully absorbed.",
+    keyBenefits: [
+      "Enhances Size & Girth",
+      "Improves Stamina",
+      "Boosts Local Blood Flow",
+      "100% Skin Safe Formula"
+    ]
   },
   {
-    name: "VYRO Apex — 5% Minoxidil + Redensyl Hair Growth Drops",
-    slug: "vyro-apex-minoxidil-redensyl-hair-growth-drops",
-    category: "Grooming & Beard",
-    price: 899,
-    comparePrice: 1299,
-    stock: 60,
-    rating: 4.8,
-    reviewCount: 289,
-    isBestSeller: false,
+    name: "Hypril™ Extended Delay Gel (50ml)",
+    slug: "hypril-extended-delay-gel-50ml",
+    category: "Delay Gels",
+    price: 999,
+    comparePrice: 1499,
+    originalPrice: 1499,
+    stock: 40,
+    rating: 4.95,
+    numReviews: 245,
+    reviewCount: 245,
+    isBestSeller: true,
     isFeatured: true,
-    benefitSummary: "Clinically proven formula for reactivating dormant scalp hair follicles & thickening beard density.",
-    description: "Non-greasy hair growth tonic engineered with 5% Minoxidil, 3% Redensyl, Procapil, and Saw Palmetto.",
-    images: ["https://images.unsplash.com/photo-1621607512214-68297480165e?auto=format&fit=crop&q=80&w=800"],
-    ingredients: "Minoxidil 5%, Redensyl 3%, Procapil 2%, Saw Palmetto.",
-    usage: "Apply 1ml twice daily onto clean scalp or beard."
+    benefitSummary: "Longer performance, control, confidence & pleasant cooling sensation.",
+    description: "Engineered for maximum climax timing control and duration extension. Fast-acting non-sticky gel formulation with a refreshing cooling effect and skin-safe formula.",
+    images: ["/images/hypril_delay_gel.jpg"],
+    image: "/images/hypril_delay_gel.jpg",
+    ingredients: "L-Arginine, Menthol Cooling Extract, Aloe Vera Gel, Vitamin E, Purified Water Base.",
+    usage: "Apply small pump 10-15 minutes prior to intimate activity. Wash off before intercourse if needed.",
+    keyBenefits: [
+      "Delay Performance & Duration",
+      "Cooling Sensation",
+      "Skin Safe & Non-Sticky Formula",
+      "Maximum Intimate Confidence"
+    ]
   }
 ];
 
 const seedData = async () => {
   await connectDB();
-  console.log('[Seed] Seeding VYRO database...');
+  console.log('[Seed] Seeding Hypril database...');
 
   try {
     // Clear existing
@@ -73,8 +74,8 @@ const seedData = async () => {
 
     // Seed Admin
     await User.create({
-      name: 'Demo Admin',
-      email: 'admin@vyro.men',
+      name: 'Hypril Admin',
+      email: 'admin@hypril.com',
       phone: '+91 9876543210',
       password: 'Admin@123',
       role: 'admin',
@@ -83,7 +84,7 @@ const seedData = async () => {
     // Seed Customer
     await User.create({
       name: 'Vikram Rao',
-      email: 'user@vyro.men',
+      email: 'user@hypril.com',
       phone: '+91 9876543211',
       password: 'User@123',
       role: 'user',
@@ -94,13 +95,15 @@ const seedData = async () => {
 
     // Seed Coupons
     await Coupon.create({
-      code: 'VYRO10',
+      code: 'HYPRIL10',
       discountType: 'percentage',
       discountValue: 10,
+      minOrderAmount: 0,
+      isActive: true,
     });
 
     console.log('[Seed] Database seeded successfully!');
-    console.log('Admin Email: admin@vyro.men | Password: Admin@123');
+    console.log('Admin Email: admin@hypril.com | Password: Admin@123');
     process.exit();
   } catch (error) {
     console.error('[Seed Error]', error);

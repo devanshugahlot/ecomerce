@@ -1,8 +1,10 @@
 import { Coupon } from '../models/Coupon.js';
 
 let inMemoryCoupons = [
-  { _id: 'coup_1', code: 'VYRO10', discountType: 'percentage', discountValue: 10, minOrderAmount: 0, isActive: true },
-  { _id: 'coup_2', code: 'WELLNESS200', discountType: 'fixed', discountValue: 200, minOrderAmount: 999, isActive: true }
+  { _id: 'coup_1', code: 'HYPRIL10', discountType: 'percentage', discountValue: 10, minOrderAmount: 0, isActive: true },
+  { _id: 'coup_2', code: 'BOLD10', discountType: 'percentage', discountValue: 10, minOrderAmount: 0, isActive: true },
+  { _id: 'coup_3', code: 'VYRO10', discountType: 'percentage', discountValue: 10, minOrderAmount: 0, isActive: true },
+  { _id: 'coup_4', code: 'WELLNESS200', discountType: 'fixed', discountValue: 200, minOrderAmount: 999, isActive: true }
 ];
 
 export const validateCoupon = async (req, res) => {

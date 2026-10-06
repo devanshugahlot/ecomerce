@@ -78,7 +78,7 @@ class ErrorBoundary extends Component {
               }}
               className="btn-primary text-xs py-3 px-6 w-full font-bold"
             >
-              Return to Bold Care Storefront
+              Return to Hypril™ Storefront
             </button>
           </div>
         </div>

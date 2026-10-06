@@ -41,7 +41,7 @@ export const CartDrawer = () => {
     if (!couponCode.trim()) return;
     
     const code = couponCode.trim().toUpperCase();
-    if (code === 'BOLD10' || code === 'VYRO10') {
+    if (code === 'HYPRIL10' || code === 'BOLD10' || code === 'VYRO10') {
       applyCoupon(code, 'percentage', 10, 0);
     } else if (code === 'FREESHIP') {
       applyCoupon('FREESHIP', 'fixed', 99, 0);
@@ -240,7 +240,7 @@ export const CartDrawer = () => {
                         type="text"
                         value={couponCode}
                         onChange={(e) => setCouponCode(e.target.value)}
-                        placeholder="Discount code (BOLD10)"
+                        placeholder="Discount code (HYPRIL10)"
                         className="flex-1 bg-white border border-[#E4E0D8] rounded-xl px-3 py-2 text-xs text-[#1B1F1D] font-bold placeholder-slate-400 focus:outline-none focus:border-[#0F3D2B]"
                       />
                       <button type="submit" className="btn-secondary px-4 py-2 text-xs font-bold shrink-0">

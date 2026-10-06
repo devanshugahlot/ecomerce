@@ -95,8 +95,8 @@ export const Shop = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 bg-[#FAF7F2] text-[#1B1F1D]">
       <SEO
-        title="Buy Men's Sexual Health, Stamina & Hair Products Online — Bold Care"
-        description="Browse doctor-backed men's wellness catalog: stamina gummies, Himalayan Shilajit gold, 404 condoms, hair growth serums, and intimate hygiene. Free discreet delivery."
+        title="Buy Hypril™ Performance Oil & Delay Gel Online — Hypril Official Store"
+        description="Browse doctor-backed Hypril performance catalog: Hypril Enlargement Oil & Extended Delay Gel. Free discreet shipping & cash on delivery across India."
       />
 
       {/* Header Banner — Deep Forest & Ivory Card */}
@@ -106,7 +106,7 @@ export const Shop = () => {
             CLINICAL CATALOG
           </span>
           <h1 className="text-3xl sm:text-4xl font-serif font-extrabold text-[#0F3D2B]">
-            Bold Care Storefront
+            Hypril™ Storefront
           </h1>
           <p className="text-xs sm:text-sm text-[#5B655F] font-medium flex items-center gap-1.5">
             <PackageCheck className="w-4 h-4 text-[#B8924A]" /> Formulated with clinical ingredients. Delivered in plain unmarked boxes.

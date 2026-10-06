@@ -72,14 +72,14 @@ export const Navbar = ({ onOpenSearch, onOpenQuiz }) => {
               </button>
             </div>
 
-            {/* Logo: Deep Forest Green Bold Care Branding */}
+            {/* Logo: Deep Forest Green Hypril Branding */}
             <Link to="/" className="flex items-center gap-2.5 group">
               <div className="w-9 h-9 rounded-xl bg-[#0F3D2B] text-white flex items-center justify-center font-serif font-black text-xl shadow-glow-forest group-hover:scale-105 transition-transform">
-                B
+                H
               </div>
               <div className="flex flex-col">
                 <span className="font-serif font-black text-xl sm:text-2xl tracking-tight text-[#0F3D2B]">
-                  Bold Care
+                  {BRAND_NAME}
                 </span>
                 <span className="text-[9px] font-extrabold text-[#B8924A] uppercase tracking-widest leading-none">
                   CLINICAL WELLNESS

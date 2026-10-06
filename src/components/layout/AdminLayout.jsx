@@ -68,12 +68,12 @@ export const AdminLayout = () => {
         {/* Header Logo */}
         <div className="p-5 border-b border-dark-400/80 flex items-center justify-between">
           <Link to="/admin" className="flex items-center gap-2 overflow-hidden">
-            <div className="w-9 h-9 rounded-xl bg-amber-500 text-dark-900 font-extrabold flex items-center justify-center shrink-0">
-              V
+            <div className="w-9 h-9 rounded-xl bg-amber-500 text-dark-900 font-extrabold flex items-center justify-center shrink-0 text-xl font-serif">
+              H
             </div>
             {!collapsed && (
               <div className="flex flex-col">
-                <span className="font-bold text-sm text-white">{BRAND_NAME} ADMIN</span>
+                <span className="font-bold text-sm text-white">HYPRIL ADMIN</span>
                 <span className="text-[10px] text-amber-400 font-semibold uppercase tracking-wider">
                   Management Console
                 </span>

@@ -24,7 +24,7 @@ import {
 import { SEO } from '../components/common/SEO';
 import { ProductCard } from '../components/common/ProductCard';
 import { MOCK_PRODUCTS } from '../utils/mockProducts';
-import { CONCERNS } from '../utils/constants';
+import { CONCERNS, BRAND_NAME } from '../utils/constants';
 import { useToast } from '../context/ToastContext';
 
 export const Home = ({ onOpenQuiz }) => {
@@ -33,62 +33,44 @@ export const Home = ({ onOpenQuiz }) => {
   const [email, setEmail] = useState('');
   const { addToast } = useToast();
 
-  const filterTabs = ['All', 'Sexual Wellness', 'Daily Performance', 'Condoms & Lubes', 'Grooming & Hair', 'Intimate Care'];
+  const filterTabs = ['All', 'Enlargement Oils', 'Delay Gels'];
 
   const displayedProducts = selectedTab === 'All'
-    ? MOCK_PRODUCTS.slice(0, 8)
+    ? MOCK_PRODUCTS
     : MOCK_PRODUCTS.filter((p) => p.category === selectedTab);
 
   const brandPillars = [
     {
-      title: "Clinical Active Ingredients",
-      desc: "Formulated alongside pharmacologists using standardized botanical extracts at effective clinical dosages.",
+      title: "Clinical Active Extracts",
+      desc: "Formulated alongside specialists using standardized herbal oils & botanical extracts for max efficacy.",
       icon: Stethoscope
     },
     {
-      title: "ICP-MS Batch Certified",
-      desc: "Every batch is lab-tested for heavy metal safety, purity, and active compound potency in FSSAI-approved facilities.",
+      title: "Purity & Quality Batch Certified",
+      desc: "Every batch is lab-tested for heavy metal safety, skin safety, and active compound potency.",
       icon: ShieldCheck
     },
     {
-      title: "100% Discreet Doorstep Packaging",
-      desc: "Delivered in plain, unmarked brown outer boxes with zero product names or brand logos on the label.",
+      title: "100% Discreet Packaging",
+      desc: "Delivered in plain, unmarked brown outer boxes with zero product names or brand logos on the exterior label.",
       icon: PackageCheck
     },
     {
-      title: "Real Doctor Support, Zero Judgment",
-      desc: "Free 1-on-1 consultations with senior medical specialists to guide your routine safely.",
+      title: "Confidential Support & Advice",
+      desc: "Free 1-on-1 consultations with specialists to guide your intimate wellness routine safely.",
       icon: UserCheck
     }
   ];
 
   const bundles = [
     {
-      id: "bundle-1",
-      title: "Endurance & Daily Power Routine",
-      includes: "Bold Care Surge Gummies (60s) + Pure Himalayan Shilajit Gold (20g)",
-      price: 1699,
-      comparePrice: 2298,
-      savings: "Save ₹599",
-      img: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=400"
-    },
-    {
-      id: "bundle-2",
-      title: "Complete Intimate Freshness Kit",
-      includes: "FreshShield Intimate Wash (200ml) + Aloe Organic Lubricant (100ml)",
-      price: 749,
-      comparePrice: 1098,
-      savings: "Save ₹349",
-      img: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=400"
-    },
-    {
-      id: "bundle-3",
-      title: "Hair Regrowth & Density Regimen",
-      includes: "Bold Care Apex 5% Minoxidil (60ml) + Titanium Derma Roller 0.5mm",
-      price: 1199,
-      comparePrice: 1698,
-      savings: "Save ₹499",
-      img: "https://images.unsplash.com/photo-1621607512214-68297480165e?auto=format&fit=crop&q=80&w=400"
+      id: "bundle-hypril-duo",
+      title: "Hypril™ Ultimate Intimate Stack",
+      includes: "Hypril™ Enlargement Oil (100ml) + Hypril™ Extended Delay Gel (50ml)",
+      price: 2299,
+      comparePrice: 3498,
+      savings: "Save ₹1,199",
+      img: "/images/hypril_oil.jpg"
     }
   ];
 
@@ -96,41 +78,41 @@ export const Home = ({ onOpenQuiz }) => {
     {
       name: "Rohan S.",
       location: "Bengaluru, KA",
-      product: "Bold Care Surge Gummies",
+      product: "Hypril™ Enlargement Oil (100ml)",
       rating: 5,
       date: "Verified Buyer • 3 days ago",
-      comment: "Super impressed with the discreet delivery. Box had no product names outside. Energy levels felt noticeably better within 10 days!"
+      comment: "Super impressed with the discreet delivery! Unmarked box outside. The oil absorbs fast, non-greasy, and noticeable boost in stamina and confidence."
     },
     {
       name: "Vikram R.",
       location: "Mumbai, MH",
-      product: "Pure Himalayan Shilajit Gold",
+      product: "Hypril™ Extended Delay Gel (50ml)",
       rating: 5,
       date: "Verified Buyer • 1 week ago",
-      comment: "Authentic resin with genuine lab certificate. Dissolves easily in warm milk. Excellent post-gym recovery and stamina booster."
+      comment: "Works exactly as advertised. Cooling sensation and gives complete control without losing sensitivity. Highly recommended!"
     },
     {
       name: "Anish M.",
       location: "Delhi NCR",
-      product: "Apex 5% Minoxidil Drops",
+      product: "Hypril™ Enlargement Oil (100ml)",
       rating: 5,
       date: "Verified Buyer • 2 weeks ago",
-      comment: "Using for 2 months now along with derma rolling. Receding hairline is visibly filling up with fine baby hairs. Non-sticky formula."
+      comment: "Been using it consistently for 3 weeks. Premium quality packaging and genuine botanical formulation. 10/10."
     }
   ];
 
   const faqs = [
     {
       q: "Is the outer delivery box 100% discreet?",
-      a: "Yes, 100% guaranteed. All orders ship in a plain, unmarked brown outer box or tamper-proof courier bag. There are ZERO product names, logos, or sensitive descriptions printed on the exterior shipping label."
+      a: "Yes, 100% guaranteed. All Hypril orders ship in a plain, unmarked brown box or tamper-proof courier bag. There are ZERO product names, logos, or sensitive descriptions printed on the exterior shipping label."
     },
     {
       q: "What name will appear on my bank or credit card statement?",
-      a: "Your bank or credit card statement will display a neutral billing descriptor ('BC Healthcare' or 'Razorpay Merchant') with zero mention of sexual wellness or specific product names."
+      a: "Your bank or credit card statement will display a neutral billing descriptor ('Hypril Merchant' or 'Razorpay Merchant') with zero mention of intimate products."
     },
     {
-      q: "Are Bold Care products doctor-formulated and batch tested?",
-      a: "Yes. All Bold Care formulations are engineered alongside clinical medical pharmacologists. Every batch undergoes third-party ICP-MS lab testing for heavy metal safety, purity, and active botanical concentration in FSSAI-approved, GMP-certified facilities."
+      q: "Are Hypril products clinically tested and safe?",
+      a: "Yes. All Hypril formulations are manufactured in FSSAI & GMP certified facilities. Every batch undergoes third-party lab testing for skin safety, purity, and active botanical concentration."
     },
     {
       q: "How fast is delivery across India?",
@@ -141,8 +123,8 @@ export const Home = ({ onOpenQuiz }) => {
       a: "Yes, Cash on Delivery (COD) is available across 19,000+ PIN codes in India with free discreet packaging."
     },
     {
-      q: "How do I consult a Bold Care medical specialist privately?",
-      a: "You can click on 'Talk to Wellness Advisor' or book a free 1-on-1 WhatsApp consultation with our certified medical team. All consultations are 100% confidential and free."
+      q: "How do I consult a Hypril medical specialist privately?",
+      a: "You can click on 'Talk to Wellness Advisor' or book a free 1-on-1 confidential consultation with our team. All consultations are 100% private."
     }
   ];
 
@@ -152,15 +134,17 @@ export const Home = ({ onOpenQuiz }) => {
       addToast('Please enter a valid email address.', 'error');
       return;
     }
-    addToast('Welcome to the Bold Care circle! Check your email for code BOLD15.', 'success');
+    addToast('Welcome to the Hypril Circle! Check your email for discount code HYPRIL10.', 'success');
     setEmail('');
   };
+
+  const heroProduct = MOCK_PRODUCTS[0]; // Hypril Oil
 
   return (
     <div className="space-y-16 sm:space-y-24 pb-20 bg-[#FAF7F2] text-[#1B1F1D]">
       <SEO
-        title="Bold Care — Confident. Clinical. Discreet. Men's Wellness"
-        description="Doctor-backed men's sexual health, stamina gummies, Himalayan Shilajit gold, 404 ultra-thin condoms & hair growth serums. 100% plain box discreet delivery across India."
+        title="Hypril™ — Confident. Clinical. Discreet. Men's Intimate Wellness"
+        description="Doctor-backed Hypril Enlargement Oil & Extended Delay Gel. 100% plain box discreet delivery, cash on delivery & clinical grade herbal formula."
       />
 
       {/* HERO SECTION — ELEGANT D2C PRESENTATION */}
@@ -176,20 +160,20 @@ export const Home = ({ onOpenQuiz }) => {
               </div>
 
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-extrabold text-white tracking-tight leading-[1.15]">
-                Wellness, handled with <br />
+                Intimate Wellness, handled with <br />
                 <span className="text-[#B8924A] italic underline decoration-[#B8924A]/40 decoration-2 underline-offset-8">
                   absolute confidence.
                 </span>
               </h1>
 
               <p className="text-emerald-100/90 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed">
-                Doctor-reviewed stamina gummies, pure Himalayan Shilajit gold, 404 ultra-thin condoms, and hair growth drops. Delivered in 100% plain, unmarked packaging.
+                Hypril™ Enlargement Oil & Extended Delay Gel. Engineered for stronger performance, increased blood flow, and extended control. Delivered in 100% plain, unmarked packaging.
               </p>
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
                 <Link to="/shop" className="btn-gold w-full sm:w-auto text-xs sm:text-sm py-4 px-8 font-extrabold shadow-glow-gold">
-                  <span>Shop Bestsellers</span>
+                  <span>Shop Hypril Range</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
 
@@ -223,8 +207,8 @@ export const Home = ({ onOpenQuiz }) => {
 
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-[#FAF7F2] relative">
                   <img
-                    src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800"
-                    alt="Bold Care Hero Product"
+                    src={heroProduct.image}
+                    alt={heroProduct.name}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute bottom-2 left-2 bg-[#0F3D2B]/90 text-white px-2.5 py-1 rounded-lg text-[10px] font-bold backdrop-blur-sm flex items-center gap-1">
@@ -234,21 +218,21 @@ export const Home = ({ onOpenQuiz }) => {
 
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-extrabold text-[#0F3D2B]">Sexual Wellness</span>
-                    <span className="font-extrabold text-[#B8924A]">★ 4.9 (342 Reviews)</span>
+                    <span className="font-extrabold text-[#0F3D2B]">{heroProduct.category}</span>
+                    <span className="font-extrabold text-[#B8924A]">★ {heroProduct.rating} ({heroProduct.numReviews} Reviews)</span>
                   </div>
                   <h3 className="font-extrabold text-base text-[#1B1F1D]">
-                    Bold Care Surge — Stamina Gummies
+                    {heroProduct.name}
                   </h3>
                   <p className="text-xs text-[#5B655F] line-clamp-2">
-                    L-Arginine, Gokshura & Safed Musli for natural nitric oxide elevation and bedroom endurance.
+                    {heroProduct.shortDescription}
                   </p>
                   <div className="pt-3 border-t border-[#E4E0D8] flex items-center justify-between">
                     <div>
-                      <span className="text-xl font-black text-[#0F3D2B]">₹699</span>
-                      <span className="text-xs text-[#5B655F] line-through ml-2">₹999</span>
+                      <span className="text-xl font-black text-[#0F3D2B]">₹{heroProduct.price}</span>
+                      <span className="text-xs text-[#5B655F] line-through ml-2">₹{heroProduct.originalPrice}</span>
                     </div>
-                    <Link to="/products/bold-care-surge-endurance-stamina-gummies" className="btn-primary text-xs py-2 px-4 font-bold">
+                    <Link to={`/products/${heroProduct.slug}`} className="btn-primary text-xs py-2 px-4 font-bold">
                       View Product
                     </Link>
                   </div>
@@ -279,7 +263,7 @@ export const Home = ({ onOpenQuiz }) => {
         </div>
       </section>
 
-      {/* SHOP BY CONCERN SECTION (8 CONCERN CARDS) */}
+      {/* SHOP BY CONCERN SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="text-center space-y-2 max-w-2xl mx-auto">
           <span className="text-xs font-extrabold text-[#B8924A] uppercase tracking-widest block">
@@ -289,44 +273,47 @@ export const Home = ({ onOpenQuiz }) => {
             Shop By Concern
           </h2>
           <p className="text-xs sm:text-sm text-[#5B655F]">
-            Select your specific goal for tailored, doctor-approved wellness products.
+            Select your specific goal for tailored Hypril™ performance products.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
           {CONCERNS.map((c) => (
             <Link
               key={c.id}
-              to={`/shop?category=${encodeURIComponent(c.slug === 'sexual-wellness' ? 'Sexual Wellness' : c.slug === 'protection' ? 'Condoms & Lubes' : c.slug === 'daily-performance' ? 'Daily Performance' : c.slug === 'intimate-care' ? 'Intimate Care' : 'Grooming & Hair')}`}
-              className="group bg-white rounded-2xl p-4 border border-[#E4E0D8] hover:border-[#0F3D2B] transition-all duration-300 shadow-premium hover:shadow-2xl flex flex-col items-center text-center space-y-3"
+              to={`/shop?category=${encodeURIComponent(c.name)}`}
+              className="group bg-white rounded-2xl p-6 border border-[#E4E0D8] hover:border-[#0F3D2B] transition-all duration-300 shadow-premium hover:shadow-2xl flex items-center space-x-4"
             >
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-[#FAF7F2] border border-[#E4E0D8] group-hover:scale-110 transition-transform duration-300 p-1">
-                <img src={c.img} alt={c.name} className="w-full h-full object-cover rounded-full" />
+              <div className="w-20 h-20 rounded-2xl overflow-hidden bg-[#FAF7F2] border border-[#E4E0D8] group-hover:scale-105 transition-transform duration-300 shrink-0">
+                <img src={c.img} alt={c.name} className="w-full h-full object-cover" />
               </div>
-              <div className="space-y-0.5">
-                <h3 className="font-extrabold text-xs sm:text-sm text-[#1B1F1D] group-hover:text-[#0F3D2B] transition-colors">
+              <div className="space-y-1">
+                <h3 className="font-extrabold text-base text-[#1B1F1D] group-hover:text-[#0F3D2B] transition-colors">
                   {c.name}
                 </h3>
-                <p className="text-[10px] text-[#5B655F] line-clamp-1">{c.desc}</p>
+                <p className="text-xs text-[#5B655F] line-clamp-2">{c.desc}</p>
+                <span className="text-xs font-extrabold text-[#B8924A] group-hover:underline flex items-center gap-1 pt-1">
+                  Explore Products <ArrowRight className="w-3 h-3" />
+                </span>
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* CURATED BESTSELLERS CAROUSEL / GRID */}
+      {/* CURATED BESTSELLERS GRID */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <span className="text-xs font-extrabold text-[#B8924A] uppercase tracking-widest block mb-1">
-              MOST POPULAR ROUTINES
+              HYPRIL CATALOG
             </span>
             <h2 className="text-3xl sm:text-4xl font-serif font-extrabold text-[#1B1F1D]">
-              Bold Care Bestsellers
+              Hypril™ Range
             </h2>
           </div>
 
-          {/* Interactive Category Filter Pills */}
+          {/* Category Filter Pills */}
           <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
             {filterTabs.map((tab) => (
               <button
@@ -345,25 +332,25 @@ export const Home = ({ onOpenQuiz }) => {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {displayedProducts.map((p) => (
             <ProductCard key={p._id || p.id} product={p} />
           ))}
         </div>
       </section>
 
-      {/* WHY BOLD CARE — 4 BRAND PILLARS */}
+      {/* WHY HYPRIL — BRAND PILLARS */}
       <section className="bg-[#EEF3EE]/80 border-y border-[#E4E0D8] py-16 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <span className="text-xs font-extrabold text-[#0F3D2B] uppercase tracking-widest">
-              THE BOLD CARE STANDARD
+              THE HYPRIL STANDARD
             </span>
             <h2 className="text-3xl sm:text-4xl font-serif font-extrabold text-[#1B1F1D]">
-              Why Indian Men Trust Bold Care
+              Why Men Choose Hypril™
             </h2>
             <p className="text-xs sm:text-sm text-[#5B655F]">
-              We replace underdosed generic supplements with high-concentration standardized extracts and 100% privacy.
+              We offer targeted formulas made with pure botanical extracts and 100% privacy assurance.
             </p>
           </div>
 
@@ -384,37 +371,37 @@ export const Home = ({ onOpenQuiz }) => {
         </div>
       </section>
 
-      {/* FEATURED SPOTLIGHT SECTION — EDITORIAL SPLIT */}
+      {/* FEATURED SPOTLIGHT SECTION — HYPRIL DELAY GEL */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-3xl border border-[#E4E0D8] p-8 sm:p-12 shadow-2xl overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             
             <div className="lg:col-span-6 space-y-6">
               <span className="px-3 py-1 rounded-full bg-[#FAF4E8] text-[#B8924A] text-xs font-extrabold uppercase tracking-wider border border-[#B8924A]/20">
-                Pure Himalayan Shilajit Gold
+                Hypril™ Extended Delay Gel
               </span>
               <h2 className="text-3xl sm:text-4xl font-serif font-extrabold text-[#1B1F1D] leading-tight">
-                Harvested from 18,000 ft Himalayan peaks. <br />
-                <span className="text-[#0F3D2B]">75% Fulvic Acid Soft Resin.</span>
+                Extended Duration. Total Control. <br />
+                <span className="text-[#0F3D2B]">Cooling Sensation & Skin Safe.</span>
               </h2>
               <p className="text-xs sm:text-sm text-[#5B655F] leading-relaxed font-medium">
-                Enriched with 24K edible Gold Bhasma and traditional Shodhana purification. Proven to boost daily power output, muscle recovery, and stamina naturally.
+                Engineered for maximum stamina and endurance during intimate moments. Fast-acting formula with pleasant cooling effect.
               </p>
               <div className="pt-2 flex items-center gap-4">
-                <Link to="/products/pure-himalayan-shilajit-gold-resin" className="btn-gold py-3.5 px-7 text-xs font-extrabold">
-                  <span>Claim Shilajit Offer</span>
+                <Link to="/products/hypril-extended-delay-gel-50ml" className="btn-gold py-3.5 px-7 text-xs font-extrabold">
+                  <span>Claim Gel Offer</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <span className="text-xs font-bold text-[#0F3D2B] flex items-center gap-1">
-                  <ShieldCheck className="w-4 h-4 text-[#B8924A]" /> Lab Certificate Included
+                  <ShieldCheck className="w-4 h-4 text-[#B8924A]" /> Dermatologically Tested
                 </span>
               </div>
             </div>
 
             <div className="lg:col-span-6 flex justify-center">
               <img
-                src="https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&q=80&w=800"
-                alt="Pure Himalayan Shilajit Gold Resin"
+                src="/images/hypril_delay_gel.jpg"
+                alt="Hypril Extended Delay Gel"
                 className="rounded-2xl border border-[#E4E0D8] shadow-xl max-w-md w-full object-cover aspect-[4/3]"
               />
             </div>
@@ -432,11 +419,11 @@ export const Home = ({ onOpenQuiz }) => {
             Build Your Routine & Save
           </h2>
           <p className="text-xs sm:text-sm text-[#5B655F]">
-            Curated 2-product stacks engineered for synergistic results and maximum value.
+            Curated 2-product stack engineered for synergistic performance and maximum value.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="max-w-xl mx-auto">
           {bundles.map((bundle) => (
             <div key={bundle.id} className="bg-white rounded-2xl p-6 border border-[#E4E0D8] shadow-premium flex flex-col justify-between space-y-4">
               <div className="space-y-3">
@@ -471,7 +458,7 @@ export const Home = ({ onOpenQuiz }) => {
             <span className="text-xs font-extrabold text-[#0F3D2B] uppercase tracking-widest">
               SIMPLE & ANXIETY-FREE
             </span>
-            <h2 className="text-3xl font-serif font-extrabold text-[#1B1F1D]">How Bold Care Works</h2>
+            <h2 className="text-3xl font-serif font-extrabold text-[#1B1F1D]">How Hypril™ Works</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl mx-auto">
@@ -479,8 +466,8 @@ export const Home = ({ onOpenQuiz }) => {
               <div className="w-12 h-12 rounded-full bg-[#0F3D2B] text-white font-serif font-bold text-lg mx-auto flex items-center justify-center">
                 1
               </div>
-              <h3 className="font-extrabold text-base text-[#1B1F1D]">Select Your Formula</h3>
-              <p className="text-xs text-[#5B655F]">Browse doctor-reviewed gummies, Shilajit, or take our 1-min quiz.</p>
+              <h3 className="font-extrabold text-base text-[#1B1F1D]">Select Your Hypril Formula</h3>
+              <p className="text-xs text-[#5B655F]">Choose between Hypril™ Enlargement Oil or Hypril™ Extended Delay Gel.</p>
             </div>
 
             <div className="space-y-3 p-6 rounded-2xl bg-[#FAF7F2] border border-[#E4E0D8]">
@@ -488,7 +475,7 @@ export const Home = ({ onOpenQuiz }) => {
                 2
               </div>
               <h3 className="font-extrabold text-base text-[#1B1F1D]">100% Plain Box Packing</h3>
-              <p className="text-xs text-[#5B655F]">We pack in unmarked brown boxes with zero product names outside.</p>
+              <p className="text-xs text-[#5B655F]">We pack in unmarked brown boxes with zero product names printed outside.</p>
             </div>
 
             <div className="space-y-3 p-6 rounded-2xl bg-[#FAF7F2] border border-[#E4E0D8]">
@@ -538,22 +525,6 @@ export const Home = ({ onOpenQuiz }) => {
         </div>
       </section>
 
-      {/* AS SEEN IN — PRESS LOGOS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white py-8 px-6 rounded-2xl border border-[#E4E0D8] text-center space-y-4">
-          <span className="text-[11px] font-extrabold text-[#5B655F] uppercase tracking-widest block">
-            AS FEATURED IN LEADING MEDIA
-          </span>
-          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-16 opacity-60 grayscale font-serif font-extrabold text-base text-slate-700">
-            <span>Inc42</span>
-            <span>YourStory</span>
-            <span>Mint</span>
-            <span>Outlook Money</span>
-            <span>Financial Express</span>
-          </div>
-        </div>
-      </section>
-
       {/* FAQ ACCORDION */}
       <section id="faq" className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="text-center space-y-2">
@@ -594,10 +565,10 @@ export const Home = ({ onOpenQuiz }) => {
           </div>
           <div className="space-y-2">
             <h2 className="text-2xl sm:text-3xl font-serif font-extrabold text-white">
-              Join The Bold Care Circle
+              Join The Hypril™ Circle
             </h2>
             <p className="text-xs text-emerald-100/80 max-w-md mx-auto font-medium">
-              Receive doctor-written health guides, new formula drops, and 15% OFF your first order.
+              Receive private wellness tips, special offers, and 10% OFF your first order.
             </p>
           </div>
 
@@ -610,7 +581,7 @@ export const Home = ({ onOpenQuiz }) => {
               className="flex-1 bg-white/10 border border-white/20 rounded-full px-4 py-3 text-xs text-white placeholder-emerald-200/60 focus:outline-none focus:border-[#B8924A]"
             />
             <button type="submit" className="btn-gold text-xs py-3 px-6 shrink-0 font-extrabold shadow-sm">
-              Get 15% Off
+              Get 10% Off
             </button>
           </form>
         </div>

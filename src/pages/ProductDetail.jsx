@@ -127,7 +127,7 @@ export const ProductDetail = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16 bg-[#FAF7F2] text-[#1B1F1D]">
       <SEO
-        title={`${product.name} — Bold Care Official Store`}
+        title={`${product.name} — Hypril Official Store`}
         description={`Buy ${product.name} online in India. ${product.benefitSummary || product.description} Free express shipping & 100% plain box discreet packaging.`}
       />
 

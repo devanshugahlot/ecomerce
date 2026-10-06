@@ -4,16 +4,16 @@ export const SEO = ({
   title,
   description,
   image,
-  canonicalUrl = "https://vyro.men/",
+  canonicalUrl = "https://hypril.com/",
   noIndex = false,
   jsonLd = null
 }) => {
-  const defaultTitle = "VYRO: Buy Best Men's Sexual Wellness & Vitality Products Online in India";
-  const defaultDesc = "Shop science-backed men's sexual wellness, stamina gummies, Shilajit gold & hair serums online in India. Doctor formulated, COD & 100% discreet packaging.";
+  const defaultTitle = "Hypril: Premium Men's Sexual Wellness, Enlargement Oil & Delay Gel in India";
+  const defaultDesc = "Shop doctor-formulated Hypril Enlargement Oil & Extended Delay Gel online in India. 100% discreet shipping, cash on delivery & clinical grade formula.";
 
   useEffect(() => {
     // 1. Page Title
-    document.title = title ? `${title} | VYRO Wellness` : defaultTitle;
+    document.title = title ? `${title} | Hypril Wellness` : defaultTitle;
 
     // 2. Meta Description
     let metaDescription = document.querySelector('meta[name="description"]');

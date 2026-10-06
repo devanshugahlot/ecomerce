@@ -30,7 +30,7 @@ export const AgeGateModal = () => {
             CONFIDENTIAL & AGE-RESTRICTED (18+)
           </span>
           <h2 className="text-2xl font-serif font-extrabold text-[#1B1F1D]">
-            Welcome to Bold Care
+            Welcome to Hypril™
           </h2>
           <p className="text-xs text-[#5B655F] leading-relaxed">
             This site contains health, wellness, and adult sexual health products. Please confirm that you are at least 18 years old to proceed.

@@ -14,22 +14,19 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const concerns = [
-    { id: 'stamina', title: 'Lasting Longer & Bedroom Stamina', subtitle: 'Climax timing control & endurance', icon: '⚡' },
-    { id: 'vitality', title: 'Energy, Power & Testosterone', subtitle: 'Daily vigour, gym recovery & strength', icon: '✨' },
-    { id: 'condoms', title: 'Condoms & Intimate Lubes', subtitle: 'Featherlight 0.04mm protection & moisture', icon: '🛡️' },
-    { id: 'hair', title: 'Hair Thinning & Beard Growth', subtitle: 'Receding hairline & patchy beard fill', icon: '💈' }
+    { id: 'enlargement', title: 'Size & Blood Flow Enhancement', subtitle: 'Natural herbal oil for tissue support & vigor', icon: '⚡' },
+    { id: 'delay', title: 'Endurance & Climax Delay', subtitle: 'Extended performance gel for timing control', icon: '⏱️' }
   ];
 
   const durations = [
     { id: 'recent', title: 'Less than 3 months', subtitle: 'Noticeable changes recently' },
-    { id: 'longterm', title: 'Over 6 months', subtitle: 'Persistent wellness goal' },
-    { id: 'prevention', title: 'General Prevention & Vitality', subtitle: 'Optimizing daily performance' }
+    { id: 'longterm', title: 'Over 6 months', subtitle: 'Persistent performance goal' },
+    { id: 'prevention', title: 'General Enhancement', subtitle: 'Optimizing intimate confidence' }
   ];
 
   const preferences = [
-    { id: 'gummies', title: 'Daily Herbal Gummies', subtitle: 'Tasty, discreet, zero sugar' },
-    { id: 'resin', title: 'Pure Shilajit Gold Resin', subtitle: 'Traditional high-potency tonic' },
-    { id: 'topical', title: 'Sprays & Serums', subtitle: 'Fast-acting direct application' }
+    { id: 'oil', title: 'Topical Massage Oil', subtitle: 'Deep absorption, 100ml bottle' },
+    { id: 'gel', title: 'Fast-acting Performance Gel', subtitle: 'Cooling sensation, 50ml pump' }
   ];
 
   const handleSelectConcern = (cId) => {
@@ -44,19 +41,14 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
 
   const handleSelectPreference = (pId) => {
     setAnswers({ ...answers, preference: pId });
-    setStep(4); // Recommendation step
+    setStep(4);
   };
 
   const getRecommendation = () => {
-    if (answers.concern === 'stamina') {
-      return MOCK_PRODUCTS.find((p) => p.slug.includes('surge')) || MOCK_PRODUCTS[0];
-    } else if (answers.concern === 'vitality') {
-      return MOCK_PRODUCTS.find((p) => p.slug.includes('shilajit')) || MOCK_PRODUCTS[1];
-    } else if (answers.concern === 'condoms') {
-      return MOCK_PRODUCTS.find((p) => p.slug.includes('404')) || MOCK_PRODUCTS[3];
-    } else {
-      return MOCK_PRODUCTS.find((p) => p.slug.includes('apex')) || MOCK_PRODUCTS[2];
+    if (answers.concern === 'delay' || answers.preference === 'gel') {
+      return MOCK_PRODUCTS[1] || MOCK_PRODUCTS[0];
     }
+    return MOCK_PRODUCTS[0];
   };
 
   const recommendedProd = getRecommendation();
@@ -82,7 +74,7 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
         <div className="flex items-center gap-2">
           <span className="px-3 py-1 rounded-full bg-[#0F3D2B]/10 text-[#0F3D2B] text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-[#B8924A]" />
-            1-Min Personalized Wellness Quiz
+            1-Min Hypril™ Wellness Quiz
           </span>
         </div>
 
@@ -91,9 +83,9 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
           <div className="space-y-4">
             <div className="space-y-1">
               <h2 className="text-xl sm:text-2xl font-serif font-extrabold text-[#1B1F1D]">
-                What is your primary wellness focus?
+                What is your primary intimate wellness focus?
               </h2>
-              <p className="text-xs text-[#5B655F]">Select your main goal for a doctor-backed product recommendation.</p>
+              <p className="text-xs text-[#5B655F]">Select your main goal for a targeted Hypril™ recommendation.</p>
             </div>
             <div className="space-y-2.5 pt-2">
               {concerns.map((c) => (
@@ -123,7 +115,7 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
               <h2 className="text-xl sm:text-2xl font-serif font-extrabold text-[#1B1F1D]">
                 How long have you had this goal?
               </h2>
-              <p className="text-xs text-[#5B655F]">Helps us determine daily dosage and routine duration.</p>
+              <p className="text-xs text-[#5B655F]">Helps us determine application routine.</p>
             </div>
             <div className="space-y-2.5 pt-2">
               {durations.map((d) => (
@@ -150,7 +142,7 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
               <h2 className="text-xl sm:text-2xl font-serif font-extrabold text-[#1B1F1D]">
                 Preferred product format?
               </h2>
-              <p className="text-xs text-[#5B655F]">Select what fits your daily lifestyle best.</p>
+              <p className="text-xs text-[#5B655F]">Select what fits your routine best.</p>
             </div>
             <div className="space-y-2.5 pt-2">
               {preferences.map((p) => (
@@ -178,13 +170,13 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
                 MATCHED FOR YOU
               </span>
               <h2 className="text-2xl font-serif font-extrabold text-[#1B1F1D]">
-                Your Recommended Routine
+                Your Recommended Hypril Routine
               </h2>
             </div>
 
             <div className="bg-white p-5 rounded-2xl border border-[#E4E0D8] flex flex-col sm:flex-row items-center gap-4 shadow-sm">
               <img
-                src={recommendedProd.images[0]}
+                src={recommendedProd.images ? recommendedProd.images[0] : recommendedProd.image}
                 alt={recommendedProd.name}
                 className="w-24 h-24 rounded-xl object-cover bg-[#FAF7F2] shrink-0"
               />
@@ -196,7 +188,7 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
                 <p className="text-xs text-[#5B655F] line-clamp-2">{recommendedProd.benefitSummary}</p>
                 <div className="pt-2 flex items-center justify-between sm:justify-start gap-4">
                   <span className="text-lg font-black text-[#0F3D2B]">₹{recommendedProd.price}</span>
-                  <span className="text-xs text-[#5B655F] line-through">₹{recommendedProd.comparePrice}</span>
+                  <span className="text-xs text-[#5B655F] line-through">₹{recommendedProd.originalPrice}</span>
                 </div>
               </div>
             </div>
@@ -207,7 +199,7 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
                 onClick={onClose}
                 className="btn-primary w-full py-3.5 font-bold shadow-glow-forest text-center flex justify-center"
               >
-                <span>View Product & Claim Discount</span>
+                <span>View Product & Claim Offer</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <button

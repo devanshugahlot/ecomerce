@@ -6,7 +6,7 @@ export const createOrder = async (req, res) => {
   try {
     const { orderItems, shippingAddress, paymentMethod, itemsPrice, shippingPrice, discountAmount, totalPrice } = req.body;
 
-    const orderNumber = 'VYRO-' + Date.now().toString().slice(-6);
+    const orderNumber = 'HYPRIL-' + Date.now().toString().slice(-6);
 
     try {
       const order = new Order({

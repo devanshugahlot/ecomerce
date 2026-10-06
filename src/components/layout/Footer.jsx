@@ -71,20 +71,20 @@ export const Footer = () => {
           <div className="md:col-span-2 space-y-4">
             <Link to="/" className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-xl bg-white text-[#0F3D2B] flex items-center justify-center font-serif font-black text-xl">
-                B
+                H
               </div>
               <span className="font-serif font-black text-2xl tracking-tight text-white">
-                Bold Care
+                Hypril
               </span>
             </Link>
             
             <p className="text-xs text-emerald-100/80 max-w-sm leading-relaxed font-medium">
-              Confident. Clinical. Discreet. India's premium men's health and intimacy brand, delivering science-backed stamina, Shilajit, hair care, and wellness directly to your doorstep.
+              Confident. Clinical. Discreet. India's premium men's health and intimacy brand, delivering science-backed performance oils, delay gels, and wellness solutions directly to your doorstep.
             </p>
 
             <form onSubmit={handleSubscribe} className="space-y-2 pt-2 max-w-sm">
               <label className="text-[11px] font-extrabold uppercase text-[#B8924A] tracking-wider block">
-                Join Wellness Circle (15% OFF First Order)
+                Join Wellness Circle (10% OFF First Order)
               </label>
               <div className="flex gap-2">
                 <input
@@ -105,11 +105,9 @@ export const Footer = () => {
           <div className="space-y-3">
             <h4 className="text-xs font-extrabold text-[#B8924A] uppercase tracking-wider">Shop Solutions</h4>
             <ul className="space-y-2 font-semibold text-emerald-100/80">
-              <li><Link to="/shop?category=Sexual%20Wellness" className="hover:text-white transition-colors">Sexual Wellness</Link></li>
-              <li><Link to="/shop?category=Daily%20Performance" className="hover:text-white transition-colors">Shilajit & Daily Health</Link></li>
-              <li><Link to="/shop?category=Condoms%20%26%20Lubes" className="hover:text-white transition-colors">Condoms & Lubes</Link></li>
-              <li><Link to="/shop?category=Grooming%20%26%20Hair" className="hover:text-white transition-colors">Hair & Beard Care</Link></li>
-              <li><Link to="/shop?category=Intimate%20Care" className="hover:text-white transition-colors">Intimate Hygiene</Link></li>
+              <li><Link to="/shop?category=Enlargement%20Oils" className="hover:text-white transition-colors">Enlargement Oils</Link></li>
+              <li><Link to="/shop?category=Delay%20Gels" className="hover:text-white transition-colors">Delay Gels</Link></li>
+              <li><Link to="/shop" className="hover:text-white transition-colors">All Hypril Products</Link></li>
             </ul>
           </div>
 
@@ -129,13 +127,13 @@ export const Footer = () => {
             <h4 className="text-xs font-extrabold text-[#B8924A] uppercase tracking-wider">Contact & Legal</h4>
             <div className="space-y-2 text-emerald-100/80 font-medium">
               <p className="flex items-center gap-2">
-                <Mail className="w-3.5 h-3.5 text-[#B8924A]" /> support@boldcare.in
+                <Mail className="w-3.5 h-3.5 text-[#B8924A]" /> support@hypril.com
               </p>
               <p className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-[#B8924A]" /> +91 1800-BOLD-CARE
+                <Phone className="w-3.5 h-3.5 text-[#B8924A]" /> +91 1800-HYPRIL-CARE
               </p>
               <p className="pt-1 text-[11px] text-emerald-200/60 leading-tight">
-                Bold Care Healthcare Pvt. Ltd.<br />
+                Hypril Healthcare Pvt. Ltd.<br />
                 Mumbai, Maharashtra, India.
               </p>
             </div>
@@ -145,7 +143,7 @@ export const Footer = () => {
         {/* Legal Disclaimer */}
         <div className="pt-8 border-t border-white/10 text-[10px] text-emerald-200/60 leading-relaxed space-y-2">
           <p>
-            <strong>Medical Disclaimer:</strong> Statements regarding dietary supplements have not been evaluated by FDA/FSSAI for disease treatment. Products are not intended to diagnose, treat, cure, or prevent any medical condition. Always consult a certified medical doctor before starting any healthcare regimen.
+            <strong>Medical Disclaimer:</strong> Statements regarding topical performance oils and gels have not been evaluated for disease treatment. Products are intended for adult intimacy and wellness enhancement. Always test on a small area of skin prior to full application.
           </p>
           <p>
             Complies with Indian Drugs and Magic Remedies Act & ASCI Advertising Guidelines. 100% Confidential packaging assured on all dispatches.
@@ -154,7 +152,7 @@ export const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-emerald-200/70 font-medium">
-          <p>© {new Date().getFullYear()} Bold Care Inc. All rights reserved. Confident. Clinical. Discreet.</p>
+          <p>© {new Date().getFullYear()} Hypril Inc. All rights reserved. Confident. Clinical. Discreet.</p>
           <div className="flex items-center gap-4 text-white font-bold">
             <span>UPI Instant</span>
             <span>•</span>
