@@ -14,6 +14,9 @@ import { Footer } from './components/layout/Footer';
 import { AdminLayout } from './components/layout/AdminLayout';
 import { CartDrawer } from './components/common/CartDrawer';
 import { SearchModal } from './components/common/SearchModal';
+import { NeedsQuizModal } from './components/common/NeedsQuizModal';
+import { AgeGateModal } from './components/common/AgeGateModal';
+import { WhatsAppFloat } from './components/common/WhatsAppFloat';
 import { MOCK_PRODUCTS } from './utils/mockProducts';
 
 // Pages
@@ -55,11 +58,11 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-[#FAF9F6] text-slate-900 flex items-center justify-center p-6 text-center">
-          <div className="bg-white border border-slate-200 rounded-3xl p-8 max-w-md w-full space-y-4 shadow-xl">
-            <h2 className="text-xl font-serif font-extrabold text-slate-900">Something went wrong</h2>
-            <p className="text-xs text-slate-600 font-medium">
-              An unexpected display issue occurred. Click below to return to the homepage.
+        <div className="min-h-screen bg-[#FAF7F2] text-[#1B1F1D] flex items-center justify-center p-6 text-center">
+          <div className="bg-white border border-[#E4E0D8] rounded-3xl p-8 max-w-md w-full space-y-4 shadow-xl">
+            <h2 className="text-xl font-serif font-extrabold text-[#0F3D2B]">Something went wrong</h2>
+            <p className="text-xs text-[#5B655F] font-medium">
+              An unexpected display issue occurred. Click below to return to the storefront.
             </p>
             {this.state.error && (
               <div className="bg-red-50 border border-red-200 p-3 rounded-xl text-left">
@@ -75,7 +78,7 @@ class ErrorBoundary extends Component {
               }}
               className="btn-primary text-xs py-3 px-6 w-full font-bold"
             >
-              Return to VYRO Storefront
+              Return to Bold Care Storefront
             </button>
           </div>
         </div>
@@ -87,15 +90,19 @@ class ErrorBoundary extends Component {
 
 const StorefrontLayout = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isQuizOpen, setIsQuizOpen] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FAF9F6] text-slate-900 font-sans">
+    <div className="flex flex-col min-h-screen bg-[#FAF7F2] text-[#1B1F1D] font-sans">
       <AnnouncementBar />
-      <Navbar onOpenSearch={() => setIsSearchOpen(true)} />
+      <Navbar
+        onOpenSearch={() => setIsSearchOpen(true)}
+        onOpenQuiz={() => setIsQuizOpen(true)}
+      />
       
       <main className="flex-1">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home onOpenQuiz={() => setIsQuizOpen(true)} />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/products/:slug" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
@@ -110,6 +117,12 @@ const StorefrontLayout = () => {
 
       <Footer />
       <CartDrawer />
+      <WhatsAppFloat />
+      <AgeGateModal />
+      <NeedsQuizModal
+        isOpen={isQuizOpen}
+        onClose={() => setIsQuizOpen(false)}
+      />
       <SearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}

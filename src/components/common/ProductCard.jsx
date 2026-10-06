@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, ShoppingBag, Check } from 'lucide-react';
-import { RatingStars } from './RatingStars';
+import { Heart, ShoppingBag, Check, ShieldCheck, Sparkles, Star } from 'lucide-react';
 import { Badge } from './Badge';
 import { formatCurrency, calculateDiscount } from '../../utils/currency';
 import { useCart } from '../../context/CartContext';
@@ -10,6 +9,8 @@ import { useWishlist } from '../../context/WishlistContext';
 export const ProductCard = ({ product }) => {
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
+  const [selectedPackIndex, setSelectedPackIndex] = useState(0);
+
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
 
@@ -17,17 +18,22 @@ export const ProductCard = ({ product }) => {
 
   const id = product._id || product.id || 'prod_fallback';
   const isSaved = id ? isInWishlist(id) : false;
-  const discount = calculateDiscount(product.price || 0, product.comparePrice || 0);
 
+  const packs = product.packs && product.packs.length > 0 ? product.packs : null;
+  const currentPrice = packs ? packs[selectedPackIndex].price : product.price;
+  const currentCompare = packs ? packs[selectedPackIndex].comparePrice : product.comparePrice;
 
+  const discount = calculateDiscount(currentPrice || 0, currentCompare || 0);
 
   const handleQuickAdd = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setAdding(true);
 
+    const selectedVariant = packs ? { name: packs[selectedPackIndex].name } : null;
+
     setTimeout(() => {
-      addToCart(product, 1);
+      addToCart({ ...product, price: currentPrice }, 1, selectedVariant);
       setAdding(false);
       setAdded(true);
       setTimeout(() => setAdded(false), 1800);
@@ -44,23 +50,45 @@ export const ProductCard = ({ product }) => {
     ? product.images[0] 
     : product.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=600';
 
+  const hoverImage = product.images && product.images.length > 1 ? product.images[1] : mainImage;
+
   return (
-    <div className="group relative bg-white rounded-2xl border border-slate-200/90 hover:border-emerald-500/60 transition-all duration-300 flex flex-col overflow-hidden shadow-sm hover:shadow-md">
-      {/* Product Image Container */}
-      <div className="relative aspect-[4/3] bg-slate-50 overflow-hidden">
-        <Link to={`/products/${product.slug || id}`}>
+    <div className="group relative bg-white rounded-2xl border border-[#E4E0D8] hover:border-[#0F3D2B]/40 transition-all duration-300 flex flex-col overflow-hidden shadow-premium hover:shadow-2xl">
+      
+      {/* Product Image Container (4:5 Aspect Ratio) */}
+      <div className="relative aspect-[4/5] bg-[#FAF7F2] overflow-hidden">
+        <Link to={`/products/${product.slug || id}`} className="block w-full h-full">
           <img
             src={mainImage}
             alt={product.name}
-            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+            className="w-full h-full object-cover object-center group-hover:opacity-0 transition-opacity duration-500 ease-out"
+            loading="lazy"
+          />
+          <img
+            src={hoverImage}
+            alt={`${product.name} alternate`}
+            className="w-full h-full object-cover object-center absolute inset-0 opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 ease-out"
             loading="lazy"
           />
         </Link>
 
-        {/* Top Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
-          {product.isBestSeller && <Badge variant="amber">Bestseller</Badge>}
-          {discount > 0 && <Badge variant="emerald">{discount}% OFF</Badge>}
+        {/* Top Left Badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
+          {product.isBestSeller && (
+            <span className="bg-[#B8924A] text-white font-extrabold text-[10px] px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1 uppercase tracking-wider">
+              <Sparkles className="w-3 h-3 fill-current" /> Bestseller
+            </span>
+          )}
+          {product.isRx && (
+            <span className="bg-[#0F3D2B] text-white font-extrabold text-[10px] px-2.5 py-0.5 rounded-full shadow-sm uppercase tracking-wider">
+              Doctor Consult
+            </span>
+          )}
+          {discount > 0 && (
+            <span className="bg-[#B5472F] text-white font-extrabold text-[10px] px-2 py-0.5 rounded-full shadow-sm">
+              {discount}% OFF
+            </span>
+          )}
         </div>
 
         {/* Wishlist Button */}
@@ -69,43 +97,72 @@ export const ProductCard = ({ product }) => {
           aria-label="Save to Wishlist"
           className={`absolute top-3 right-3 p-2.5 rounded-full backdrop-blur-md transition-all duration-200 z-10 ${
             isSaved
-              ? 'bg-rose-500 text-white shadow-sm'
-              : 'bg-white/80 text-slate-600 hover:text-slate-900 hover:bg-white border border-slate-200'
+              ? 'bg-rose-600 text-white shadow-sm'
+              : 'bg-white/80 text-[#5B655F] hover:text-[#1B1F1D] hover:bg-white border border-[#E4E0D8]'
           }`}
         >
           <Heart className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
         </button>
+
+        {/* Discreet Delivery Guarantee Footer Tag */}
+        <div className="absolute bottom-2 left-2 right-2 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-lg border border-[#E4E0D8] text-[10px] text-[#0F3D2B] font-bold flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <ShieldCheck className="w-3 h-3 text-[#B8924A]" />
+          <span>100% Plain Box Packaging</span>
+        </div>
       </div>
 
       {/* Content */}
-      <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-        <div>
-          <div className="flex items-center justify-between text-xs text-emerald-700 font-bold mb-1">
-            <span className="capitalize">{product.category || 'Wellness'}</span>
-            <RatingStars rating={product.rating || 4.8} reviewCount={product.reviewCount || 124} size="xs" />
+      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-xs text-[#0F3D2B] font-bold">
+            <span className="capitalize text-[11px] text-[#5B655F]">{product.category || 'Wellness'}</span>
+            <div className="flex items-center gap-1 text-[#B8924A] font-extrabold text-xs">
+              <Star className="w-3.5 h-3.5 fill-[#B8924A]" />
+              <span>{product.rating || 4.9}</span>
+              <span className="text-[10px] text-[#5B655F] font-normal">({product.reviewCount || 180})</span>
+            </div>
           </div>
 
           <Link to={`/products/${product.slug || id}`}>
-            <h3 className="font-extrabold text-base text-slate-900 group-hover:text-emerald-600 transition-colors line-clamp-1">
+            <h3 className="font-extrabold text-sm sm:text-base text-[#1B1F1D] group-hover:text-[#0F3D2B] transition-colors line-clamp-2 leading-snug">
               {product.name}
             </h3>
           </Link>
 
-          <p className="text-xs text-slate-600 mt-1 line-clamp-2 leading-relaxed">
-            {product.benefitSummary || product.description || 'Science-backed daily formula for peak performance.'}
+          <p className="text-xs text-[#5B655F] line-clamp-2 leading-relaxed font-medium">
+            {product.benefitSummary || product.description}
           </p>
+
+          {/* Pack Options Selector Pills */}
+          {packs && (
+            <div className="pt-1 flex flex-wrap gap-1.5">
+              {packs.map((p, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedPackIndex(idx)}
+                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold transition-all ${
+                    selectedPackIndex === idx
+                      ? 'bg-[#0F3D2B] text-white shadow-sm'
+                      : 'bg-[#FAF7F2] text-[#5B655F] border border-[#E4E0D8] hover:border-[#0F3D2B]'
+                  }`}
+                >
+                  {p.name.split(' ')[0]} {p.name.split(' ')[1] || ''}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Price & Action */}
-        <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+        <div className="pt-3 border-t border-[#E4E0D8] flex items-center justify-between gap-2">
           <div>
             <div className="flex items-baseline gap-2">
-              <span className="text-lg font-extrabold text-slate-900">
-                {formatCurrency(product.price)}
+              <span className="text-lg font-black text-[#1B1F1D]">
+                {formatCurrency(currentPrice)}
               </span>
-              {product.comparePrice > product.price && (
-                <span className="text-xs text-slate-400 line-through">
-                  {formatCurrency(product.comparePrice)}
+              {currentCompare > currentPrice && (
+                <span className="text-xs text-[#5B655F] line-through">
+                  {formatCurrency(currentCompare)}
                 </span>
               )}
             </div>
@@ -114,20 +171,20 @@ export const ProductCard = ({ product }) => {
           <button
             onClick={handleQuickAdd}
             disabled={adding || product.stock <= 0}
-            className={`btn-primary px-3.5 py-2 text-xs rounded-xl font-bold shrink-0 shadow-sm ${
-              added ? 'bg-emerald-700 text-white' : ''
+            className={`btn-primary px-4 py-2 text-xs rounded-full font-extrabold shrink-0 shadow-sm ${
+              added ? 'bg-[#0F3D2B] text-white' : ''
             }`}
           >
             {adding ? (
               <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
             ) : added ? (
               <>
-                <Check className="w-4 h-4" />
+                <Check className="w-3.5 h-3.5" />
                 <span>Added</span>
               </>
             ) : (
               <>
-                <ShoppingBag className="w-4 h-4" />
+                <ShoppingBag className="w-3.5 h-3.5" />
                 <span>Add</span>
               </>
             )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   Heart,
@@ -10,9 +10,13 @@ import {
   Minus,
   Star,
   Zap,
-  Package,
+  PackageCheck,
   Stethoscope,
-  ChevronRight
+  ChevronRight,
+  Sparkles,
+  AlertCircle,
+  Lock,
+  Play
 } from 'lucide-react';
 import { SEO } from '../components/common/SEO';
 import { RatingStars } from '../components/common/RatingStars';
@@ -28,35 +32,34 @@ export const ProductDetail = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  // Find product by slug or id
   const product = MOCK_PRODUCTS.find(
     (p) => p.slug === slug || p._id === slug || p.id === slug
   ) || MOCK_PRODUCTS[0];
 
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [selectedPackIndex, setSelectedPackIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState('description');
+  const [activeTab, setActiveTab] = useState('science');
   const [pinCode, setPinCode] = useState('');
   const [deliveryChecked, setDeliveryChecked] = useState(false);
 
-  // Review form states
+  // Review form state
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewText, setReviewText] = useState('');
   const [reviewName, setReviewName] = useState('');
   const [reviewsList, setReviewsList] = useState([
     {
-      name: "Ankit M.",
+      name: "Rohan S.",
       rating: 5,
-      date: "2 days ago",
-      text: "Extremely effective. Delivered within 48 hours in a plain brown box without any label identifying the contents.",
+      date: "Verified Buyer • 3 days ago",
+      text: "Superb formula quality. Delivered in a plain brown box without any product name on the shipping label. Highly recommend!",
       verified: true
     },
     {
-      name: "Siddharth K.",
+      name: "Vikram R.",
       rating: 5,
-      date: "1 week ago",
-      text: "Superb formula quality. Noticed improved daily energy and workouts. Will definitely reorder the 3-month supply.",
+      date: "Verified Buyer • 1 week ago",
+      text: "Authentic Shilajit resin. Noticeable energy boost in daily gym sessions and bedroom stamina within 7 days.",
       verified: true
     }
   ]);
@@ -67,25 +70,24 @@ export const ProductDetail = () => {
 
   const id = product._id || product.id;
   const isSaved = isInWishlist(id);
-  const discount = calculateDiscount(product.price, product.comparePrice);
 
-  const variants = [
-    { id: '1-pack', name: '1 Month Supply (Standard)', price: product.price },
-    { id: '3-pack', name: '3 Month Supply (Save 20%)', price: Math.round(product.price * 2.4) },
-  ];
-
-  const currentPrice = selectedVariant ? selectedVariant.price : product.price;
+  const packs = product.packs && product.packs.length > 0 ? product.packs : null;
+  const currentPrice = packs ? packs[selectedPackIndex].price : product.price;
+  const currentCompare = packs ? packs[selectedPackIndex].comparePrice : product.comparePrice;
+  const discount = calculateDiscount(currentPrice, currentCompare);
 
   const images = product.images && product.images.length > 0
     ? product.images
     : [product.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'];
 
   const handleAddToCart = () => {
-    addToCart(product, quantity, selectedVariant || variants[0]);
+    const variant = packs ? { name: packs[selectedPackIndex].name } : null;
+    addToCart({ ...product, price: currentPrice }, quantity, variant);
   };
 
   const handleBuyNow = () => {
-    addToCart(product, quantity, selectedVariant || variants[0]);
+    const variant = packs ? { name: packs[selectedPackIndex].name } : null;
+    addToCart({ ...product, price: currentPrice }, quantity, variant);
     navigate('/checkout');
   };
 
@@ -102,124 +104,86 @@ export const ProductDetail = () => {
   const handleReviewSubmit = (e) => {
     e.preventDefault();
     if (!reviewName || !reviewText) {
-      addToast('Please provide your name and review comment', 'error');
+      addToast('Please provide your name and review text', 'error');
       return;
     }
     const newRev = {
       name: reviewName,
       rating: reviewRating,
-      date: "Just now",
+      date: "Verified Buyer • Just now",
       text: reviewText,
       verified: true
     };
     setReviewsList([newRev, ...reviewsList]);
     setReviewText('');
     setReviewName('');
-    addToast('Thank you! Your verified review has been published.', 'success');
+    addToast('Thank you! Your review has been published.', 'success');
   };
 
   const relatedProducts = MOCK_PRODUCTS.filter(
     (p) => p.category === product.category && (p._id || p.id) !== id
   ).slice(0, 4);
 
-  const productUrl = `https://vyro.men/products/${product.slug || id}`;
-
-  const productJsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Product",
-        "name": product.name,
-        "image": images,
-        "description": product.description || product.benefitSummary,
-        "sku": `VYRO-${id}`,
-        "brand": {
-          "@type": "Brand",
-          "name": "VYRO"
-        },
-        "offers": {
-          "@type": "Offer",
-          "url": productUrl,
-          "priceCurrency": "INR",
-          "price": currentPrice,
-          "priceValidUntil": "2027-12-31",
-          "itemCondition": "https://schema.org/NewCondition",
-          "availability": "https://schema.org/InStock",
-          "seller": {
-            "@type": "Organization",
-            "name": "VYRO Wellness"
-          }
-        },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": product.rating || 4.9,
-          "reviewCount": product.reviewCount || 342
-        }
-      },
-      {
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://vyro.men/"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Shop",
-            "item": "https://vyro.men/shop"
-          },
-          {
-            "@type": "ListItem",
-            "position": 3,
-            "name": product.name,
-            "item": productUrl
-          }
-        ]
-      }
-    ]
-  };
-
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16 bg-[#FAF9F6] text-slate-900">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16 bg-[#FAF7F2] text-[#1B1F1D]">
       <SEO
-        title={`${product.name} — Buy Online in India`}
-        description={`Buy ${product.name} online. ${product.benefitSummary || product.description} Free express shipping & 100% discreet packaging.`}
-        canonicalUrl={productUrl}
-        jsonLd={productJsonLd}
+        title={`${product.name} — Bold Care Official Store`}
+        description={`Buy ${product.name} online in India. ${product.benefitSummary || product.description} Free express shipping & 100% plain box discreet packaging.`}
       />
 
       {/* Breadcrumb Navigation */}
-      <nav className="flex items-center gap-2 text-xs font-bold text-slate-500">
-        <Link to="/" className="hover:text-emerald-700">Home</Link>
+      <nav className="flex items-center gap-2 text-xs font-bold text-[#5B655F]">
+        <Link to="/" className="hover:text-[#0F3D2B]">Home</Link>
         <ChevronRight className="w-3.5 h-3.5" />
-        <Link to="/shop" className="hover:text-emerald-700">Shop</Link>
+        <Link to="/shop" className="hover:text-[#0F3D2B]">Shop</Link>
         <ChevronRight className="w-3.5 h-3.5" />
-        <span className="text-emerald-700 truncate max-w-xs">{product.name}</span>
+        <span className="text-[#0F3D2B] truncate max-w-xs">{product.name}</span>
       </nav>
 
-      {/* Main Product Info Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-        {/* Gallery - Left 6 Columns */}
+      {/* Rx Prescription Warning Notice (If Applicable) */}
+      {product.isRx && (
+        <div className="bg-[#FAF4E8] border border-[#B8924A]/40 rounded-2xl p-4 flex items-start gap-3 text-xs text-[#1B1F1D] shadow-sm">
+          <AlertCircle className="w-5 h-5 text-[#B8924A] shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <h4 className="font-extrabold text-xs text-[#0F3D2B]">Clinical Formulation Notice:</h4>
+            <p className="text-[#5B655F] font-medium leading-relaxed">
+              {product.rxNotice || 'This is a potent clinical formulation. Always consult a certified medical practitioner before starting dosage.'}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Main Product Purchase Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        
+        {/* Left Column: Gallery & Images (4:5 Ratio) */}
         <div className="lg:col-span-6 space-y-4">
-          <div className="relative aspect-[4/3] bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-sm">
+          <div className="relative aspect-[4/5] bg-white rounded-3xl overflow-hidden border border-[#E4E0D8] shadow-premium">
             <img
               src={images[selectedImage]}
               alt={product.name}
               className="w-full h-full object-cover object-center"
             />
-            {product.isBestSeller && (
-              <div className="absolute top-4 left-4 z-10">
-                <Badge variant="amber">Bestseller</Badge>
-              </div>
-            )}
-            {discount > 0 && (
-              <div className="absolute top-4 right-4 z-10">
-                <Badge variant="emerald">{discount}% OFF</Badge>
-              </div>
-            )}
+
+            {/* Badges */}
+            <div className="absolute top-4 left-4 flex flex-col gap-1.5 z-10">
+              {product.isBestSeller && (
+                <span className="bg-[#B8924A] text-white font-extrabold text-xs px-3 py-1 rounded-full shadow-sm uppercase tracking-wider flex items-center gap-1">
+                  <Sparkles className="w-3.5 h-3.5 fill-current" /> Bestseller
+                </span>
+              )}
+              {discount > 0 && (
+                <span className="bg-[#B5472F] text-white font-extrabold text-xs px-3 py-1 rounded-full shadow-sm">
+                  {discount}% OFF
+                </span>
+              )}
+            </div>
+
+            {/* Discreet Delivery Badge */}
+            <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl border border-[#E4E0D8] text-xs text-[#0F3D2B] font-extrabold flex items-center justify-center gap-2 shadow-sm">
+              <PackageCheck className="w-4 h-4 text-[#B8924A]" />
+              <span>100% Plain Unmarked Outer Box Guaranteed</span>
+            </div>
           </div>
 
           {/* Thumbnails */}
@@ -229,8 +193,8 @@ export const ProductDetail = () => {
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(idx)}
-                  className={`w-20 h-20 rounded-xl overflow-hidden bg-slate-100 border-2 transition-all ${
-                    selectedImage === idx ? 'border-emerald-600 scale-95' : 'border-slate-200 opacity-70'
+                  className={`w-20 h-20 rounded-2xl overflow-hidden bg-white border-2 transition-all ${
+                    selectedImage === idx ? 'border-[#0F3D2B] scale-95 shadow-md' : 'border-[#E4E0D8] opacity-70'
                   }`}
                 >
                   <img src={img} alt={`Thumb ${idx}`} className="w-full h-full object-cover" />
@@ -240,90 +204,102 @@ export const ProductDetail = () => {
           )}
         </div>
 
-        {/* Purchase Options - Right 6 Columns */}
+        {/* Right Column: Buy Box & Options */}
         <div className="lg:col-span-6 space-y-6">
           <div className="space-y-2">
-            <div className="flex items-center gap-3 text-xs">
-              <span className="text-emerald-700 font-extrabold uppercase tracking-widest">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-[#0F3D2B] font-extrabold uppercase tracking-widest">
                 {product.category}
               </span>
-              <RatingStars rating={product.rating || 4.9} reviewCount={product.reviewCount || 300} />
+              <div className="flex items-center gap-1.5 text-[#B8924A] font-extrabold">
+                <Star className="w-4 h-4 fill-[#B8924A]" />
+                <span className="text-sm">{product.rating || 4.9}</span>
+                <span className="text-[#5B655F] text-xs font-normal">({product.reviewCount || 342} verified reviews)</span>
+              </div>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl font-serif font-extrabold text-slate-900 leading-tight">
+            <h1 className="text-2xl sm:text-4xl font-serif font-extrabold text-[#1B1F1D] leading-tight">
               {product.name}
             </h1>
 
-            <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed pt-1">
+            <p className="text-xs sm:text-sm text-[#5B655F] leading-relaxed font-medium pt-1">
               {product.benefitSummary || product.description}
             </p>
           </div>
 
-          {/* Pricing */}
-          <div className="p-4 rounded-2xl bg-[#FEF8EC] border border-amber-200 flex items-center justify-between">
-            <div className="flex items-baseline gap-3">
-              <span className="text-3xl font-black text-slate-900">
-                {formatCurrency(currentPrice)}
-              </span>
-              {product.comparePrice > currentPrice && (
-                <span className="text-sm text-slate-400 line-through">
-                  {formatCurrency(product.comparePrice)}
+          {/* Pricing Box */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E4E0D8] shadow-sm flex items-center justify-between">
+            <div>
+              <div className="flex items-baseline gap-3">
+                <span className="text-3xl font-black text-[#0F3D2B]">
+                  {formatCurrency(currentPrice)}
                 </span>
-              )}
+                {currentCompare > currentPrice && (
+                  <span className="text-sm text-[#5B655F] line-through">
+                    {formatCurrency(currentCompare)}
+                  </span>
+                )}
+              </div>
+              <span className="text-[11px] text-emerald-800 font-bold">Inclusive of all taxes & plain box delivery</span>
             </div>
 
-            <div className="text-right">
-              <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-200">
-                In Stock • Express Shipping
-              </span>
-            </div>
+            <span className="text-xs font-extrabold text-[#0F3D2B] bg-[#EEF3EE] px-3.5 py-1.5 rounded-full border border-[#0F3D2B]/20">
+              In Stock
+            </span>
           </div>
 
-          {/* Variant Selector */}
-          <div className="space-y-2">
-            <label className="text-xs font-extrabold text-slate-700 uppercase tracking-wider">
-              Select Supply Pack
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {variants.map((v) => (
-                <button
-                  key={v.id}
-                  onClick={() => setSelectedVariant(v)}
-                  className={`p-3.5 rounded-xl border text-left text-xs font-bold transition-all ${
-                    (selectedVariant?.id || variants[0].id) === v.id
-                      ? 'bg-emerald-50 border-emerald-600 text-emerald-800 shadow-sm'
-                      : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
-                  }`}
-                >
-                  <span className="block font-extrabold text-slate-900">{v.name}</span>
-                  <span className="block text-slate-500 mt-1 font-semibold">{formatCurrency(v.price)}</span>
-                </button>
-              ))}
+          {/* Pack Options Selector Pills */}
+          {packs && (
+            <div className="space-y-2.5">
+              <label className="text-xs font-extrabold text-[#1B1F1D] uppercase tracking-wider block">
+                Select Supply Pack:
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {packs.map((pack, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedPackIndex(idx)}
+                    className={`p-3.5 rounded-2xl border text-left text-xs transition-all relative ${
+                      selectedPackIndex === idx
+                        ? 'bg-[#EEF3EE] border-[#0F3D2B] text-[#0F3D2B] shadow-sm'
+                        : 'bg-white border-[#E4E0D8] text-[#1B1F1D] hover:border-[#0F3D2B]'
+                    }`}
+                  >
+                    <span className="block font-extrabold text-sm text-[#1B1F1D]">{pack.name}</span>
+                    <div className="flex items-center justify-between mt-1">
+                      <span className="font-black text-[#0F3D2B]">₹{pack.price}</span>
+                      <span className="text-[10px] font-extrabold bg-[#B5472F] text-white px-2 py-0.5 rounded-full uppercase">
+                        {pack.savings}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Quantity Selector + Add to Cart + Wishlist */}
-          <div className="space-y-4 pt-2">
+          {/* Quantity & CTA Buttons */}
+          <div className="space-y-3 pt-2">
             <div className="flex gap-3">
               {/* Quantity */}
-              <div className="flex items-center border border-slate-200 rounded-xl bg-white px-2 shrink-0">
+              <div className="flex items-center border border-[#E4E0D8] rounded-full bg-white px-2 shrink-0">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="p-2 text-slate-500 hover:text-slate-900"
+                  className="p-2 text-[#5B655F] hover:text-[#1B1F1D]"
                 >
                   <Minus className="w-4 h-4" />
                 </button>
-                <span className="px-3 text-sm font-extrabold text-slate-900">{quantity}</span>
+                <span className="px-3 text-sm font-black text-[#1B1F1D]">{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="p-2 text-slate-500 hover:text-slate-900"
+                  className="p-2 text-[#5B655F] hover:text-[#1B1F1D]"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
               </div>
 
               {/* Add to Cart */}
-              <button onClick={handleAddToCart} className="btn-primary flex-1 text-xs sm:text-sm py-3.5 font-bold">
+              <button onClick={handleAddToCart} className="btn-primary flex-1 py-4 text-xs sm:text-sm font-extrabold shadow-glow-forest">
                 <ShoppingBag className="w-4 h-4" />
                 <span>Add To Cart</span>
               </button>
@@ -331,10 +307,10 @@ export const ProductDetail = () => {
               {/* Wishlist */}
               <button
                 onClick={() => toggleWishlist(product)}
-                className={`p-3.5 rounded-xl border transition-all ${
+                className={`p-3.5 rounded-full border transition-all ${
                   isSaved
-                    ? 'bg-rose-500 text-white border-rose-500'
-                    : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900'
+                    ? 'bg-rose-600 text-white border-rose-600'
+                    : 'bg-white border-[#E4E0D8] text-[#5B655F] hover:text-[#1B1F1D]'
                 }`}
                 aria-label="Wishlist"
               >
@@ -345,71 +321,71 @@ export const ProductDetail = () => {
             {/* Instant Buy Now */}
             <button
               onClick={handleBuyNow}
-              className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black py-3.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 text-xs sm:text-sm uppercase tracking-wider"
+              className="btn-gold w-full py-4 text-xs sm:text-sm font-extrabold shadow-glow-gold uppercase tracking-wider flex items-center justify-center gap-2"
             >
               <Zap className="w-4 h-4 fill-current" />
               <span>Buy Now — Instant Checkout</span>
             </button>
           </div>
 
-          {/* PIN Code Delivery Checker */}
-          <div className="p-4 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-sm">
-            <h4 className="text-xs font-extrabold text-slate-900 flex items-center gap-2">
-              <Truck className="w-4 h-4 text-emerald-600" />
-              Check Estimated Delivery
+          {/* PIN Code Delivery Estimator */}
+          <div className="p-4 rounded-2xl bg-white border border-[#E4E0D8] space-y-3 shadow-sm">
+            <h4 className="text-xs font-extrabold text-[#1B1F1D] flex items-center gap-2">
+              <Truck className="w-4 h-4 text-[#0F3D2B]" />
+              Check Estimated Delivery:
             </h4>
             <form onSubmit={handleCheckDelivery} className="flex gap-2">
               <input
                 type="text"
                 value={pinCode}
                 onChange={(e) => setPinCode(e.target.value)}
-                placeholder="Enter 6-digit Indian PIN Code"
+                placeholder="Enter 6-digit PIN code"
                 maxLength={6}
-                className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 font-medium"
+                className="flex-1 bg-[#FAF7F2] border border-[#E4E0D8] rounded-xl px-3 py-2 text-xs text-[#1B1F1D] font-bold focus:outline-none focus:border-[#0F3D2B]"
               />
-              <button type="submit" className="btn-secondary text-xs px-4 py-2 font-bold">
+              <button type="submit" className="btn-secondary py-2 px-4 text-xs font-bold shrink-0">
                 Check
               </button>
             </form>
             {deliveryChecked && (
-              <p className="text-[11px] text-emerald-700 font-extrabold flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" />
+              <p className="text-[11px] text-[#0F3D2B] font-extrabold flex items-center gap-1 pt-1">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#B8924A]" />
                 Guaranteed 2-Day Express Delivery to PIN {pinCode}.
               </p>
             )}
           </div>
 
-          {/* Trust Guarantees */}
-          <div className="grid grid-cols-2 gap-3 text-[11px] text-slate-700 font-bold pt-2 border-t border-slate-200">
+          {/* Trust Pillars */}
+          <div className="grid grid-cols-2 gap-3 text-[11px] font-extrabold text-[#0F3D2B] pt-2 border-t border-[#E4E0D8]">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>100% Discreet Plain Box</span>
+              <PackageCheck className="w-4 h-4 text-[#B8924A]" />
+              <span>100% Plain Box Outer Label</span>
             </div>
             <div className="flex items-center gap-2">
-              <Stethoscope className="w-4 h-4 text-amber-600" />
-              <span>Doctor Formulated Extract</span>
+              <Stethoscope className="w-4 h-4 text-[#B8924A]" />
+              <span>Doctor-Reviewed Dosages</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* DETAILED TABS SECTION */}
-      <div className="space-y-6 pt-6 border-t border-slate-200">
-        {/* Navigation Tab Headers */}
-        <div className="flex border-b border-slate-200 overflow-x-auto gap-6 text-sm font-bold">
+      {/* SCIENCE, USAGE, WHO IT IS FOR TABS */}
+      <div className="space-y-6 pt-6 border-t border-[#E4E0D8]">
+        <div className="flex border-b border-[#E4E0D8] overflow-x-auto gap-6 text-sm font-bold">
           {[
-            { id: 'description', label: 'Formula Science' },
+            { id: 'science', label: 'Clinical Science' },
             { id: 'ingredients', label: 'Active Ingredients' },
             { id: 'usage', label: 'How To Use' },
-            { id: 'reviews', label: `Reviews (${reviewsList.length})` },
+            { id: 'who', label: 'Who It Is For' },
+            { id: 'reviews', label: `Verified Reviews (${reviewsList.length})` },
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`pb-3 transition-colors border-b-2 whitespace-nowrap ${
                 activeTab === tab.id
-                  ? 'border-emerald-600 text-emerald-700 font-extrabold'
-                  : 'border-transparent text-slate-500 hover:text-slate-900'
+                  ? 'border-[#0F3D2B] text-[#0F3D2B] font-extrabold'
+                  : 'border-transparent text-[#5B655F] hover:text-[#1B1F1D]'
               }`}
             >
               {tab.label}
@@ -418,15 +394,15 @@ export const ProductDetail = () => {
         </div>
 
         {/* Tab Content Panels */}
-        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 text-xs sm:text-sm text-slate-700 leading-relaxed shadow-sm font-medium">
-          {activeTab === 'description' && (
+        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#E4E0D8] text-xs sm:text-sm text-[#1B1F1D] leading-relaxed shadow-premium font-medium">
+          {activeTab === 'science' && (
             <div className="space-y-4">
-              <h3 className="font-serif font-extrabold text-lg text-slate-900">Full Clinical Product Description</h3>
+              <h3 className="font-serif font-extrabold text-lg text-[#0F3D2B]">Formula Overview & Science</h3>
               <p>{product.description}</p>
               {product.benefits && (
                 <div className="space-y-2 pt-2">
-                  <h4 className="font-extrabold text-slate-900">Key Formula Benefits:</h4>
-                  <ul className="space-y-1.5 list-disc pl-5 text-slate-700">
+                  <h4 className="font-extrabold text-[#1B1F1D]">Key Clinical Benefits:</h4>
+                  <ul className="space-y-1.5 list-disc pl-5 text-[#5B655F]">
                     {product.benefits.map((b, i) => (
                       <li key={i}>{b}</li>
                     ))}
@@ -438,63 +414,84 @@ export const ProductDetail = () => {
 
           {activeTab === 'ingredients' && (
             <div className="space-y-4">
-              <h3 className="font-serif font-extrabold text-lg text-slate-900">100% Transparent Active Ingredients</h3>
-              <p className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-emerald-800 font-mono text-xs font-semibold">
+              <h3 className="font-serif font-extrabold text-lg text-[#0F3D2B]">100% Transparent Active Ingredients</h3>
+              <p className="bg-[#FAF7F2] p-4 rounded-xl border border-[#E4E0D8] font-mono text-xs text-[#0F3D2B] font-bold">
                 {product.ingredients || 'Standardized active extracts: L-Arginine, Gokshura (500mg), Safed Musli, Zinc Monomethionine.'}
               </p>
-              <p className="text-slate-500 text-xs">
-                Zero artificial colors, heavy metals, or undisclosed synthetic compounds. Every batch is certified under FSSAI and GMP guidelines.
+              <p className="text-[#5B655F] text-xs">
+                Zero artificial colors, steroids, or unlisted compounds. Certified under FSSAI and ISO guidelines.
               </p>
             </div>
           )}
 
           {activeTab === 'usage' && (
             <div className="space-y-4">
-              <h3 className="font-serif font-extrabold text-lg text-slate-900">Recommended Dosage & Instructions</h3>
-              <p>{product.usage || 'Take 2 gummies/capsules daily with water or milk after meals. For optimal results, use consistently for 60 to 90 days.'}</p>
+              <h3 className="font-serif font-extrabold text-lg text-[#0F3D2B]">Recommended Dosage & Application</h3>
+              <p>{product.usage || 'Consume 2 gummies/capsules daily with water or milk after meals. For optimal stamina, use consistently for 60 to 90 days.'}</p>
+            </div>
+          )}
+
+          {activeTab === 'who' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="p-5 rounded-2xl bg-[#EEF3EE] border border-[#0F3D2B]/20 space-y-2">
+                <h4 className="font-extrabold text-sm text-[#0F3D2B] flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#0F3D2B]" /> Who It Is For
+                </h4>
+                <p className="text-xs text-[#1B1F1D] leading-relaxed">
+                  {product.whoFor || "Men seeking natural daily stamina, improved blood flow, and sexual energy."}
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-[#FAF4E8] border border-[#B8924A]/30 space-y-2">
+                <h4 className="font-extrabold text-sm text-[#B8924A] flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-[#B8924A]" /> Who It Is NOT For
+                </h4>
+                <p className="text-xs text-[#1B1F1D] leading-relaxed">
+                  {product.whoNotFor || "Not intended for minors under 18 or individuals undergoing acute cardiovascular treatment."}
+                </p>
+              </div>
             </div>
           )}
 
           {activeTab === 'reviews' && (
             <div className="space-y-8">
               {/* Review Submission Form */}
-              <form onSubmit={handleReviewSubmit} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
-                <h4 className="font-extrabold text-slate-900 text-base">Write a Verified Review</h4>
+              <form onSubmit={handleReviewSubmit} className="p-5 rounded-2xl bg-[#FAF7F2] border border-[#E4E0D8] space-y-4">
+                <h4 className="font-extrabold text-[#1B1F1D] text-base">Write a Verified Review</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-600 mb-1">Your Name</label>
+                    <label className="block text-xs font-bold text-[#5B655F] mb-1">Your Name</label>
                     <input
                       type="text"
                       value={reviewName}
                       onChange={(e) => setReviewName(e.target.value)}
-                      placeholder="e.g. Vikram R."
-                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 font-medium"
+                      placeholder="e.g. Rohan S."
+                      className="w-full bg-white border border-[#E4E0D8] rounded-xl px-3 py-2 text-xs text-[#1B1F1D] font-bold"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-600 mb-1">Rating</label>
+                    <label className="block text-xs font-bold text-[#5B655F] mb-1">Rating</label>
                     <select
                       value={reviewRating}
                       onChange={(e) => setReviewRating(Number(e.target.value))}
-                      className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 font-bold"
+                      className="w-full bg-white border border-[#E4E0D8] rounded-xl px-3 py-2 text-xs text-[#1B1F1D] font-bold"
                     >
                       <option value={5}>5 Stars — Excellent</option>
                       <option value={4}>4 Stars — Very Good</option>
-                      <option value={3}>3 Stars — Average</option>
                     </select>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-600 mb-1">Your Feedback</label>
+                  <label className="block text-xs font-bold text-[#5B655F] mb-1">Your Feedback</label>
                   <textarea
                     rows={3}
                     value={reviewText}
                     onChange={(e) => setReviewText(e.target.value)}
                     placeholder="Share your experience with this formula..."
-                    className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium"
+                    className="w-full bg-white border border-[#E4E0D8] rounded-xl p-3 text-xs text-[#1B1F1D] font-medium"
                   />
                 </div>
-                <button type="submit" className="btn-primary text-xs py-2.5 px-6 font-bold">
+                <button type="submit" className="btn-primary text-xs py-2.5 px-6 font-extrabold">
                   Submit Review
                 </button>
               </form>
@@ -502,17 +499,17 @@ export const ProductDetail = () => {
               {/* Reviews List */}
               <div className="space-y-4">
                 {reviewsList.map((rev, idx) => (
-                  <div key={idx} className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                  <div key={idx} className="p-4 rounded-xl bg-[#FAF7F2] border border-[#E4E0D8] space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-extrabold text-slate-900 text-xs">{rev.name}</span>
-                      <span className="text-[10px] text-slate-400">{rev.date}</span>
+                      <span className="font-extrabold text-[#1B1F1D] text-xs">{rev.name}</span>
+                      <span className="text-[10px] text-[#5B655F]">{rev.date}</span>
                     </div>
-                    <div className="flex text-amber-500">
+                    <div className="flex text-[#B8924A]">
                       {[...Array(rev.rating)].map((_, i) => (
-                        <Star key={i} className="w-3.5 h-3.5 fill-amber-500" />
+                        <Star key={i} className="w-3.5 h-3.5 fill-[#B8924A]" />
                       ))}
                     </div>
-                    <p className="text-xs text-slate-700 font-medium">{rev.text}</p>
+                    <p className="text-xs text-[#5B655F] font-medium">{rev.text}</p>
                   </div>
                 ))}
               </div>
@@ -521,10 +518,10 @@ export const ProductDetail = () => {
         </div>
       </div>
 
-      {/* RELATED PRODUCTS */}
+      {/* FREQUENTLY BOUGHT TOGETHER */}
       {relatedProducts.length > 0 && (
-        <div className="space-y-6 pt-8 border-t border-slate-200">
-          <h2 className="text-2xl font-serif font-extrabold text-slate-900">
+        <div className="space-y-6 pt-8 border-t border-[#E4E0D8]">
+          <h2 className="text-2xl font-serif font-extrabold text-[#1B1F1D]">
             Frequently Bought Together
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -536,12 +533,12 @@ export const ProductDetail = () => {
       )}
 
       {/* MOBILE STICKY PURCHASE BAR */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 flex items-center justify-between gap-3 shadow-2xl">
+      <div className="lg:hidden fixed bottom-14 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-[#E4E0D8] p-3 flex items-center justify-between gap-3 shadow-2xl">
         <div>
-          <span className="block text-[10px] text-slate-500 font-bold uppercase">Total Price</span>
-          <span className="text-lg font-black text-slate-900">{formatCurrency(currentPrice)}</span>
+          <span className="block text-[10px] text-[#5B655F] font-bold uppercase">Price</span>
+          <span className="text-lg font-black text-[#0F3D2B]">{formatCurrency(currentPrice)}</span>
         </div>
-        <button onClick={handleAddToCart} className="btn-primary flex-1 py-2.5 text-xs font-bold">
+        <button onClick={handleAddToCart} className="btn-primary flex-1 py-3 text-xs font-bold shadow-glow-forest">
           <ShoppingBag className="w-4 h-4" />
           <span>Add to Cart</span>
         </button>

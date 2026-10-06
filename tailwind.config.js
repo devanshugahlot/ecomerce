@@ -8,50 +8,61 @@ export default {
   theme: {
     extend: {
       colors: {
+        forest: {
+          50: '#EDF5F0',
+          100: '#D5E6DC',
+          200: '#AECCCB',
+          300: '#7FA897',
+          400: '#4F846D',
+          500: '#155E3E', // Hover Forest
+          600: '#0F3D2B', // Primary Deep Forest Green
+          700: '#0B3022',
+          800: '#072117',
+          900: '#04130D',
+        },
         brand: {
-          50: '#ECFDF5',
-          100: '#D1FAE5',
-          200: '#A7F3D0',
-          300: '#6EE7B7',
-          400: '#34D399',
-          500: '#00A86B', // Emerald primary
-          600: '#008F5B',
-          700: '#047857',
-          800: '#065F46',
-          900: '#064E3B',
-          950: '#022C22',
+          50: '#EDF5F0',
+          100: '#D5E6DC',
+          200: '#AECCCB',
+          300: '#7FA897',
+          400: '#4F846D',
+          500: '#0F3D2B', // Primary Forest Green
+          600: '#155E3E',
+          700: '#0B3022',
+          800: '#072117',
+          900: '#04130D',
         },
-        cream: {
-          50: '#FFFDF9',
-          100: '#FEF8EC', // Bold Care Banner Cream background
-          200: '#FDEEAA',
-          300: '#FCD777',
-          400: '#FBBF24',
-          500: '#F59E0B',
+        gold: {
+          50: '#FAF4E8',
+          100: '#F3E5C7',
+          200: '#E7CE97',
+          300: '#DDB872',
+          400: '#B8924A', // Warm Gold Accent
+          500: '#947234',
+          600: '#735624',
+          700: '#533C17',
         },
-        pinkish: {
-          50: '#FFF0F5', // Bold Care ticker banner ribbon
-          100: '#FCE7F3',
-          200: '#FBCFE8',
+        ivory: {
+          50: '#FFFDFB',
+          100: '#FAF7F2', // Warm Ivory Background
+          200: '#F4EFE6',
+          300: '#E8E0D2',
         },
-        dark: {
-          50: '#F3F4F6',
-          100: '#E5E7EB',
-          200: '#D1D5DB',
-          300: '#9CA3AF',
-          400: '#4B5563',
-          500: '#1F2937',
-          600: '#111827',
-          700: '#0B0F17',
-          800: '#070A0F',
-          900: '#030508',
+        sage: {
+          50: '#F5F8F5',
+          100: '#EEF3EE', // Soft Sage Tint
+          200: '#E2EBE2',
+          300: '#C9DAC9',
         },
-        accent: {
-          amber: '#D97706',
-          copper: '#C2410C',
-          gold: '#F59E0B',
-          navy: '#1E293B',
-          slate: '#334155',
+        charcoal: {
+          50: '#F6F7F7',
+          100: '#E4E6E5',
+          300: '#9E9E9D',
+          500: '#5B655F', // Secondary Text
+          900: '#1B1F1D', // Primary Text
+        },
+        terracotta: {
+          500: '#B5472F', // Sale/Alert Muted Terracotta
         }
       },
       fontFamily: {
@@ -59,10 +70,13 @@ export default {
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
       },
       boxShadow: {
-        'glow': '0 0 20px -5px rgba(0, 168, 107, 0.25)',
-        'glow-amber': '0 0 20px -5px rgba(217, 119, 6, 0.25)',
-        'premium': '0 10px 30px -10px rgba(0, 0, 0, 0.08)',
-        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+        'glow-forest': '0 8px 30px rgba(15, 61, 43, 0.12)',
+        'glow-gold': '0 8px 25px rgba(184, 146, 74, 0.18)',
+        'premium': '0 10px 40px -10px rgba(27, 31, 29, 0.07)',
+        'card': '0 4px 20px -2px rgba(15, 61, 43, 0.05)',
+      },
+      borderRadius: {
+        '4xl': '2rem',
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -71,10 +85,11 @@ export default {
       keyframes: {
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
+          '50%': { transform: 'translateY(-8px)' },
         }
       }
     },
   },
   plugins: [],
 }
+
