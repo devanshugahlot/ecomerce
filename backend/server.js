@@ -17,7 +17,7 @@ const app = express();
 
 // Security Middlewares
 app.use(helmet());
-app.use(cors({ origin: '*', credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '10mb' }));
 
 // Rate Limiting
@@ -27,6 +27,16 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again later.',
 });
 app.use('/api', limiter);
+
+// Root Endpoint
+app.get('/', (req, res) => {
+  res.json({
+    status: 'online',
+    brand: 'VYRO REST API',
+    health: '/api/health',
+    timestamp: new Date(),
+  });
+});
 
 // Health Endpoint
 app.get('/api/health', (req, res) => {
@@ -62,3 +72,4 @@ connectDB().then(() => {
     console.log(`[VYRO Server] REST API running at http://localhost:${PORT}/api`);
   });
 });
+
