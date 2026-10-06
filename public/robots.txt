@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Allow: /shop
+Allow: /products/
+
+# Disallow private user & checkout pages
+Disallow: /admin/
+Disallow: /admin
+Disallow: /account
+Disallow: /cart
+Disallow: /checkout
+Disallow: /order-success
+
+# Sitemap Location
+Sitemap: https://vyro.men/sitemap.xml
