@@ -4,6 +4,7 @@ import { Filter, SlidersHorizontal, Search, X, Check, PackageCheck } from 'lucid
 import { SEO } from '../components/common/SEO';
 import { ProductCard } from '../components/common/ProductCard';
 import { useProducts } from '../context/ProductContext';
+import { CATEGORIES } from '../utils/constants';
 
 export const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
