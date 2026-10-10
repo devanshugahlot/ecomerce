@@ -3,14 +3,15 @@ import { getStore, saveStore } from '../config/store.js';
 
 export const validateCoupon = async (req, res) => {
   try {
-    const { code, cartSubtotal } = req.body;
+    const couponInput = req.body.code || req.body.couponCode;
+    const subtotal = Number(req.body.cartSubtotal || req.body.orderAmount || 0);
     const userId = req.user ? req.user.id : null;
 
-    if (!code) {
+    if (!couponInput) {
       return res.status(400).json({ message: 'Coupon code is required' });
     }
 
-    const uppercaseCode = code.trim().toUpperCase();
+    const uppercaseCode = couponInput.trim().toUpperCase();
 
     let coupon = null;
     try {
@@ -44,7 +45,6 @@ export const validateCoupon = async (req, res) => {
     }
 
     // Check minimum order subtotal
-    const subtotal = Number(cartSubtotal || 0);
     const minOrder = Number(coupon.minOrderAmount || 0);
     if (subtotal < minOrder) {
       return res.status(400).json({

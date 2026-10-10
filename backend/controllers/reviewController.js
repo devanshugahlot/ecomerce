@@ -52,7 +52,7 @@ export const getProductReviews = async (req, res) => {
 
 export const createReview = async (req, res) => {
   try {
-    const { productId } = req.params;
+    const productId = req.params.productId || req.body.productId || req.body.product;
     const { rating, title, comment, image } = req.body;
     const userId = req.user.id;
     const userName = req.user.name || 'Verified Customer';

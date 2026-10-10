@@ -11,7 +11,11 @@ export const createOrder = async (req, res) => {
       return res.status(400).json({ message: 'No order items in cart' });
     }
 
-    if (!shippingAddress || !shippingAddress.fullName || !shippingAddress.line1 || !shippingAddress.postalCode) {
+    const line1 = shippingAddress?.line1 || shippingAddress?.addressLine || shippingAddress?.address;
+    const postalCode = shippingAddress?.postalCode || shippingAddress?.pincode || shippingAddress?.zip;
+    const fullName = shippingAddress?.fullName || shippingAddress?.name;
+
+    if (!shippingAddress || !fullName || !line1 || !postalCode) {
       return res.status(400).json({ message: 'Complete shipping address is required' });
     }
 
