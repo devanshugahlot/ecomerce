@@ -36,8 +36,16 @@ app.use(express.urlencoded({ limit: '25mb', extended: true }));
 // Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 500,
-  message: 'Too many requests from this IP, please try again later.',
+  max: 3000, // Increased limit for production and admin workloads
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Too many requests from this IP, please try again later.' },
+  skip: (req) => {
+    // Exempt health check and admin PUT/POST/DELETE operations
+    if (req.path === '/health' || req.path === '/api/health') return true;
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) return true;
+    return false;
+  },
 });
 app.use('/api', limiter);
 
