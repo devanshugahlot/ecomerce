@@ -1,15 +1,10 @@
+import mongoose from 'mongoose';
 import { Category } from '../models/Category.js';
-import { getStore, saveStore } from '../config/store.js';
 
 export const getCategories = async (req, res) => {
   try {
-    try {
-      const categories = await Category.find().sort({ createdAt: -1 });
-      if (categories && categories.length > 0) return res.json(categories);
-    } catch (e) {}
-
-    const store = getStore();
-    return res.json(store.categories);
+    const categories = await Category.find().sort({ createdAt: -1 });
+    return res.json(categories);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -22,27 +17,21 @@ export const createCategory = async (req, res) => {
       return res.status(400).json({ message: 'Category name is required' });
     }
 
-    try {
-      const cat = new Category(req.body);
-      const saved = await cat.save();
-      return res.status(201).json(saved);
-    } catch (dbErr) {
-      const store = getStore();
-      const catId = 'cat_' + Date.now();
-      const newCat = {
-        _id: catId,
-        id: catId,
-        name: name.trim(),
-        slug: name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-        badge: req.body.badge || 'NEW',
-        image: req.body.image || '',
-        ...req.body,
-        createdAt: new Date().toISOString(),
-      };
-      store.categories.unshift(newCat);
-      saveStore(store);
-      return res.status(201).json(newCat);
+    const slug = req.body.slug || name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const existing = await Category.findOne({ slug });
+    if (existing) {
+      return res.status(400).json({ message: 'Category already exists' });
     }
+
+    const cat = await Category.create({
+      name: name.trim(),
+      slug,
+      badge: req.body.badge || 'NEW',
+      image: req.body.image || '',
+      description: req.body.description || '',
+    });
+
+    return res.status(201).json(cat);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -51,19 +40,22 @@ export const createCategory = async (req, res) => {
 export const updateCategory = async (req, res) => {
   try {
     const id = req.params.id;
-    try {
-      const updated = await Category.findByIdAndUpdate(id, req.body, { new: true });
-      if (updated) return res.json(updated);
-    } catch (dbErr) {}
-
-    const store = getStore();
-    const idx = store.categories.findIndex((c) => c._id === id || c.id === id || c.slug === id);
-    if (idx > -1) {
-      store.categories[idx] = { ...store.categories[idx], ...req.body };
-      saveStore(store);
-      return res.json(store.categories[idx]);
+    const query = [{ slug: id }];
+    if (mongoose.isValidObjectId(id)) {
+      query.push({ _id: id });
     }
-    res.status(404).json({ message: 'Category not found' });
+
+    const updated = await Category.findOneAndUpdate(
+      { $or: query },
+      req.body,
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    return res.json(updated);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -72,15 +64,17 @@ export const updateCategory = async (req, res) => {
 export const deleteCategory = async (req, res) => {
   try {
     const id = req.params.id;
-    try {
-      await Category.findByIdAndDelete(id);
-    } catch (dbErr) {}
+    const query = [{ slug: id }];
+    if (mongoose.isValidObjectId(id)) {
+      query.push({ _id: id });
+    }
 
-    const store = getStore();
-    store.categories = store.categories.filter((c) => c._id !== id && c.id !== id && c.slug !== id);
-    saveStore(store);
+    const deleted = await Category.findOneAndDelete({ $or: query });
+    if (!deleted) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
 
-    res.json({ message: 'Category removed' });
+    return res.json({ message: 'Category removed' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

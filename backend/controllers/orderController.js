@@ -1,7 +1,7 @@
+import mongoose from 'mongoose';
 import { Order } from '../models/Order.js';
 import { Product } from '../models/Product.js';
 import { Coupon } from '../models/Coupon.js';
-import { getStore, saveStore } from '../config/store.js';
 
 export const createOrder = async (req, res) => {
   try {
@@ -21,62 +21,82 @@ export const createOrder = async (req, res) => {
 
     const userId = req.user ? req.user.id : null;
 
-    // Server-side authoritative price & stock verification
-    let itemsPrice = 0;
-    const verifiedOrderItems = [];
-    const store = getStore();
-
-    for (const item of orderItems) {
-      const pId = item.productId || item.product || item._id || item.id;
-      let dbProd = null;
-
-      try {
-        dbProd = await Product.findById(pId);
-      } catch (e) {}
-
-      if (!dbProd) {
-        dbProd = store.products.find((p) => p._id === pId || p.id === pId);
-      }
-
-      const unitPrice = dbProd ? Number(dbProd.price) : Number(item.price || 0);
-      const qty = Math.max(1, Number(item.quantity || 1));
-      itemsPrice += unitPrice * qty;
-
-      verifiedOrderItems.push({
-        name: dbProd ? dbProd.name : item.name,
-        quantity: qty,
-        image: dbProd ? (dbProd.images ? dbProd.images[0] : dbProd.image) : item.image,
-        price: unitPrice,
-        product: dbProd ? dbProd._id : pId,
+    // Deduplicate rapid parallel requests (double-click prevention)
+    if (userId) {
+      const recentOrder = await Order.findOne({
+        user: userId,
+        createdAt: { $gte: new Date(Date.now() - 3000) },
       });
-
-      // Stock check & decrement
-      if (dbProd) {
-        if (dbProd.stock < qty) {
-          return res.status(400).json({ message: `Insufficient stock for product '${dbProd.name}'` });
-        }
-        dbProd.stock = Math.max(0, dbProd.stock - qty);
-        try {
-          await Product.findByIdAndUpdate(dbProd._id, { stock: dbProd.stock });
-        } catch (e) {}
+      if (recentOrder) {
+        return res.status(200).json({ success: true, order: recentOrder });
       }
     }
 
-    // Shipping fee
+    let itemsPrice = 0;
+    const verifiedOrderItems = [];
+    const decrementedItems = [];
+
+    // Atomic Stock Verification & Decrement
+    for (const item of orderItems) {
+      const pId = item.productId || item.product || item._id || item.id;
+      const qty = Math.max(1, Number(item.quantity || 1));
+
+      const query = [{ slug: pId }];
+      if (mongoose.isValidObjectId(pId)) {
+        query.push({ _id: pId });
+      }
+
+      const dbProd = await Product.findOne({ $or: query });
+      if (!dbProd) {
+        // Rollback decrements
+        for (const dec of decrementedItems) {
+          await Product.findByIdAndUpdate(dec.productId, { $inc: { stock: dec.quantity } });
+        }
+        return res.status(400).json({ message: `Product '${item.name || pId}' not found` });
+      }
+
+      if (dbProd.stock < qty) {
+        for (const dec of decrementedItems) {
+          await Product.findByIdAndUpdate(dec.productId, { $inc: { stock: dec.quantity } });
+        }
+        return res.status(400).json({ message: `Insufficient stock for product '${dbProd.name}'` });
+      }
+
+      // Atomic decrement: stock must be >= qty
+      const updatedProd = await Product.findOneAndUpdate(
+        { _id: dbProd._id, stock: { $gte: qty } },
+        { $inc: { stock: -qty } },
+        { new: true }
+      );
+
+      if (!updatedProd) {
+        for (const dec of decrementedItems) {
+          await Product.findByIdAndUpdate(dec.productId, { $inc: { stock: dec.quantity } });
+        }
+        return res.status(400).json({ message: `Insufficient stock for product '${dbProd.name}'` });
+      }
+
+      decrementedItems.push({ productId: dbProd._id, quantity: qty });
+      const unitPrice = Number(dbProd.price);
+      itemsPrice += unitPrice * qty;
+
+      verifiedOrderItems.push({
+        name: dbProd.name,
+        quantity: qty,
+        image: dbProd.images && dbProd.images[0] ? dbProd.images[0] : dbProd.image,
+        price: unitPrice,
+        product: dbProd._id,
+      });
+    }
+
+    // Shipping Fee
     const shippingPrice = itemsPrice > 799 || itemsPrice === 0 ? 0 : 79;
 
-    // Server-side coupon discount calculation
+    // Coupon Validation & Discount
     let discountAmount = 0;
     if (couponCode) {
-      const codeUpper = couponCode.trim().toUpperCase();
-      let couponDoc = null;
-      try {
-        couponDoc = await Coupon.findOne({ code: codeUpper, isActive: true });
-      } catch (e) {}
-
-      if (!couponDoc) {
-        couponDoc = store.coupons.find((c) => c.code === codeUpper && c.isActive);
-      }
+      const uppercaseCode = couponCode.trim().toUpperCase();
+      const couponDoc = await Coupon.findOne({ code: uppercaseCode, isActive: true });
 
       if (couponDoc && itemsPrice >= (couponDoc.minOrderAmount || 0)) {
         if (couponDoc.discountType === 'percentage') {
@@ -86,67 +106,66 @@ export const createOrder = async (req, res) => {
         }
         discountAmount = Math.round(discountAmount * 100) / 100;
 
-        // Record coupon usage
-        try {
-          await Coupon.findByIdAndUpdate(couponDoc._id, {
-            $inc: { usedCount: 1 },
-            $addToSet: { usersUsed: userId },
-          });
-        } catch (e) {}
-        couponDoc.usedCount = (couponDoc.usedCount || 0) + 1;
-        if (userId && couponDoc.usersUsed && !couponDoc.usersUsed.includes(userId)) {
-          couponDoc.usersUsed.push(userId);
-        }
+        await Coupon.findByIdAndUpdate(couponDoc._id, {
+          $inc: { usedCount: 1 },
+          $addToSet: { usersUsed: userId ? userId.toString() : '' },
+        });
       }
     }
 
     const totalPrice = Math.max(0, Math.round((itemsPrice + shippingPrice - discountAmount) * 100) / 100);
-    const dateStamp = Date.now().toString().slice(-6);
-    const orderNumber = 'HYP-' + dateStamp;
 
-    let savedOrder;
-    try {
-      const order = new Order({
-        orderNumber,
-        user: userId,
-        orderItems: verifiedOrderItems,
-        shippingAddress,
-        paymentMethod: paymentMethod || 'COD',
-        itemsPrice,
-        shippingPrice,
-        discountAmount,
-        totalPrice,
-        isPaid: paymentMethod !== 'COD',
-        paidAt: paymentMethod !== 'COD' ? new Date() : null,
-        status: 'Confirmed',
-        trackingNumber: 'EXP-' + dateStamp + 'IN',
-      });
-      savedOrder = await order.save();
-    } catch (dbErr) {
-      // Disk store fallback
-      savedOrder = {
-        _id: 'ord_' + Date.now(),
-        orderNumber,
-        user: userId,
-        orderItems: verifiedOrderItems,
-        shippingAddress,
-        paymentMethod: paymentMethod || 'COD',
-        itemsPrice,
-        shippingPrice,
-        discountAmount,
-        totalPrice,
-        isPaid: paymentMethod !== 'COD',
-        paidAt: paymentMethod !== 'COD' ? new Date() : null,
-        status: 'Confirmed',
-        trackingNumber: 'EXP-' + dateStamp + 'IN',
-        createdAt: new Date().toISOString(),
-      };
-      store.orders.unshift(savedOrder);
-      saveStore(store);
+    // Retry loop for collision-safe unique HYP- Order ID
+    let savedOrder = null;
+    let attempts = 0;
+
+    while (!savedOrder && attempts < 10) {
+      attempts++;
+      const randNo = Math.floor(100000 + Math.random() * 900000);
+      const orderNumber = `HYP-${randNo}`;
+
+      try {
+        const order = new Order({
+          orderNumber,
+          user: userId,
+          orderItems: verifiedOrderItems,
+          shippingAddress: {
+            fullName,
+            phone: shippingAddress.phone || '',
+            line1,
+            city: shippingAddress.city || '',
+            postalCode,
+          },
+          paymentMethod: paymentMethod || 'COD',
+          itemsPrice,
+          shippingPrice,
+          discountAmount,
+          totalPrice,
+          couponCode: couponCode || null,
+          isPaid: paymentMethod !== 'COD',
+          paidAt: paymentMethod !== 'COD' ? new Date() : null,
+          status: 'Confirmed',
+          trackingNumber: `EXP-${randNo}IN`,
+        });
+        savedOrder = await order.save();
+      } catch (err) {
+        if (err.code === 11000 && err.keyPattern && err.keyPattern.orderNumber) {
+          continue;
+        }
+        // Rollback stock if order saving failed
+        for (const dec of decrementedItems) {
+          await Product.findByIdAndUpdate(dec.productId, { $inc: { stock: dec.quantity } });
+        }
+        throw err;
+      }
     }
 
-    // Save updated stock to disk store
-    saveStore(store);
+    if (!savedOrder) {
+      for (const dec of decrementedItems) {
+        await Product.findByIdAndUpdate(dec.productId, { $inc: { stock: dec.quantity } });
+      }
+      return res.status(500).json({ message: 'Failed to generate unique Order ID after retries' });
+    }
 
     return res.status(201).json({ success: true, order: savedOrder });
   } catch (error) {
@@ -156,13 +175,8 @@ export const createOrder = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   try {
-    try {
-      const orders = await Order.find().sort({ createdAt: -1 });
-      if (orders && orders.length > 0) return res.json(orders);
-    } catch (e) {}
-
-    const store = getStore();
-    return res.json(store.orders);
+    const orders = await Order.find().sort({ createdAt: -1 });
+    return res.json(orders);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -171,18 +185,8 @@ export const getOrders = async (req, res) => {
 export const getMyOrders = async (req, res) => {
   try {
     const userId = req.user.id;
-
-    try {
-      const orders = await Order.find({ user: userId }).sort({ createdAt: -1 });
-      if (orders && orders.length > 0) return res.json(orders);
-    } catch (e) {}
-
-    const store = getStore();
-    const userOrders = store.orders.filter(
-      (o) => (o.user && o.user.toString() === userId.toString()) || o.user === userId
-    );
-
-    return res.json(userOrders);
+    const orders = await Order.find({ user: userId }).sort({ createdAt: -1 });
+    return res.json(orders);
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving user orders' });
   }
@@ -194,20 +198,12 @@ export const getOrderByNumber = async (req, res) => {
     const userId = req.user.id;
     const isAdmin = req.user.role === 'admin';
 
-    let order = null;
-    try {
-      order = await Order.findOne({
-        $or: [{ orderNumber: orderNumber }, { _id: orderNumber }],
-      });
-    } catch (e) {}
-
-    if (!order) {
-      const store = getStore();
-      order = store.orders.find(
-        (o) => o.orderNumber === orderNumber || o._id === orderNumber || o.id === orderNumber
-      );
+    const query = [{ orderNumber: orderNumber }];
+    if (mongoose.isValidObjectId(orderNumber)) {
+      query.push({ _id: orderNumber });
     }
 
+    const order = await Order.findOne({ $or: query });
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
@@ -228,52 +224,38 @@ export const updateOrderStatus = async (req, res) => {
     const { status, trackingNumber } = req.body;
     const id = req.params.id;
 
-    let updatedOrder = null;
-
-    try {
-      const existing = await Order.findById(id);
-      if (existing) {
-        const oldStatus = existing.status;
-        existing.status = status || existing.status;
-        existing.trackingNumber = trackingNumber || existing.trackingNumber;
-        updatedOrder = await existing.save();
-
-        // If cancelled, restore stock!
-        if (status === 'Cancelled' && oldStatus !== 'Cancelled') {
-          for (const item of existing.orderItems) {
-            if (item.product) {
-              await Product.findByIdAndUpdate(item.product, { $inc: { stock: item.quantity } });
-            }
-          }
-        }
-        return res.json(updatedOrder);
-      }
-    } catch (e) {}
-
-    // Store fallback
-    const store = getStore();
-    const idx = store.orders.findIndex((o) => o._id === id || o.id === id || o.orderNumber === id);
-    if (idx > -1) {
-      const oldStatus = store.orders[idx].status;
-      store.orders[idx].status = status || store.orders[idx].status;
-      store.orders[idx].trackingNumber = trackingNumber || store.orders[idx].trackingNumber;
-
-      // Restore stock if cancelled
-      if (status === 'Cancelled' && oldStatus !== 'Cancelled') {
-        for (const item of store.orders[idx].orderItems || []) {
-          const pId = item.product || item.productId;
-          const pIdx = store.products.findIndex((p) => p._id === pId || p.id === pId);
-          if (pIdx > -1) {
-            store.products[pIdx].stock += item.quantity || 1;
-          }
-        }
-      }
-
-      saveStore(store);
-      return res.json(store.orders[idx]);
+    const query = [{ orderNumber: id }];
+    if (mongoose.isValidObjectId(id)) {
+      query.push({ _id: id });
     }
 
-    res.status(404).json({ message: 'Order not found' });
+    const order = await Order.findOne({ $or: query });
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    const oldStatus = order.status;
+    if (status) order.status = status;
+    if (trackingNumber) order.trackingNumber = trackingNumber;
+    const updated = await order.save();
+
+    // If cancelled, restore stock exactly once
+    if (status === 'Cancelled' && oldStatus !== 'Cancelled') {
+      for (const item of order.orderItems || []) {
+        if (item.product) {
+          await Product.findByIdAndUpdate(item.product, { $inc: { stock: item.quantity } });
+        }
+      }
+
+      if (order.couponCode) {
+        await Coupon.findOneAndUpdate(
+          { code: order.couponCode.toUpperCase() },
+          { $inc: { usedCount: -1 }, $pull: { usersUsed: order.user ? order.user.toString() : '' } }
+        );
+      }
+    }
+
+    return res.json(updated);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

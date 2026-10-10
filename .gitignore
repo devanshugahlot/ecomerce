@@ -3,6 +3,10 @@ dist
 .env
 .env.local
 .env.*.local
+*.env
+backend/.env
+db_store.json
+backend/data/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

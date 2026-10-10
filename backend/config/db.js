@@ -1,15 +1,30 @@
 import mongoose from 'mongoose';
 
 export const connectDB = async () => {
+  const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI;
+
+  if (!mongoUri) {
+    console.error('[FATAL ERROR] MONGODB_URI environment variable is missing! Server refusing to start.');
+    process.exit(1);
+  }
+
   try {
-    const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/hypril_wellness';
-    const conn = await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 2000,
+    await mongoose.connect(mongoUri, {
+      dbName: 'hypril',
+      serverSelectionTimeoutMS: 10000,
     });
-    console.log(`[MongoDB] Database connected successfully: ${conn.connection.host}`);
+    console.log("MongoDB connected");
     return true;
   } catch (error) {
-    console.warn(`[MongoDB Notice] Local MongoDB service offline. API running with persistent JSON store fallback.`);
-    return false;
+    console.error('[FATAL ERROR] MongoDB Connection Failed:', error.message);
+    process.exit(1);
   }
 };
+
+mongoose.connection.on('error', (err) => {
+  console.error('[MongoDB Error]', err.message);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.warn('[MongoDB Notice] MongoDB disconnected. Attempting reconnection...');
+});

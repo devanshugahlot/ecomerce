@@ -1,5 +1,5 @@
+import mongoose from 'mongoose';
 import { Coupon } from '../models/Coupon.js';
-import { getStore, saveStore } from '../config/store.js';
 
 export const validateCoupon = async (req, res) => {
   try {
@@ -13,18 +13,7 @@ export const validateCoupon = async (req, res) => {
 
     const uppercaseCode = couponInput.trim().toUpperCase();
 
-    let coupon = null;
-    try {
-      coupon = await Coupon.findOne({ code: uppercaseCode, isActive: true });
-    } catch (e) {
-      coupon = null;
-    }
-
-    if (!coupon) {
-      const store = getStore();
-      coupon = store.coupons.find((c) => c.code === uppercaseCode && c.isActive);
-    }
-
+    const coupon = await Coupon.findOne({ code: uppercaseCode, isActive: true });
     if (!coupon) {
       return res.status(404).json({ message: `Coupon '${uppercaseCode}' is invalid or inactive` });
     }
@@ -40,7 +29,7 @@ export const validateCoupon = async (req, res) => {
     }
 
     // Check per-user limit
-    if (userId && coupon.usersUsed && coupon.usersUsed.includes(userId)) {
+    if (userId && coupon.usersUsed && coupon.usersUsed.includes(userId.toString())) {
       return res.status(400).json({ message: `You have already used coupon '${coupon.code}'` });
     }
 
@@ -83,13 +72,8 @@ export const validateCoupon = async (req, res) => {
 
 export const getCoupons = async (req, res) => {
   try {
-    try {
-      const coupons = await Coupon.find().sort({ createdAt: -1 });
-      if (coupons && coupons.length > 0) return res.json(coupons);
-    } catch (e) {}
-
-    const store = getStore();
-    return res.json(store.coupons);
+    const coupons = await Coupon.find().sort({ createdAt: -1 });
+    return res.json(coupons);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -98,43 +82,28 @@ export const getCoupons = async (req, res) => {
 export const createCoupon = async (req, res) => {
   try {
     const { code, discountType, discountValue, minOrderAmount, maxDiscountAmount, usageLimit, expirationDate } = req.body;
+
     if (!code || discountValue === undefined) {
       return res.status(400).json({ message: 'Coupon code and discount value are required' });
     }
 
     const uppercaseCode = code.trim().toUpperCase();
-
-    try {
-      const coupon = await Coupon.create({
-        code: uppercaseCode,
-        discountType: discountType || 'percentage',
-        discountValue: Number(discountValue),
-        minOrderAmount: Number(minOrderAmount) || 0,
-        maxDiscountAmount: Number(maxDiscountAmount) || 1000,
-        usageLimit: Number(usageLimit) || 1000,
-        expirationDate: expirationDate ? new Date(expirationDate) : null,
-      });
-      return res.status(201).json(coupon);
-    } catch (dbErr) {
-      const store = getStore();
-      const newCoup = {
-        _id: 'coup_' + Date.now(),
-        code: uppercaseCode,
-        discountType: discountType || 'percentage',
-        discountValue: Number(discountValue),
-        minOrderAmount: Number(minOrderAmount) || 0,
-        maxDiscountAmount: Number(maxDiscountAmount) || 1000,
-        usageLimit: Number(usageLimit) || 1000,
-        usedCount: 0,
-        usersUsed: [],
-        expirationDate: expirationDate || null,
-        isActive: true,
-        createdAt: new Date().toISOString(),
-      };
-      store.coupons.unshift(newCoup);
-      saveStore(store);
-      return res.status(201).json(newCoup);
+    const existing = await Coupon.findOne({ code: uppercaseCode });
+    if (existing) {
+      return res.status(400).json({ message: `Coupon with code '${uppercaseCode}' already exists` });
     }
+
+    const coupon = await Coupon.create({
+      code: uppercaseCode,
+      discountType: discountType || 'percentage',
+      discountValue: Number(discountValue),
+      minOrderAmount: Number(minOrderAmount) || 0,
+      maxDiscountAmount: Number(maxDiscountAmount) || 1000,
+      usageLimit: Number(usageLimit) || 1000,
+      expirationDate: expirationDate ? new Date(expirationDate) : null,
+    });
+
+    return res.status(201).json(coupon);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -143,24 +112,19 @@ export const createCoupon = async (req, res) => {
 export const toggleCoupon = async (req, res) => {
   try {
     const id = req.params.id;
-    try {
-      const coupon = await Coupon.findById(id);
-      if (coupon) {
-        coupon.isActive = !coupon.isActive;
-        await coupon.save();
-        return res.json(coupon);
-      }
-    } catch (e) {}
-
-    const store = getStore();
-    const idx = store.coupons.findIndex((c) => c._id === id || c.id === id);
-    if (idx > -1) {
-      store.coupons[idx].isActive = !store.coupons[idx].isActive;
-      saveStore(store);
-      return res.json(store.coupons[idx]);
+    const query = [{ code: id.toUpperCase() }];
+    if (mongoose.isValidObjectId(id)) {
+      query.push({ _id: id });
     }
 
-    res.status(404).json({ message: 'Coupon not found' });
+    const coupon = await Coupon.findOne({ $or: query });
+    if (!coupon) {
+      return res.status(404).json({ message: 'Coupon not found' });
+    }
+
+    coupon.isActive = !coupon.isActive;
+    await coupon.save();
+    return res.json(coupon);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -169,13 +133,15 @@ export const toggleCoupon = async (req, res) => {
 export const deleteCoupon = async (req, res) => {
   try {
     const id = req.params.id;
-    try {
-      await Coupon.findByIdAndDelete(id);
-    } catch (e) {}
+    const query = [{ code: id.toUpperCase() }];
+    if (mongoose.isValidObjectId(id)) {
+      query.push({ _id: id });
+    }
 
-    const store = getStore();
-    store.coupons = store.coupons.filter((c) => c._id !== id && c.id !== id);
-    saveStore(store);
+    const deleted = await Coupon.findOneAndDelete({ $or: query });
+    if (!deleted) {
+      return res.status(404).json({ message: 'Coupon not found' });
+    }
 
     res.json({ message: 'Coupon deleted successfully' });
   } catch (error) {
