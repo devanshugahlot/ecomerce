@@ -1,37 +1,43 @@
 import { Banner } from '../models/Banner.js';
-
-let IN_MEMORY_BANNERS = { heroBanner: '', promoBanner1: '' };
+import { getStore, saveStore } from '../config/store.js';
 
 export const getBanners = async (req, res) => {
   try {
-    const bannerDoc = await Banner.findOne().sort({ updatedAt: -1 });
-    if (bannerDoc) {
-      return res.json({
-        heroBanner: bannerDoc.heroBanner || '',
-        promoBanner1: bannerDoc.promoBanner1 || '',
-      });
-    }
-    return res.json(IN_MEMORY_BANNERS);
+    try {
+      const bannerDoc = await Banner.findOne().sort({ updatedAt: -1 });
+      if (bannerDoc) {
+        return res.json({
+          heroBanner: bannerDoc.heroBanner || '',
+          promoBanner1: bannerDoc.promoBanner1 || '',
+        });
+      }
+    } catch (e) {}
+
+    const store = getStore();
+    return res.json(store.banners || { heroBanner: '', promoBanner1: '' });
   } catch (error) {
-    return res.json(IN_MEMORY_BANNERS);
+    res.status(500).json({ message: error.message });
   }
 };
 
 export const updateBanners = async (req, res) => {
-  IN_MEMORY_BANNERS = { ...IN_MEMORY_BANNERS, ...req.body };
   try {
-    let bannerDoc = await Banner.findOne();
-    if (!bannerDoc) {
-      bannerDoc = new Banner(req.body);
-    } else {
-      Object.assign(bannerDoc, req.body);
-    }
-    await bannerDoc.save();
-    return res.json({
-      heroBanner: bannerDoc.heroBanner || '',
-      promoBanner1: bannerDoc.promoBanner1 || '',
-    });
-  } catch (dbErr) {
-    return res.json(IN_MEMORY_BANNERS);
+    try {
+      let bannerDoc = await Banner.findOne();
+      if (!bannerDoc) {
+        bannerDoc = new Banner(req.body);
+      } else {
+        Object.assign(bannerDoc, req.body);
+      }
+      await bannerDoc.save();
+    } catch (dbErr) {}
+
+    const store = getStore();
+    store.banners = { ...store.banners, ...req.body };
+    saveStore(store);
+
+    return res.json(store.banners);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 };

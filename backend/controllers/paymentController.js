@@ -3,8 +3,8 @@ import crypto from 'crypto';
 
 const getRazorpayInstance = () => {
   return new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_VyroMockKey123',
-    key_secret: process.env.RAZORPAY_KEY_SECRET || 'VyroMockSecretKey9999',
+    key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_HyprilMockKey123',
+    key_secret: process.env.RAZORPAY_KEY_SECRET || 'HyprilMockSecretKey9999',
   });
 };
 
@@ -41,7 +41,7 @@ export const verifyRazorpaySignature = async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
-    const secret = process.env.RAZORPAY_KEY_SECRET || 'VyroMockSecretKey9999';
+    const secret = process.env.RAZORPAY_KEY_SECRET || 'HyprilMockSecretKey9999';
     const body = `${razorpay_order_id}|${razorpay_payment_id}`;
 
     const expectedSignature = crypto

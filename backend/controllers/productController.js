@@ -1,46 +1,70 @@
 import { Product } from '../models/Product.js';
-
-const MOCK_PRODUCTS_BACKEND = [];
+import { getStore, saveStore } from '../config/store.js';
 
 export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find({ isActive: true }).sort({ createdAt: -1 });
-    return res.json(products);
+    try {
+      const products = await Product.find({ isActive: true }).sort({ createdAt: -1 });
+      if (products && products.length > 0) return res.json(products);
+    } catch (e) {}
+
+    const store = getStore();
+    return res.json(store.products.filter((p) => p.isActive !== false));
   } catch (error) {
-    return res.json(MOCK_PRODUCTS_BACKEND);
+    res.status(500).json({ message: error.message });
   }
 };
 
 export const getProductBySlug = async (req, res) => {
   try {
-    const product = await Product.findOne({ slug: req.params.slug });
-    if (product) return res.json(product);
-    const mockMatch = MOCK_PRODUCTS_BACKEND.find((p) => p.slug === req.params.slug || p._id === req.params.slug);
-    if (mockMatch) return res.json(mockMatch);
+    const slug = req.params.slug;
+    try {
+      const product = await Product.findOne({ $or: [{ slug: slug }, { _id: slug }] });
+      if (product) return res.json(product);
+    } catch (e) {}
+
+    const store = getStore();
+    const match = store.products.find((p) => p.slug === slug || p._id === slug || p.id === slug);
+    if (match) return res.json(match);
+
     return res.status(404).json({ message: 'Product not found' });
   } catch (error) {
-    const mockMatch = MOCK_PRODUCTS_BACKEND.find((p) => p.slug === req.params.slug || p._id === req.params.slug);
-    if (mockMatch) return res.json(mockMatch);
     return res.status(404).json({ message: 'Product not found' });
   }
 };
 
 export const createProduct = async (req, res) => {
   try {
+    const { name, category, price } = req.body;
+    if (!name || price === undefined) {
+      return res.status(400).json({ message: 'Product name and price are required' });
+    }
+
     try {
       const product = new Product(req.body);
       const saved = await product.save();
       return res.status(201).json(saved);
     } catch (dbErr) {
+      const store = getStore();
+      const pId = 'prod_' + Date.now();
       const newProd = {
-        _id: 'prod_' + Date.now(),
-        id: 'prod_' + Date.now(),
+        _id: pId,
+        id: pId,
         ...req.body,
-        rating: req.body.rating || 5.0,
-        reviewCount: req.body.reviewCount || 1,
-        images: req.body.images || [req.body.image || 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800'],
+        slug: req.body.slug || name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        category: category || 'General',
+        price: Number(price),
+        comparePrice: Number(req.body.comparePrice || price * 1.4),
+        stock: Number(req.body.stock || 50),
+        rating: Number(req.body.rating || 5.0),
+        reviewCount: Number(req.body.reviewCount || 0),
+        images: req.body.images || [req.body.image || ''],
+        image: req.body.image || '',
+        isActive: true,
+        createdAt: new Date().toISOString(),
       };
-      MOCK_PRODUCTS_BACKEND.unshift(newProd);
+      store.products.unshift(newProd);
+      saveStore(store);
       return res.status(201).json(newProd);
     }
   } catch (error) {
@@ -50,17 +74,20 @@ export const createProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
+    const id = req.params.id;
     try {
-      const updated = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      const updated = await Product.findByIdAndUpdate(id, req.body, { new: true });
       if (updated) return res.json(updated);
-    } catch (dbErr) {
-      // In-memory update fallback
-    }
-    const idx = MOCK_PRODUCTS_BACKEND.findIndex((p) => p._id === req.params.id || p.id === req.params.id);
+    } catch (dbErr) {}
+
+    const store = getStore();
+    const idx = store.products.findIndex((p) => p._id === id || p.id === id || p.slug === id);
     if (idx > -1) {
-      MOCK_PRODUCTS_BACKEND[idx] = { ...MOCK_PRODUCTS_BACKEND[idx], ...req.body };
-      return res.json(MOCK_PRODUCTS_BACKEND[idx]);
+      store.products[idx] = { ...store.products[idx], ...req.body };
+      saveStore(store);
+      return res.json(store.products[idx]);
     }
+
     res.status(404).json({ message: 'Product not found' });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -69,18 +96,17 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
+    const id = req.params.id;
     try {
-      await Product.findByIdAndDelete(req.params.id);
-    } catch (dbErr) {
-      const idx = MOCK_PRODUCTS_BACKEND.findIndex((p) => p._id === req.params.id || p.id === req.params.id);
-      if (idx > -1) {
-        MOCK_PRODUCTS_BACKEND.splice(idx, 1);
-      }
-    }
+      await Product.findByIdAndDelete(id);
+    } catch (dbErr) {}
+
+    const store = getStore();
+    store.products = store.products.filter((p) => p._id !== id && p.id !== id && p.slug !== id);
+    saveStore(store);
+
     res.json({ message: 'Product removed' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
-

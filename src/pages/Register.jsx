@@ -43,12 +43,12 @@ export const Register = () => {
 
   return (
     <div className="max-w-md mx-auto px-4 py-16 sm:py-20 space-y-8">
-      <SEO title="Create Account" description="Register a free VYRO account." />
+      <SEO title="Create Account" description="Register a free Hypril account." />
 
       <div className="text-center space-y-3">
         <h1 className="text-3xl font-heading font-extrabold text-slate-900">Create Account</h1>
         <p className="text-xs text-slate-600 font-medium max-w-xs mx-auto leading-relaxed">
-          Join VYRO for fast express checkout, live order tracking, and customized wellness recommendations.
+          Join Hypril for fast express checkout, live order tracking, and customized wellness recommendations.
         </p>
       </div>
 
@@ -64,7 +64,7 @@ export const Register = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Vikram Rao"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:border-[#0D472E] focus:ring-2 focus:ring-[#0D472E]/20 transition-all min-h-[44px]"
               />
             </div>
           </div>
@@ -79,7 +79,7 @@ export const Register = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="vikram@example.com"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:border-[#0D472E] focus:ring-2 focus:ring-[#0D472E]/20 transition-all min-h-[44px]"
               />
             </div>
           </div>
@@ -94,7 +94,7 @@ export const Register = () => {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 9876543210"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:border-[#0D472E] focus:ring-2 focus:ring-[#0D472E]/20 transition-all min-h-[44px]"
               />
             </div>
           </div>
@@ -109,7 +109,7 @@ export const Register = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Minimum 6 characters"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:border-[#0D472E] focus:ring-2 focus:ring-[#0D472E]/20 transition-all min-h-[44px]"
               />
             </div>
           </div>
@@ -124,12 +124,12 @@ export const Register = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Re-enter password"
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-xs text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:border-[#0D472E] focus:ring-2 focus:ring-[#0D472E]/20 transition-all min-h-[44px]"
               />
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="btn-primary w-full py-3.5 text-xs font-bold mt-2 shadow-md">
+          <button type="submit" disabled={loading} className="btn-primary bg-[#0D472E] text-white w-full py-3.5 text-xs font-bold mt-2 shadow-md min-h-[44px] flex items-center justify-center gap-2">
             {loading ? (
               <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
             ) : (
@@ -143,7 +143,7 @@ export const Register = () => {
 
         <div className="pt-6 mt-6 border-t border-slate-100 text-center text-xs text-slate-600 font-medium">
           Already registered?{' '}
-          <Link to="/login" className="text-primary font-bold hover:underline">
+          <Link to="/login" className="text-[#0D472E] font-bold hover:underline">
             Sign in
           </Link>
         </div>

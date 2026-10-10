@@ -42,7 +42,7 @@ export const CartDrawer = () => {
     if (!couponCode.trim()) return;
     
     const code = couponCode.trim().toUpperCase();
-    if (code === 'BOLD10' || code === 'HYPRIL10' || code === 'VYRO10') {
+    if (code === 'HYPRIL10' || code === 'HYPRIL20' || code === 'BOLD10') {
       applyCoupon(code, 'percentage', 10, 0);
     } else {
       applyCoupon(code, 'percentage', 10, 0);

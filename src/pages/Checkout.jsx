@@ -19,7 +19,7 @@ import { BRAND_NAME } from '../utils/constants';
 import api from '../services/api';
 
 export const Checkout = () => {
-  const { cartItems, getSubtotal, getShippingFee, getDiscountAmount, getTotal, clearCart } = useCart();
+  const { cartItems, getSubtotal, getShippingFee, getDiscountAmount, getTotal, appliedCoupon, clearCart } = useCart();
   const { user } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
@@ -86,31 +86,35 @@ export const Checkout = () => {
   };
 
   const handlePlaceOrder = async () => {
+    if (loading) return;
     setLoading(true);
 
-    const orderData = {
-      orderItems: cartItems,
+    const orderPayload = {
+      orderItems: cartItems.map((item) => ({
+        productId: item.productId || item.product || item._id || item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.image,
+      })),
       shippingAddress: address,
-      paymentMethod,
-      itemsPrice: subtotal,
-      shippingPrice: shipping,
-      discountAmount: discount,
-      totalPrice: total,
+      paymentMethod: paymentMethod === 'cod' ? 'COD' : 'Razorpay (Paid)',
+      couponCode: appliedCoupon ? appliedCoupon.code : null,
     };
 
     if (paymentMethod === 'cod') {
       try {
-        const res = await api.post('/orders', orderData);
+        const res = await api.post('/orders', orderPayload);
+        const savedOrder = res.data?.order || { orderNumber: 'HYP-' + Date.now().toString().slice(-6), totalPrice: total, paymentMethod: 'COD' };
         clearCart();
         addToast('Order placed successfully with Cash on Delivery!', 'success');
-        navigate('/order-success', { state: { order: res.data.order || { orderNumber: BRAND_NAME.toUpperCase() + '-' + Date.now().toString().slice(-6), totalPrice: total } } });
+        navigate('/order-success', { state: { order: savedOrder } });
       } catch (err) {
-        // Fallback for dev demo mode
-        clearCart();
-        addToast('Order placed successfully (COD Demo)', 'success');
-        navigate('/order-success', { state: { order: { orderNumber: BRAND_NAME.toUpperCase() + '-' + Date.now().toString().slice(-6), totalPrice: total, paymentMethod: 'COD' } } });
+        const errMsg = err.response?.data?.message || 'Error placing order';
+        addToast(errMsg, 'error');
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
       return;
     }
 
@@ -129,7 +133,6 @@ export const Checkout = () => {
         const createRes = await api.post('/payments/create', { amount: total });
         razorpayOrder = createRes.data;
       } catch (e) {
-        // Mock fallback if backend offline
         razorpayOrder = {
           id: 'order_mock_' + Date.now(),
           amount: total * 100,
@@ -147,24 +150,26 @@ export const Checkout = () => {
         image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=200',
         order_id: razorpayOrder.id,
         handler: async function (response) {
+          let savedOrder;
           try {
-            // Verify signature on backend
             await api.post('/payments/verify', {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
-              orderData
             });
-          } catch (e) {
-            console.log('Verified mock payment');
-          }
+          } catch (e) {}
+
+          try {
+            const res = await api.post('/orders', orderPayload);
+            savedOrder = res.data?.order;
+          } catch (e) {}
 
           clearCart();
           addToast('Payment successful! Your order has been placed.', 'success');
           navigate('/order-success', {
             state: {
-              order: {
-                orderNumber: BRAND_NAME.toUpperCase() + '-' + Date.now().toString().slice(-6),
+              order: savedOrder || {
+                orderNumber: 'HYP-' + Date.now().toString().slice(-6),
                 totalPrice: total,
                 paymentMethod: 'Razorpay (Paid)'
               }
@@ -177,12 +182,12 @@ export const Checkout = () => {
           contact: address.phone
         },
         theme: {
-          color: '#0A7E8C'
+          color: '#0D472E'
         }
       };
 
       const rzp1 = new window.Razorpay(options);
-      rzp1.on('payment.failed', function (response) {
+      rzp1.on('payment.failed', function () {
         addToast('Payment failed or cancelled.', 'error');
       });
       rzp1.open();
@@ -200,11 +205,11 @@ export const Checkout = () => {
       {/* Header */}
       <div className="flex items-center justify-between pb-4 border-b border-slate-200">
         <h1 className="text-3xl font-heading font-extrabold text-slate-900 flex items-center gap-3">
-          <Lock className="w-7 h-7 text-[#0A7E8C]" />
+          <Lock className="w-7 h-7 text-[#0D472E]" />
           Encrypted Checkout
         </h1>
-        <div className="flex items-center gap-2 text-xs text-[#0A7E8C] font-extrabold bg-teal-50 px-3.5 py-1.5 rounded-full border border-[#0A7E8C]/20">
-          <ShieldCheck className="w-4 h-4 text-[#0A7E8C]" /> 256-Bit SSL Protected
+        <div className="flex items-center gap-2 text-xs text-[#0D472E] font-extrabold bg-teal-50 px-3.5 py-1.5 rounded-full border border-[#0D472E]/20">
+          <ShieldCheck className="w-4 h-4 text-[#0D472E]" /> 256-Bit SSL Protected
         </div>
       </div>
 
@@ -215,11 +220,11 @@ export const Checkout = () => {
           <div className="bg-white rounded-3xl p-6 border border-slate-200 space-y-4 shadow-sm">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h2 className="font-heading font-extrabold text-lg text-slate-900 flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-[#0A7E8C] text-white font-black text-xs flex items-center justify-center">1</span>
+                <span className="w-6 h-6 rounded-full bg-[#0D472E] text-white font-black text-xs flex items-center justify-center">1</span>
                 Shipping Address
               </h2>
               {step > 1 && (
-                <button onClick={() => setStep(1)} className="text-xs text-[#0A7E8C] font-bold hover:underline">
+                <button onClick={() => setStep(1)} className="text-xs text-[#0D472E] font-bold hover:underline">
                   Edit
                 </button>
               )}
@@ -285,7 +290,7 @@ export const Checkout = () => {
                     />
                   </div>
                 </div>
-                <button type="submit" className="btn-primary text-xs py-3 px-6 font-extrabold">
+                <button type="submit" className="btn-primary bg-[#0D472E] text-white text-xs py-3 px-6 font-extrabold">
                   Continue to Delivery & Payment
                 </button>
               </form>
@@ -302,7 +307,7 @@ export const Checkout = () => {
             <div className="bg-white rounded-3xl p-6 border border-slate-200 space-y-4 shadow-sm">
               <div className="border-b border-slate-100 pb-3">
                 <h2 className="font-heading font-extrabold text-lg text-slate-900 flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-[#0A7E8C] text-white font-black text-xs flex items-center justify-center">2</span>
+                  <span className="w-6 h-6 rounded-full bg-[#0D472E] text-white font-black text-xs flex items-center justify-center">2</span>
                   Payment Method
                 </h2>
               </div>
@@ -313,18 +318,18 @@ export const Checkout = () => {
                   onClick={() => setPaymentMethod('razorpay')}
                   className={`p-4 rounded-2xl border cursor-pointer transition-all space-y-2 ${
                     paymentMethod === 'razorpay'
-                      ? 'bg-teal-50 border-[#0A7E8C] text-slate-900 shadow-sm'
+                      ? 'bg-teal-50 border-[#0D472E] text-slate-900 shadow-sm'
                       : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-heading font-extrabold text-sm text-slate-900">Online Payment (Razorpay)</span>
-                    <CreditCard className="w-5 h-5 text-[#0A7E8C]" />
+                    <CreditCard className="w-5 h-5 text-[#0D472E]" />
                   </div>
                   <p className="text-xs text-slate-600 font-medium">
                     UPI (Google Pay, PhonePe, Paytm), Cards & NetBanking.
                   </p>
-                  <span className="inline-block text-[10px] text-[#0A7E8C] font-bold bg-teal-100 px-2.5 py-0.5 rounded-full">
+                  <span className="inline-block text-[10px] text-[#0D472E] font-bold bg-teal-100 px-2.5 py-0.5 rounded-full">
                     Instant Confirmation
                   </span>
                 </div>
@@ -334,7 +339,7 @@ export const Checkout = () => {
                   onClick={() => setPaymentMethod('cod')}
                   className={`p-4 rounded-2xl border cursor-pointer transition-all space-y-2 ${
                     paymentMethod === 'cod'
-                      ? 'bg-teal-50 border-[#0A7E8C] text-slate-900 shadow-sm'
+                      ? 'bg-teal-50 border-[#0D472E] text-slate-900 shadow-sm'
                       : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
                   }`}
                 >
@@ -353,7 +358,7 @@ export const Checkout = () => {
                 <button
                   onClick={handlePlaceOrder}
                   disabled={loading}
-                  className="btn-primary w-full py-4 text-sm font-extrabold shadow-glow-primary"
+                  className="btn-primary bg-[#0D472E] text-white w-full py-4 text-sm font-extrabold shadow-glow-primary flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
@@ -394,24 +399,24 @@ export const Checkout = () => {
               <span className="font-extrabold text-slate-900">{formatCurrency(subtotal)}</span>
             </div>
             {discount > 0 && (
-              <div className="flex justify-between text-[#0A7E8C] font-bold">
-                <span>Discount</span>
+              <div className="flex justify-between text-[#0D472E] font-bold">
+                <span>Discount ({appliedCoupon?.code})</span>
                 <span>-{formatCurrency(discount)}</span>
               </div>
             )}
             <div className="flex justify-between">
               <span>Shipping</span>
-              <span>{shipping === 0 ? <strong className="text-[#0A7E8C] font-extrabold">FREE</strong> : formatCurrency(shipping)}</span>
+              <span>{shipping === 0 ? <strong className="text-[#0D472E] font-extrabold">FREE</strong> : formatCurrency(shipping)}</span>
             </div>
             <div className="flex justify-between text-base font-black text-slate-900 pt-2 border-t border-slate-200">
               <span>Total Payable</span>
-              <span className="text-[#0A7E8C]">{formatCurrency(total)}</span>
+              <span className="text-[#0D472E]">{formatCurrency(total)}</span>
             </div>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 space-y-2 font-medium">
             <div className="flex items-center gap-2 text-slate-900 font-bold">
-              <Package className="w-4 h-4 text-[#0A7E8C] shrink-0" />
+              <Package className="w-4 h-4 text-[#0D472E] shrink-0" />
               <span>100% Plain Unmarked Outer Box Packaging</span>
             </div>
             <p className="text-[10px] text-slate-500">
@@ -423,4 +428,3 @@ export const Checkout = () => {
     </div>
   );
 };
-

@@ -10,9 +10,9 @@ export const AdminReviews = () => {
 
   const reviews = getAllReviewsFlat();
 
-  const handleDelete = (productId, reviewId) => {
+  const handleDelete = async (productId, reviewId) => {
     if (window.confirm('Are you sure you want to delete this customer review?')) {
-      deleteReview(productId, reviewId);
+      await deleteReview(productId, reviewId);
       addToast('Review deleted permanently', 'info');
     }
   };
@@ -36,30 +36,32 @@ export const AdminReviews = () => {
       <div className="space-y-4">
         {reviews.map((r) => (
           <div
-            key={r.id || r._id}
+            key={r._id || r.id}
             className="p-5 rounded-3xl bg-dark-800 border border-dark-600 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl"
           >
             <div className="space-y-2 flex-1">
               <div className="flex items-center gap-3 flex-wrap">
                 <span className="font-extrabold text-white text-sm">{r.name}</span>
                 <div className="flex text-amber-400 gap-0.5">
-                  {[...Array(r.rating || 5)].map((_, i) => (
+                  {[...Array(Number(r.rating) || 5)].map((_, i) => (
                     <Star key={i} className="w-3.5 h-3.5 fill-current" />
                   ))}
                 </div>
                 <span className="text-[10px] bg-dark-700 text-slate-300 px-2 py-0.5 rounded-full border border-dark-600 font-mono">
-                  Product ID: {r.productId}
+                  Product ID: {r.productIdStr || r.productId}
                 </span>
-                <span className="text-[11px] text-slate-400">{r.date}</span>
+                <span className="text-[11px] text-slate-400">
+                  {r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-IN') : 'Recent'}
+                </span>
               </div>
 
-              <h4 className="font-bold text-white text-xs">{r.title}</h4>
+              {r.title && <h4 className="font-bold text-white text-xs">{r.title}</h4>}
               <p className="text-xs text-slate-300 italic font-medium">"{r.comment}"</p>
 
               {r.image && (
                 <div className="pt-2 flex items-center gap-2">
                   <span className="text-[10px] text-amber-400 font-bold flex items-center gap-1">
-                    <ImageIcon className="w-3 h-3" /> Photo Attached:
+                    <ImageIcon className="w-3.5 h-3.5" /> Photo Attached:
                   </span>
                   <img src={r.image} alt="Uploaded review photo" className="w-14 h-14 object-cover rounded-xl border border-dark-600" />
                 </div>
@@ -67,8 +69,8 @@ export const AdminReviews = () => {
             </div>
 
             <button
-              onClick={() => handleDelete(r.productId, r.id)}
-              className="p-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-2xl border border-red-500/30 font-bold text-xs flex items-center gap-1.5 shrink-0 transition-colors"
+              onClick={() => handleDelete(r.productIdStr || r.productId, r._id || r.id)}
+              className="p-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-2xl border border-red-500/30 font-bold text-xs flex items-center gap-1.5 shrink-0 transition-colors min-h-[44px]"
             >
               <Trash2 className="w-4 h-4" />
               <span>Delete Review</span>

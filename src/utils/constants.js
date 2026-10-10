@@ -1,4 +1,4 @@
-export const BRAND_NAME = "BOLD";
+export const BRAND_NAME = "Hypril";
 export const BRAND_TAGLINE = "India's No. 1 Sexual Health & Men's Wellness Brand";
 export const CURRENCY_SYMBOL = "₹";
 

@@ -8,7 +8,7 @@ import { compressImage } from '../../utils/imageCompressor';
 
 export const AdminProducts = () => {
   const { products, addProduct, updateProduct, deleteProduct, categories, addCategory, siteBanners, updateSiteBanners } = useProducts();
-  const [activeTab, setActiveTab] = useState('products'); // 'products' | 'banners'
+  const [activeTab, setActiveTab] = useState('products');
   const [query, setQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -96,14 +96,14 @@ export const AdminProducts = () => {
     }
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
-      deleteProduct(id);
+      await deleteProduct(id);
       addToast('Product removed from catalog', 'info');
     }
   };
 
-  const handleSaveProduct = (e) => {
+  const handleSaveProduct = async (e) => {
     e.preventDefault();
     if (!form.name || !form.price) {
       addToast('Product title and price are required', 'error');
@@ -112,9 +112,8 @@ export const AdminProducts = () => {
 
     const catName = (form.category || 'General').trim();
 
-    // Auto-create category if it does not exist yet in categories list
     if (catName && !categories.some((c) => (c.name || '').toLowerCase() === catName.toLowerCase())) {
-      addCategory({ name: catName, badge: 'NEW', image: form.image || '' });
+      await addCategory({ name: catName, badge: 'NEW', image: form.image || '' });
     }
 
     const payload = {
@@ -132,18 +131,18 @@ export const AdminProducts = () => {
     };
 
     if (editingId) {
-      updateProduct(editingId, payload);
+      await updateProduct(editingId, payload);
       addToast('Product saved successfully!', 'success');
     } else {
-      addProduct(payload);
+      await addProduct(payload);
       addToast('New product created & saved!', 'success');
     }
     setShowModal(false);
   };
 
-  const handleSaveBanners = (e) => {
+  const handleSaveBanners = async (e) => {
     e.preventDefault();
-    updateSiteBanners(bannersForm);
+    await updateSiteBanners(bannersForm);
     addToast('Website banner images saved & applied live!', 'success');
   };
 
@@ -156,7 +155,7 @@ export const AdminProducts = () => {
         <div>
           <h1 className="text-2xl font-extrabold text-white flex items-center gap-2.5">
             <Package className="w-7 h-7 text-amber-400" />
-            Admin Catalog & Banners Control
+            Hypril™ Admin Catalog & Banners
           </h1>
           <p className="text-xs text-slate-400 mt-1">
             Upload images directly from device and manage live listings & banners.
@@ -164,22 +163,22 @@ export const AdminProducts = () => {
         </div>
 
         {/* Tab Selector */}
-        <div className="flex items-center gap-2 bg-dark-700 p-1.5 rounded-2xl border border-dark-600">
+        <div className="flex items-center gap-2 bg-dark-700 p-1.5 rounded-2xl border border-dark-600 w-full sm:w-auto">
           <button
             onClick={() => setActiveTab('products')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs font-bold transition-all min-h-[44px] ${
               activeTab === 'products' ? 'bg-amber-500 text-dark-900 shadow-md' : 'text-slate-300 hover:text-white'
             }`}
           >
-            Products Catalog ({products.length})
+            Products ({products.length})
           </button>
           <button
             onClick={() => setActiveTab('banners')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs font-bold transition-all min-h-[44px] ${
               activeTab === 'banners' ? 'bg-amber-500 text-dark-900 shadow-md' : 'text-slate-300 hover:text-white'
             }`}
           >
-            Site Banners (Upload Images)
+            Site Banners
           </button>
         </div>
       </div>
@@ -195,13 +194,13 @@ export const AdminProducts = () => {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search catalog..."
-                className="w-full bg-dark-800 border border-dark-600 rounded-2xl pl-10 pr-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+                className="w-full bg-dark-800 border border-dark-600 rounded-2xl pl-10 pr-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 min-h-[44px]"
               />
             </div>
 
             <button
               onClick={handleOpenAdd}
-              className="bg-amber-500 hover:bg-amber-600 text-dark-900 py-3 px-6 rounded-2xl text-xs font-extrabold flex items-center gap-2 shadow-md shrink-0"
+              className="bg-amber-500 hover:bg-amber-600 text-dark-900 py-3 px-6 rounded-2xl text-xs font-extrabold flex items-center gap-2 shadow-md shrink-0 w-full sm:w-auto justify-center min-h-[44px]"
             >
               <Plus className="w-4 h-4" />
               <span>Add New Product</span>
@@ -209,8 +208,8 @@ export const AdminProducts = () => {
           </div>
 
           <div className="bg-dark-800 rounded-3xl border border-dark-600 overflow-hidden shadow-2xl">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-300">
+            <div className="overflow-x-auto w-full">
+              <table className="w-full text-left text-xs text-slate-300 min-w-[600px]">
                 <thead className="bg-dark-700 text-amber-400 font-extrabold border-b border-dark-600 uppercase tracking-wider text-[10px]">
                   <tr>
                     <th className="p-4">Product</th>
@@ -256,14 +255,14 @@ export const AdminProducts = () => {
                           <div className="flex items-center justify-end gap-2">
                             <button
                               onClick={() => handleOpenEdit(p)}
-                              className="p-2 rounded-xl bg-dark-700 hover:bg-dark-600 text-amber-400 border border-dark-600 transition-colors"
+                              className="p-2.5 rounded-xl bg-dark-700 hover:bg-dark-600 text-amber-400 border border-dark-600 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                               title="Edit Product"
                             >
                               <Edit3 className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => handleDelete(pId)}
-                              className="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 transition-colors"
+                              className="p-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                               title="Delete Product"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -304,7 +303,7 @@ export const AdminProducts = () => {
             {/* Hero Section Banner Image */}
             <div className="space-y-3 p-5 bg-dark-700/60 rounded-2xl border border-dark-600">
               <label className="block text-sm font-bold text-amber-400">
-                1. Main Top Hero Banner Image (Ratio 100:27)
+                1. Main Top Hero Banner Image
               </label>
 
               {bannersForm.heroBanner ? (
@@ -318,7 +317,7 @@ export const AdminProducts = () => {
                 </div>
               )}
 
-              <label className="bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold text-xs py-3 px-6 rounded-xl cursor-pointer inline-flex items-center gap-2 shadow-md">
+              <label className="bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold text-xs py-3 px-6 rounded-xl cursor-pointer inline-flex items-center gap-2 shadow-md min-h-[44px]">
                 <Upload className="w-4 h-4" />
                 <span>Choose Hero Banner Image from Device</span>
                 <input
@@ -347,7 +346,7 @@ export const AdminProducts = () => {
                 </div>
               )}
 
-              <label className="bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold text-xs py-3 px-6 rounded-xl cursor-pointer inline-flex items-center gap-2 shadow-md">
+              <label className="bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold text-xs py-3 px-6 rounded-xl cursor-pointer inline-flex items-center gap-2 shadow-md min-h-[44px]">
                 <Upload className="w-4 h-4" />
                 <span>Choose Promo Banner Image from Device</span>
                 <input
@@ -361,7 +360,7 @@ export const AdminProducts = () => {
 
             <button
               type="submit"
-              className="bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold py-3.5 px-8 rounded-2xl text-xs shadow-glow-amber"
+              className="bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold py-3.5 px-8 rounded-2xl text-xs shadow-glow-amber min-h-[44px]"
             >
               Save Banner Images
             </button>
@@ -378,7 +377,7 @@ export const AdminProducts = () => {
                 <Sparkles className="w-5 h-5 text-amber-400" />
                 {editingId ? 'Edit Product' : 'Add New Product'}
               </h2>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-white p-1">
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -389,24 +388,24 @@ export const AdminProducts = () => {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Extend — Delay Spray for Men (20ml)"
+                  placeholder="e.g. Hypril™ Extended Delay Gel (50ml)"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 min-h-[44px]"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-slate-300 font-semibold mb-1">Category</label>
                   {categories && categories.length > 0 ? (
                     <select
                       value={form.category}
                       onChange={(e) => setForm({ ...form, category: e.target.value })}
-                      className="w-full bg-dark-700 border border-dark-600 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-amber-500"
+                      className="w-full bg-dark-700 border border-dark-600 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-amber-500 min-h-[44px]"
                     >
                       {categories.map((c) => (
-                        <option key={c.id || c.slug} value={c.name}>
+                        <option key={c.id || c.slug || c.name} value={c.name}>
                           {c.name}
                         </option>
                       ))}
@@ -417,7 +416,7 @@ export const AdminProducts = () => {
                       placeholder="Category name"
                       value={form.category}
                       onChange={(e) => setForm({ ...form, category: e.target.value })}
-                      className="w-full bg-dark-700 border border-dark-600 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-amber-500"
+                      className="w-full bg-dark-700 border border-dark-600 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-amber-500 min-h-[44px]"
                     />
                   )}
                 </div>
@@ -428,21 +427,21 @@ export const AdminProducts = () => {
                     type="number"
                     value={form.stock}
                     onChange={(e) => setForm({ ...form, stock: e.target.value })}
-                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500"
+                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 min-h-[44px]"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-slate-300 font-semibold mb-1">Selling Price (₹)</label>
                   <input
                     type="number"
                     required
-                    placeholder="499"
+                    placeholder="999"
                     value={form.price}
                     onChange={(e) => setForm({ ...form, price: e.target.value })}
-                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 font-bold text-amber-400"
+                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 font-bold text-amber-400 min-h-[44px]"
                   />
                 </div>
 
@@ -450,15 +449,14 @@ export const AdminProducts = () => {
                   <label className="block text-slate-300 font-semibold mb-1">Original MRP Price (₹)</label>
                   <input
                     type="number"
-                    placeholder="799"
+                    placeholder="1499"
                     value={form.comparePrice}
                     onChange={(e) => setForm({ ...form, comparePrice: e.target.value })}
-                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500"
+                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 min-h-[44px]"
                   />
                 </div>
               </div>
 
-              {/* Product Image File Upload from Device ONLY */}
               <div>
                 <label className="block text-slate-300 font-semibold mb-1">Upload Product Image From Device</label>
                 <div className="border-2 border-dashed border-dark-600 rounded-2xl p-4 text-center bg-dark-700/60 relative">
@@ -474,7 +472,7 @@ export const AdminProducts = () => {
                     </div>
                   )}
 
-                  <label className="mt-3 bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold text-xs py-2.5 px-5 rounded-xl cursor-pointer inline-flex items-center gap-2 shadow-md">
+                  <label className="mt-3 bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold text-xs py-2.5 px-5 rounded-xl cursor-pointer inline-flex items-center gap-2 shadow-md min-h-[44px]">
                     <Upload className="w-4 h-4" />
                     <span>Upload Product Photo from Device</span>
                     <input
@@ -491,10 +489,10 @@ export const AdminProducts = () => {
                 <label className="block text-slate-300 font-semibold mb-1">Short Benefit Summary</label>
                 <input
                   type="text"
-                  placeholder="e.g. Non-transferable delay spray formula."
+                  placeholder="e.g. Non-transferable delay gel formula."
                   value={form.benefitSummary}
                   onChange={(e) => setForm({ ...form, benefitSummary: e.target.value })}
-                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white placeholder-slate-500"
+                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 min-h-[44px]"
                 />
               </div>
 
@@ -513,13 +511,13 @@ export const AdminProducts = () => {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-5 py-3 rounded-full bg-dark-700 text-slate-300 font-bold"
+                  className="px-5 py-3 rounded-full bg-dark-700 text-slate-300 font-bold min-h-[44px]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-amber-500 text-dark-900 px-7 py-3 font-extrabold rounded-full hover:bg-amber-400 shadow-glow-amber"
+                  className="bg-amber-500 text-dark-900 px-7 py-3 font-extrabold rounded-full hover:bg-amber-400 shadow-glow-amber min-h-[44px]"
                 >
                   Save Product
                 </button>

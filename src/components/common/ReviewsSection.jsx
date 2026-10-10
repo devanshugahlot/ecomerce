@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { Star, CheckCircle2, ThumbsUp, MessageSquarePlus, Upload, Image as ImageIcon, X } from 'lucide-react';
+import { Star, CheckCircle2, ThumbsUp, MessageSquarePlus, Image as ImageIcon, X } from 'lucide-react';
 import { useToast } from '../../context/ToastContext';
 import { useProducts } from '../../context/ProductContext';
+import { useAuth } from '../../context/AuthContext';
 import { compressImage } from '../../utils/imageCompressor';
 
 export const ReviewsSection = ({ productId }) => {
   const { addToast } = useToast();
+  const { user } = useAuth();
   const { getProductReviews, addReview } = useProducts();
 
   const reviews = getProductReviews(productId || 'bold_extend_spray');
   const [showModal, setShowModal] = useState(false);
-  const [newReview, setNewReview] = useState({ name: '', title: '', comment: '', rating: 5, image: null });
+  const [submitting, setSubmitting] = useState(false);
+  const [newReview, setNewReview] = useState({ title: '', comment: '', rating: 5, image: null });
   const [imagePreview, setImagePreview] = useState(null);
   const [previewModalImg, setPreviewModalImg] = useState(null);
 
@@ -27,19 +30,48 @@ export const ReviewsSection = ({ productId }) => {
     }
   };
 
-  const handleAddReview = (e) => {
+  const handleOpenReviewModal = () => {
+    if (!user) {
+      addToast('Please sign in to write a verified review', 'error');
+      return;
+    }
+    setShowModal(true);
+  };
+
+  const handleAddReview = async (e) => {
     e.preventDefault();
-    if (!newReview.name || !newReview.comment) {
-      addToast('Please enter your name and review experience', 'error');
+    if (!user) {
+      addToast('Please sign in to submit a review', 'error');
+      return;
+    }
+    if (!newReview.comment.trim()) {
+      addToast('Please enter your review experience', 'error');
       return;
     }
 
-    addReview(productId || 'bold_extend_spray', newReview);
-    setShowModal(false);
-    setNewReview({ name: '', title: '', comment: '', rating: 5, image: null });
-    setImagePreview(null);
-    addToast('Thank you! Your verified review with image has been posted.', 'success');
+    setSubmitting(true);
+    try {
+      await addReview(productId || 'bold_extend_spray', {
+        title: newReview.title,
+        comment: newReview.comment,
+        rating: Number(newReview.rating || 5),
+        image: newReview.image,
+      });
+      setShowModal(false);
+      setNewReview({ title: '', comment: '', rating: 5, image: null });
+      setImagePreview(null);
+      addToast('Thank you! Your verified review has been posted.', 'success');
+    } catch (err) {
+      const errMsg = err.response?.data?.message || 'Failed to submit review';
+      addToast(errMsg, 'error');
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  const avgRating = reviews.length > 0
+    ? (reviews.reduce((acc, r) => acc + (Number(r.rating) || 5), 0) / reviews.length).toFixed(1)
+    : '4.9';
 
   return (
     <div className="space-y-8 bg-white p-6 sm:p-10 rounded-3xl border border-slate-200/80 shadow-xs">
@@ -48,14 +80,14 @@ export const ReviewsSection = ({ productId }) => {
         {/* Rating Breakdown Header */}
         <div className="flex items-center gap-6">
           <div className="text-center p-4 bg-[#0D472E]/10 rounded-2xl border border-[#0D472E]/20 shrink-0">
-            <span className="text-4xl font-heading font-black text-[#0D472E] block">4.9</span>
+            <span className="text-4xl font-heading font-black text-[#0D472E] block">{avgRating}</span>
             <div className="flex items-center justify-center text-amber-500 gap-0.5 my-1">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-4 h-4 fill-current" />
               ))}
             </div>
             <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-              Based on {reviews.length + 1420} Reviews
+              Based on {reviews.length} Verified Reviews
             </span>
           </div>
 
@@ -82,7 +114,7 @@ export const ReviewsSection = ({ productId }) => {
         {/* CTA Button */}
         <div className="flex flex-wrap items-center gap-3">
           <button
-            onClick={() => setShowModal(true)}
+            onClick={handleOpenReviewModal}
             className="bg-[#0D472E] hover:bg-[#08301E] text-white text-xs font-extrabold py-3.5 px-6 rounded-full flex items-center gap-2 shadow-xs transition-all"
           >
             <MessageSquarePlus className="w-4 h-4" />
@@ -94,21 +126,22 @@ export const ReviewsSection = ({ productId }) => {
       {/* Review Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {reviews.map((rev) => (
-          <div key={rev.id} className="p-6 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-3 flex flex-col justify-between">
+          <div key={rev._id || rev.id} className="p-6 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-3 flex flex-col justify-between">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex text-amber-500 gap-0.5">
-                  {[...Array(rev.rating || 5)].map((_, i) => (
+                  {[...Array(Number(rev.rating) || 5)].map((_, i) => (
                     <Star key={i} className="w-3.5 h-3.5 fill-current" />
                   ))}
                 </div>
-                <span className="text-[11px] text-slate-400 font-medium">{rev.date}</span>
+                <span className="text-[11px] text-slate-400 font-medium">
+                  {rev.createdAt ? new Date(rev.createdAt).toLocaleDateString('en-IN') : 'Recent'}
+                </span>
               </div>
 
-              <h4 className="font-heading font-black text-slate-900 text-sm leading-snug">{rev.title}</h4>
+              {rev.title && <h4 className="font-heading font-black text-slate-900 text-sm leading-snug">{rev.title}</h4>}
               <p className="text-xs text-slate-600 font-medium leading-relaxed">{rev.comment}</p>
 
-              {/* Uploaded Customer Photo Preview in Review Card */}
               {rev.image && (
                 <div className="pt-2">
                   <img
@@ -135,11 +168,17 @@ export const ReviewsSection = ({ productId }) => {
                 className="flex items-center gap-1 text-[11px] text-slate-500 hover:text-[#0D472E] font-semibold transition-colors"
               >
                 <ThumbsUp className="w-3.5 h-3.5" />
-                <span>({rev.helpful || 12})</span>
+                <span>({rev.helpful || 1})</span>
               </button>
             </div>
           </div>
         ))}
+
+        {reviews.length === 0 && (
+          <div className="col-span-3 text-center py-8 text-xs text-slate-500">
+            No customer reviews yet. Be the first verified customer to write a review!
+          </div>
+        )}
       </div>
 
       {/* Image Full Screen Preview Modal */}
@@ -185,18 +224,6 @@ export const ReviewsSection = ({ productId }) => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Your Full Name</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Rahul Sharma"
-                  value={newReview.name}
-                  onChange={(e) => setNewReview({ ...newReview, name: e.target.value })}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:outline-none focus:border-[#0D472E]"
-                />
-              </div>
-
-              <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">Review Headline</label>
                 <input
                   type="text"
@@ -219,7 +246,6 @@ export const ReviewsSection = ({ productId }) => {
                 ></textarea>
               </div>
 
-              {/* Upload Image Field */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">Upload Product Photo (Optional)</label>
                 <div className="border-2 border-dashed border-slate-300 rounded-2xl p-4 text-center bg-slate-50 hover:bg-slate-100 transition-colors relative">
@@ -245,8 +271,16 @@ export const ReviewsSection = ({ productId }) => {
               </div>
 
               <div className="flex gap-3 pt-2">
-                <button type="submit" className="flex-1 bg-[#0D472E] hover:bg-[#08301E] text-white text-xs font-black py-3.5 px-6 rounded-xl shadow-md transition-all">
-                  Submit Verified Review
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="flex-1 bg-[#0D472E] hover:bg-[#08301E] text-white text-xs font-black py-3.5 px-6 rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                >
+                  {submitting ? (
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  ) : (
+                    <span>Submit Verified Review</span>
+                  )}
                 </button>
                 <button type="button" onClick={() => setShowModal(false)} className="px-5 py-3.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50">
                   Cancel

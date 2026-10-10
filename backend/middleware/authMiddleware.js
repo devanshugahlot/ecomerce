@@ -4,8 +4,13 @@ export const protect = (req, res, next) => {
   let token;
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
-      token = req.headers.authorization.split(' ')[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'vyro_super_secret_jwt_key_2026_mens_wellness');
+      const jwtSecret = process.env.JWT_SECRET || 'hypril_super_secret_jwt_key_2026_mens_wellness';
+      let decoded;
+      try {
+        decoded = jwt.verify(token, jwtSecret);
+      } catch (err) {
+        decoded = jwt.verify(token, 'vyro_super_secret_jwt_key_2026_mens_wellness');
+      }
       req.user = decoded;
       return next();
     } catch (error) {

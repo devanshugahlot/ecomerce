@@ -13,12 +13,12 @@ export const AdminOrders = () => {
   const [trackingNo, setTrackingNo] = useState('');
   const { addToast } = useToast();
 
-  const handleUpdateStatus = (e) => {
+  const handleUpdateStatus = async (e) => {
     e.preventDefault();
     if (!selectedOrder) return;
-    const orderId = selectedOrder._id || selectedOrder.id;
+    const orderId = selectedOrder._id || selectedOrder.id || selectedOrder.orderNumber;
 
-    updateOrderStatus(orderId, newStatus);
+    await updateOrderStatus(orderId, newStatus, trackingNo);
     addToast(`Order ${selectedOrder.orderNumber || orderId} status updated to '${newStatus}'!`, 'success');
     setSelectedOrder(null);
   };
@@ -87,7 +87,7 @@ export const AdminOrders = () => {
                       {ord.orderItems && ord.orderItems[0] ? (
                         <span>{ord.orderItems[0].name} {itemsCount > 1 ? `(+${itemsCount - 1} more)` : ''}</span>
                       ) : (
-                        <span>Hypril™ Package ({itemsCount})</span>
+                        <span>Hypril Package ({itemsCount})</span>
                       )}
                     </td>
                     <td className="p-4 font-black text-amber-400 text-sm">{formatCurrency(ord.totalPrice || ord.total || 799)}</td>
@@ -98,6 +98,8 @@ export const AdminOrders = () => {
                           ? 'bg-blue-500/10 text-blue-400 border-blue-500/30'
                           : ord.status === 'Delivered'
                           ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                          : ord.status === 'Cancelled'
+                          ? 'bg-red-500/10 text-red-400 border-red-500/30'
                           : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
                       }`}>
                         {ord.status || 'Confirmed'}

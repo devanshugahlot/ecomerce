@@ -5,13 +5,14 @@ export const AgeGateModal = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const verified = localStorage.getItem('boldcare_age_verified');
+    const verified = localStorage.getItem('hypril_age_verified') || localStorage.getItem('boldcare_age_verified');
     if (!verified) {
       setIsOpen(true);
     }
   }, []);
 
   const handleVerify = () => {
+    localStorage.setItem('hypril_age_verified', 'true');
     localStorage.setItem('boldcare_age_verified', 'true');
     setIsOpen(false);
   };

@@ -19,7 +19,6 @@ import { SEO } from '../components/common/SEO';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { formatCurrency } from '../utils/currency';
-
 import api from '../services/api';
 
 export const Account = () => {
@@ -43,46 +42,35 @@ export const Account = () => {
     setLoadingOrders(true);
     try {
       const res = await api.get('/orders/my-orders');
-      if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+      if (res.data && Array.isArray(res.data)) {
         setOrders(res.data);
       } else {
-        // Fallback to initial order
-        setOrders([
-          {
-            orderNumber: "VYRO-892410",
-            date: "Oct 2, 2026",
-            status: "Shipped",
-            totalPrice: 1299,
-            paymentMethod: "Razorpay (Paid)",
-            trackingNumber: "EXP-9041284IN",
-            items: [
-              { name: "VYRO Surge Stamina Gummies", quantity: 1, price: 699 },
-              { name: "KSM-66 Ashwagandha 600mg", quantity: 1, price: 600 }
-            ],
-            address: "B-402, Green Palm Heights, HSR Layout, Bengaluru, KA 560102"
-          }
-        ]);
+        setOrders([]);
       }
     } catch (err) {
-      console.log('Error fetching user orders');
+      console.error('Error fetching user orders:', err);
+      setOrders([]);
     } finally {
       setLoadingOrders(false);
     }
   };
 
   // Address book state
-  const [addresses, setAddresses] = useState([
-    {
-      id: "addr_1",
-      fullName: user?.name || "Vikram Rao",
-      phone: "+91 9876543210",
-      line1: "B-402, Green Palm Heights",
-      city: "Bengaluru",
-      state: "Karnataka",
-      postalCode: "560102",
-      isDefault: true
-    }
-  ]);
+  const [addresses, setAddresses] = useState(() => {
+    const saved = localStorage.getItem('hypril_user_addresses');
+    return saved ? JSON.parse(saved) : [
+      {
+        id: "addr_1",
+        fullName: user?.name || "Customer",
+        phone: user?.phone || "+91 9876543210",
+        line1: "B-402, Green Palm Heights",
+        city: "Bengaluru",
+        state: "Karnataka",
+        postalCode: "560102",
+        isDefault: true
+      }
+    ];
+  });
 
   const [showAddAddress, setShowAddAddress] = useState(false);
   const [newAddr, setNewAddr] = useState({
@@ -122,7 +110,9 @@ export const Account = () => {
       isDefault: addresses.length === 0
     };
 
-    setAddresses([...addresses, created]);
+    const updated = [...addresses, created];
+    setAddresses(updated);
+    localStorage.setItem('hypril_user_addresses', JSON.stringify(updated));
     setShowAddAddress(false);
     setNewAddr({ fullName: '', phone: '', line1: '', city: '', state: '', postalCode: '' });
     addToast('Address added to your address book', 'success');
@@ -137,7 +127,7 @@ export const Account = () => {
       {/* Header Profile Summary */}
       <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-sm">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-primary text-white font-heading font-black text-2xl flex items-center justify-center shadow-md">
+          <div className="w-16 h-16 rounded-2xl bg-[#0D472E] text-white font-heading font-black text-2xl flex items-center justify-center shadow-md">
             {user.name ? user.name[0].toUpperCase() : 'U'}
           </div>
           <div>
@@ -168,7 +158,7 @@ export const Account = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all ${
                   activeTab === tab.id
-                    ? 'bg-primary/10 text-primary border border-primary/20 font-black shadow-xs'
+                    ? 'bg-[#0D472E]/10 text-[#0D472E] border border-[#0D472E]/20 font-black shadow-xs'
                     : 'text-slate-600 hover:bg-slate-50'
                 }`}
               >
@@ -187,14 +177,26 @@ export const Account = () => {
                 Order History & Live Tracking
               </h2>
 
-              {orders.length === 0 ? (
-                <p className="text-xs text-slate-500 font-medium">You have no previous orders.</p>
+              {loadingOrders ? (
+                <div className="py-12 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
+                  <div className="w-5 h-5 border-2 border-[#0D472E] border-t-transparent rounded-full animate-spin"></div>
+                  <span>Loading your orders...</span>
+                </div>
+              ) : orders.length === 0 ? (
+                <div className="py-12 text-center space-y-3">
+                  <ShoppingBag className="w-12 h-12 text-slate-300 mx-auto" />
+                  <h3 className="font-heading font-bold text-slate-900 text-base">No previous orders found</h3>
+                  <p className="text-xs text-slate-500 font-medium">When you place orders, they will appear here live with status tracking.</p>
+                  <Link to="/shop" className="btn-primary inline-flex text-xs py-2.5 px-6 font-bold">
+                    Start Shopping
+                  </Link>
+                </div>
               ) : (
                 <div className="space-y-6">
                   {orders.map((ord, orderIdx) => {
-                    const orderId = ord.orderNumber || ord._id || `ORD-${orderIdx}`;
+                    const orderId = ord.orderNumber || ord._id || `HYP-${orderIdx}`;
                     const itemsList = ord.orderItems || ord.items || [];
-                    const orderDate = ord.date || (ord.createdAt ? new Date(ord.createdAt).toLocaleDateString('en-IN') : 'Recent');
+                    const orderDate = ord.createdAt ? new Date(ord.createdAt).toLocaleDateString('en-IN') : 'Recent';
                     const orderStatus = ord.status || 'Confirmed';
                     const formattedAddress = typeof ord.address === 'string'
                       ? ord.address
@@ -209,7 +211,7 @@ export const Account = () => {
                             <span className="font-heading font-bold text-sm text-slate-900">{orderId}</span>
                             <span className="text-xs text-slate-500 font-medium block sm:inline sm:ml-3">Placed on {orderDate}</span>
                           </div>
-                          <span className="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20 self-start sm:self-auto">
+                          <span className="text-xs font-bold text-[#0D472E] bg-[#0D472E]/10 px-3 py-1 rounded-full border border-[#0D472E]/20 self-start sm:self-auto">
                             {orderStatus}
                           </span>
                         </div>
@@ -233,8 +235,8 @@ export const Account = () => {
                               const isPassed = idx <= currentIdx;
                               return (
                                 <div key={step} className="space-y-1">
-                                  <div className={`h-1.5 rounded-full ${isPassed ? 'bg-primary' : 'bg-slate-200'}`}></div>
-                                  <span className={isPassed ? 'text-primary font-bold' : 'text-slate-400'}>{step}</span>
+                                  <div className={`h-1.5 rounded-full ${isPassed ? 'bg-[#0D472E]' : 'bg-slate-200'}`}></div>
+                                  <span className={isPassed ? 'text-[#0D472E] font-bold' : 'text-slate-400'}>{step}</span>
                                 </div>
                               );
                             })}
@@ -243,7 +245,7 @@ export const Account = () => {
 
                         <div className="text-xs text-slate-600 font-medium flex flex-col sm:flex-row justify-between gap-2 pt-2 border-t border-slate-200/80">
                           <span>Shipping to: <strong className="text-slate-900">{formattedAddress}</strong></span>
-                          <span>Tracking: <strong className="text-primary font-bold">{ord.trackingNumber || 'Pending'}</strong></span>
+                          <span>Tracking: <strong className="text-[#0D472E] font-bold">{ord.trackingNumber || 'Pending'}</strong></span>
                         </div>
                       </div>
                     );
@@ -263,7 +265,6 @@ export const Account = () => {
                 </button>
               </div>
 
-              {/* Add Address Form Modal/Inline */}
               {showAddAddress && (
                 <form onSubmit={handleAddAddressSubmit} className="p-5 bg-slate-50/80 rounded-2xl border border-slate-200/80 space-y-4">
                   <h3 className="font-heading font-bold text-slate-900 text-sm">Add Delivery Address</h3>
@@ -273,35 +274,35 @@ export const Account = () => {
                       placeholder="Full Name"
                       value={newAddr.fullName}
                       onChange={(e) => setNewAddr({ ...newAddr, fullName: e.target.value })}
-                      className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+                      className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-[#0D472E]/20 focus:border-[#0D472E] outline-none"
                     />
                     <input
                       type="tel"
                       placeholder="Phone Number (+91)"
                       value={newAddr.phone}
                       onChange={(e) => setNewAddr({ ...newAddr, phone: e.target.value })}
-                      className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+                      className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-[#0D472E]/20 focus:border-[#0D472E] outline-none"
                     />
                     <input
                       type="text"
                       placeholder="Address Line 1"
                       value={newAddr.line1}
                       onChange={(e) => setNewAddr({ ...newAddr, line1: e.target.value })}
-                      className="sm:col-span-2 bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+                      className="sm:col-span-2 bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-[#0D472E]/20 focus:border-[#0D472E] outline-none"
                     />
                     <input
                       type="text"
                       placeholder="City"
                       value={newAddr.city}
                       onChange={(e) => setNewAddr({ ...newAddr, city: e.target.value })}
-                      className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+                      className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-[#0D472E]/20 focus:border-[#0D472E] outline-none"
                     />
                     <input
                       type="text"
                       placeholder="PIN Code (6 digits)"
                       value={newAddr.postalCode}
                       onChange={(e) => setNewAddr({ ...newAddr, postalCode: e.target.value })}
-                      className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+                      className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-[#0D472E]/20 focus:border-[#0D472E] outline-none"
                     />
                   </div>
                   <div className="flex gap-3">
@@ -311,12 +312,11 @@ export const Account = () => {
                 </form>
               )}
 
-              {/* Address Cards List */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {addresses.map((addr) => (
                   <div key={addr.id} className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/80 space-y-2 relative">
                     {addr.isDefault && (
-                      <span className="text-[10px] font-bold text-primary bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20">
+                      <span className="text-[10px] font-bold text-[#0D472E] bg-[#0D472E]/10 px-2.5 py-0.5 rounded-full border border-[#0D472E]/20">
                         Default Shipping Address
                       </span>
                     )}
@@ -355,3 +355,5 @@ export const Account = () => {
     </div>
   );
 };
+
+export default Account;

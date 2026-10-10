@@ -95,7 +95,7 @@ export const Home = () => {
             <div className="w-full aspect-[100/27] max-h-[324px] bg-slate-100 overflow-hidden">
               <img
                 src={siteBanners.heroBanner}
-                alt="Bold Care Hero Banner"
+                alt="Hypril Hero Banner"
                 className="w-full h-full object-cover object-center group-hover:scale-[1.01] transition-transform duration-500"
               />
             </div>

@@ -12,4 +12,4 @@ Disallow: /checkout
 Disallow: /order-success
 
 # Sitemap Location
-Sitemap: https://vyro.men/sitemap.xml
+Sitemap: https://hypril.com/sitemap.xml

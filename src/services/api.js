@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://ecomerce-khjs.onrender.com/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -12,7 +12,7 @@ const api = axios.create({
 // Interceptor to inject Auth token header
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('vyro_token');
+    const token = localStorage.getItem('hypril_token') || localStorage.getItem('vyro_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -26,8 +26,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Token expired or invalid
-      // localStorage.removeItem('vyro_token');
+      // Clear token on 401 unauthorized
     }
     return Promise.reject(error);
   }

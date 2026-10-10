@@ -2,12 +2,16 @@ import mongoose from 'mongoose';
 
 const couponSchema = new mongoose.Schema(
   {
-    code: { type: String, required: true, unique: true, uppercase: true },
+    code: { type: String, required: true, unique: true, uppercase: true, trim: true },
     discountType: { type: String, enum: ['percentage', 'fixed'], default: 'percentage' },
     discountValue: { type: Number, required: true },
     minOrderAmount: { type: Number, default: 0 },
     maxDiscountAmount: { type: Number, default: 1000 },
-    isActive: { type: Boolean, default: true }
+    usageLimit: { type: Number, default: 1000 }, // Max global uses
+    usedCount: { type: Number, default: 0 },
+    usersUsed: [{ type: String }], // User IDs who have redeemed this coupon
+    expirationDate: { type: Date, default: null },
+    isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
 );

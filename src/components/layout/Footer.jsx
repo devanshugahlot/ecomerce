@@ -14,7 +14,7 @@ export const Footer = () => {
       addToast('Please enter a valid email address.', 'error');
       return;
     }
-    addToast('Thank you for subscribing! Your 10% discount code is BOLD10.', 'success');
+    addToast('Thank you for subscribing! Your 10% discount code is HYPRIL10.', 'success');
     setEmail('');
   };
 
@@ -72,20 +72,20 @@ export const Footer = () => {
           <div className="md:col-span-2 space-y-4">
             <Link to="/" className="flex items-center gap-2">
               <span className="font-heading font-black text-3xl tracking-tighter text-white">
-                BOLD
+                HYPRIL
               </span>
               <span className="bg-[#E5B869] text-[#0D472E] text-[10px] font-black px-1.5 py-0.5 rounded tracking-widest uppercase">
-                CARE
+                WELLNESS
               </span>
             </Link>
             
             <p className="text-xs text-emerald-100/90 max-w-sm leading-relaxed font-medium">
-              India's No. 1 Men's Health & Intimacy Brand. Delivering doctor-approved delay sprays, Shilajit resin, stamina capsules, and hair regrowth serums discreetly to your doorstep.
+              India's No. 1 Men's Health & Intimacy Brand. Delivering doctor-approved delay gels, Shilajit resin, stamina capsules, and performance formulations discreetly to your doorstep.
             </p>
 
             <form onSubmit={handleSubscribe} className="space-y-2 pt-2 max-w-sm">
               <label className="text-[11px] font-black uppercase text-[#E5B869] tracking-wider block">
-                Get 10% OFF Code (Use Code: BOLD10)
+                Get 10% OFF Code (Use Code: HYPRIL10)
               </label>
               <div className="flex gap-2">
                 <input
@@ -106,11 +106,10 @@ export const Footer = () => {
           <div className="space-y-3">
             <h4 className="text-xs font-black text-[#E5B869] uppercase tracking-wider">Shop Categories</h4>
             <ul className="space-y-2 font-semibold text-emerald-100/90">
-              <li><Link to="/shop?category=Sex" className="hover:text-white transition-colors">Sexual Health (Sex)</Link></li>
+              <li><Link to="/shop?category=Sex" className="hover:text-white transition-colors">Sexual Health</Link></li>
               <li><Link to="/shop?category=Hair" className="hover:text-white transition-colors">Hair Regrowth</Link></li>
               <li><Link to="/shop?category=Performance" className="hover:text-white transition-colors">Performance & Shilajit</Link></li>
               <li><Link to="/shop?category=Daily" className="hover:text-white transition-colors">Daily Multivitamin</Link></li>
-              <li><Link to="/shop?category=Combos" className="hover:text-white transition-colors">Value Combos</Link></li>
             </ul>
           </div>
 
@@ -118,7 +117,7 @@ export const Footer = () => {
           <div className="space-y-3">
             <h4 className="text-xs font-black text-[#E5B869] uppercase tracking-wider">Customer Care</h4>
             <ul className="space-y-2 font-semibold text-emerald-100/90">
-              <li><a href="#doctor-consultation" className="hover:text-white transition-colors">Doctor Consultation</a></li>
+              <li><a href="#contact" className="hover:text-white transition-colors">Contact Support</a></li>
               <li><Link to="/account" className="hover:text-white transition-colors">Track Your Order</Link></li>
               <li><a href="#faq" className="hover:text-white transition-colors">Privacy & FAQs</a></li>
               <li><Link to="/cart" className="hover:text-white transition-colors">Shopping Cart</Link></li>
@@ -130,14 +129,14 @@ export const Footer = () => {
             <h4 className="text-xs font-black text-[#E5B869] uppercase tracking-wider">Contact Us</h4>
             <div className="space-y-2 text-emerald-100/90 font-medium">
               <p className="flex items-center gap-2">
-                <Mail className="w-3.5 h-3.5 text-[#E5B869]" /> support@boldcare.in
+                <Mail className="w-3.5 h-3.5 text-[#E5B869]" /> support@hypril.com
               </p>
               <p className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-[#E5B869]" /> +91 1800-BOLD-CARE
+                <Phone className="w-3.5 h-3.5 text-[#E5B869]" /> +91 1800-HYPRIL-CARE
               </p>
               <p className="pt-1 text-[11px] text-emerald-100/70 leading-tight">
-                Bold Care Healthcare Pvt. Ltd.<br />
-                Mumbai, Maharashtra, India.
+                Hypril Healthcare Pvt. Ltd.<br />
+                Bengaluru, Karnataka, India.
               </p>
             </div>
           </div>
@@ -146,7 +145,7 @@ export const Footer = () => {
         {/* Legal Disclaimer */}
         <div className="pt-8 border-t border-white/15 text-[10px] text-emerald-100/70 leading-relaxed space-y-2">
           <p>
-            <strong>Medical Disclaimer:</strong> Statements regarding topical performance sprays and dietary supplements have been evaluated in clinical safety trials. Products are intended for adult intimacy and wellness enhancement. Consult our online doctor panel if you have medical concerns.
+            <strong>Medical Disclaimer:</strong> Statements regarding performance formulations and dietary supplements have been evaluated in clinical safety trials. Products are intended for adult intimacy and wellness enhancement. Consult a doctor if you have medical concerns.
           </p>
           <p>
             Complies with Indian Drugs & Cosmetic Rules & ASCI Standards. 100% Plain Box packaging guaranteed on all shipments.
@@ -155,7 +154,7 @@ export const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="pt-6 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-emerald-100/80 font-medium">
-          <p>© {new Date().getFullYear()} Bold Care. All rights reserved. Discreet. Effective. Scientific.</p>
+          <p>© {new Date().getFullYear()} Hypril Care. All rights reserved. Discreet. Effective. Scientific.</p>
           <div className="flex items-center gap-4 text-white font-bold">
             <span>UPI / GPay / Paytm</span>
             <span>•</span>

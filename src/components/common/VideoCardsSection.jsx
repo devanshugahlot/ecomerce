@@ -54,7 +54,7 @@ const VIDEO_CARDS = [
     title: 'Stopped my hair shedding within 4 weeks. Highly recommend!',
     thumbnail: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=450',
     videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    productName: 'Bold Hair Regrowth Serum',
+    productName: 'Hypril Hair Regrowth Serum',
     price: 699
   }
 ];

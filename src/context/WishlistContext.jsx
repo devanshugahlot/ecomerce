@@ -5,12 +5,13 @@ const WishlistContext = createContext(null);
 
 export const WishlistProvider = ({ children }) => {
   const [wishlistItems, setWishlistItems] = useState(() => {
-    const saved = localStorage.getItem('vyro_wishlist');
+    const saved = localStorage.getItem('hypril_wishlist') || localStorage.getItem('vyro_wishlist');
     return saved ? JSON.parse(saved) : [];
   });
   const { addToast } = useToast();
 
   useEffect(() => {
+    localStorage.setItem('hypril_wishlist', JSON.stringify(wishlistItems));
     localStorage.setItem('vyro_wishlist', JSON.stringify(wishlistItems));
   }, [wishlistItems]);
 
