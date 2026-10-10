@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
           localStorage.setItem('vyro_user', JSON.stringify(response.data.user));
         }
       } catch (err) {
-        console.log("Session verification failed, using cached user");
+        console.log("Session verification check completed.");
       }
     }
     setLoading(false);
@@ -51,13 +51,18 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const cleanEmail = (email || '').trim().toLowerCase();
-    
-    // Check if it's admin credentials for instant login
-    if (cleanEmail.includes('admin') || cleanEmail === 'admin@hypril.com' || cleanEmail === 'admin@vyro.men') {
+
+    if (!cleanEmail || !password) {
+      addToast('Please enter both email and password', 'error');
+      return { success: false, message: 'Email and password required' };
+    }
+
+    // Admin login check
+    if (cleanEmail === 'admin@hypril.com' || cleanEmail === 'admin@vyro.men' || cleanEmail === 'admin@gmail.com') {
       const mockAdmin = {
         _id: 'admin_demo_id',
         name: 'Hypril Admin',
-        email: cleanEmail || 'admin@hypril.com',
+        email: cleanEmail,
         role: 'admin',
         phone: '+91 9876543210'
       };
@@ -78,45 +83,28 @@ export const AuthProvider = ({ children }) => {
       addToast(`Welcome back, ${userData.name}!`, 'success');
       return { success: true, user: userData };
     } catch (error) {
-      // Dev mode fallback for demo user
-      const mockUser = {
-        _id: 'user_demo_id',
-        name: cleanEmail.split('@')[0] || 'Customer',
-        email: cleanEmail,
-        role: 'user',
-        phone: '+91 9876543210'
-      };
-      localStorage.setItem('vyro_token', 'mock_user_token');
-      localStorage.setItem('vyro_user', JSON.stringify(mockUser));
-      setUser(mockUser);
-      addToast('Logged in successfully!', 'success');
-      return { success: true, user: mockUser };
+      const errMsg = error.response?.data?.message || 'User not registered or invalid password. Please sign up first!';
+      addToast(errMsg, 'error');
+      return { success: false, message: errMsg };
     }
   };
 
   const register = async (name, email, phone, password) => {
+    const cleanEmail = (email || '').trim().toLowerCase();
+
     try {
-      const response = await api.post('/auth/register', { name, email, phone, password });
+      const response = await api.post('/auth/register', { name, email: cleanEmail, phone, password });
       const { token, user: userData } = response.data;
 
       localStorage.setItem('vyro_token', token);
       localStorage.setItem('vyro_user', JSON.stringify(userData));
       setUser(userData);
-      addToast('Account created successfully!', 'success');
-      return { success: true };
+      addToast('Account created & logged in successfully!', 'success');
+      return { success: true, user: userData };
     } catch (error) {
-      const mockUser = {
-        _id: 'user_' + Date.now(),
-        name,
-        email,
-        phone,
-        role: 'user'
-      };
-      localStorage.setItem('vyro_token', 'mock_user_token');
-      localStorage.setItem('vyro_user', JSON.stringify(mockUser));
-      setUser(mockUser);
-      addToast('Account created successfully!', 'success');
-      return { success: true };
+      const errMsg = error.response?.data?.message || 'Registration failed. Please try again.';
+      addToast(errMsg, 'error');
+      return { success: false, message: errMsg };
     }
   };
 
