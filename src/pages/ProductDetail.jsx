@@ -93,7 +93,7 @@ export const ProductDetail = () => {
     }
   };
 
-  const relatedProducts = productList.filter(
+  const relatedProducts = (products || []).filter(
     (p) => (p._id || p.id) !== id
   ).slice(0, 4);
 
