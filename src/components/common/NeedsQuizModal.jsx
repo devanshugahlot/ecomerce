@@ -59,22 +59,22 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1B1F1D]/70 backdrop-blur-md animate-fadeIn">
-      <div className="bg-[#FAF7F2] border border-[#E4E0D8] rounded-3xl p-6 sm:p-8 max-w-lg w-full relative shadow-2xl space-y-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fadeIn">
+      <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 max-w-lg w-full relative shadow-2xl space-y-6">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 w-9 h-9 rounded-full bg-white border border-[#E4E0D8] text-[#5B655F] hover:text-[#1B1F1D] flex items-center justify-center transition-all"
+          className="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-50 border border-slate-200 text-slate-500 hover:text-slate-900 flex items-center justify-center transition-all"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Header Badge */}
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1 rounded-full bg-[#0F3D2B]/10 text-[#0F3D2B] text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-[#B8924A]" />
-            1-Min Hypril™ Wellness Quiz
+          <span className="px-3 py-1 rounded-full bg-teal-50 text-[#0A7E8C] text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 border border-[#0A7E8C]/20">
+            <Sparkles className="w-3.5 h-3.5 text-[#D4A373]" />
+            1-Min Personalized Wellness Quiz
           </span>
         </div>
 
@@ -82,26 +82,26 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
         {step === 1 && (
           <div className="space-y-4">
             <div className="space-y-1">
-              <h2 className="text-xl sm:text-2xl font-serif font-extrabold text-[#1B1F1D]">
+              <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-slate-900">
                 What is your primary intimate wellness focus?
               </h2>
-              <p className="text-xs text-[#5B655F]">Select your main goal for a targeted Hypril™ recommendation.</p>
+              <p className="text-xs text-slate-500">Select your main goal for a targeted product recommendation.</p>
             </div>
             <div className="space-y-2.5 pt-2">
               {concerns.map((c) => (
                 <button
                   key={c.id}
                   onClick={() => handleSelectConcern(c.id)}
-                  className="w-full p-4 rounded-2xl bg-white border border-[#E4E0D8] hover:border-[#0F3D2B] hover:shadow-md transition-all text-left flex items-center justify-between group"
+                  className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-[#0A7E8C] hover:shadow-md transition-all text-left flex items-center justify-between group"
                 >
                   <div className="flex items-center gap-3.5">
                     <span className="text-2xl">{c.icon}</span>
                     <div>
-                      <h4 className="font-bold text-sm text-[#1B1F1D] group-hover:text-[#0F3D2B] transition-colors">{c.title}</h4>
-                      <p className="text-xs text-[#5B655F]">{c.subtitle}</p>
+                      <h4 className="font-heading font-bold text-sm text-slate-900 group-hover:text-[#0A7E8C] transition-colors">{c.title}</h4>
+                      <p className="text-xs text-slate-500">{c.subtitle}</p>
                     </div>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-[#5B655F] group-hover:text-[#0F3D2B] group-hover:translate-x-1 transition-all" />
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#0A7E8C] group-hover:translate-x-1 transition-all" />
                 </button>
               ))}
             </div>
@@ -112,23 +112,23 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
         {step === 2 && (
           <div className="space-y-4">
             <div className="space-y-1">
-              <h2 className="text-xl sm:text-2xl font-serif font-extrabold text-[#1B1F1D]">
+              <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-slate-900">
                 How long have you had this goal?
               </h2>
-              <p className="text-xs text-[#5B655F]">Helps us determine application routine.</p>
+              <p className="text-xs text-slate-500">Helps us determine application routine.</p>
             </div>
             <div className="space-y-2.5 pt-2">
               {durations.map((d) => (
                 <button
                   key={d.id}
                   onClick={() => handleSelectDuration(d.id)}
-                  className="w-full p-4 rounded-2xl bg-white border border-[#E4E0D8] hover:border-[#0F3D2B] transition-all text-left flex items-center justify-between group"
+                  className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-[#0A7E8C] transition-all text-left flex items-center justify-between group"
                 >
                   <div>
-                    <h4 className="font-bold text-sm text-[#1B1F1D] group-hover:text-[#0F3D2B]">{d.title}</h4>
-                    <p className="text-xs text-[#5B655F]">{d.subtitle}</p>
+                    <h4 className="font-heading font-bold text-sm text-slate-900 group-hover:text-[#0A7E8C]">{d.title}</h4>
+                    <p className="text-xs text-slate-500">{d.subtitle}</p>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-[#5B655F] group-hover:text-[#0F3D2B]" />
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#0A7E8C]" />
                 </button>
               ))}
             </div>
@@ -139,23 +139,23 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
         {step === 3 && (
           <div className="space-y-4">
             <div className="space-y-1">
-              <h2 className="text-xl sm:text-2xl font-serif font-extrabold text-[#1B1F1D]">
+              <h2 className="text-xl sm:text-2xl font-heading font-extrabold text-slate-900">
                 Preferred product format?
               </h2>
-              <p className="text-xs text-[#5B655F]">Select what fits your routine best.</p>
+              <p className="text-xs text-slate-500">Select what fits your routine best.</p>
             </div>
             <div className="space-y-2.5 pt-2">
               {preferences.map((p) => (
                 <button
                   key={p.id}
                   onClick={() => handleSelectPreference(p.id)}
-                  className="w-full p-4 rounded-2xl bg-white border border-[#E4E0D8] hover:border-[#0F3D2B] transition-all text-left flex items-center justify-between group"
+                  className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-[#0A7E8C] transition-all text-left flex items-center justify-between group"
                 >
                   <div>
-                    <h4 className="font-bold text-sm text-[#1B1F1D] group-hover:text-[#0F3D2B]">{p.title}</h4>
-                    <p className="text-xs text-[#5B655F]">{p.subtitle}</p>
+                    <h4 className="font-heading font-bold text-sm text-slate-900 group-hover:text-[#0A7E8C]">{p.title}</h4>
+                    <p className="text-xs text-slate-500">{p.subtitle}</p>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-[#5B655F] group-hover:text-[#0F3D2B]" />
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#0A7E8C]" />
                 </button>
               ))}
             </div>
@@ -166,29 +166,29 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
         {step === 4 && recommendedProd && (
           <div className="space-y-5 animate-fadeIn">
             <div className="space-y-1 text-center">
-              <span className="text-[10px] font-extrabold text-[#0F3D2B] uppercase tracking-widest block">
+              <span className="text-[10px] font-black text-[#0A7E8C] uppercase tracking-widest block">
                 MATCHED FOR YOU
               </span>
-              <h2 className="text-2xl font-serif font-extrabold text-[#1B1F1D]">
-                Your Recommended Hypril Routine
+              <h2 className="text-2xl font-heading font-extrabold text-slate-900">
+                Your Recommended Wellness Routine
               </h2>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-[#E4E0D8] flex flex-col sm:flex-row items-center gap-4 shadow-sm">
+            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col sm:flex-row items-center gap-4 shadow-sm">
               <img
                 src={recommendedProd.images ? recommendedProd.images[0] : recommendedProd.image}
                 alt={recommendedProd.name}
-                className="w-24 h-24 rounded-xl object-cover bg-[#FAF7F2] shrink-0"
+                className="w-24 h-24 rounded-xl object-cover bg-white shrink-0 border border-slate-200"
               />
               <div className="space-y-1 text-center sm:text-left">
-                <span className="text-[10px] font-extrabold text-[#B8924A]">
+                <span className="text-[10px] font-black text-[#D4A373]">
                   {recommendedProd.category} ★ {recommendedProd.rating}
                 </span>
-                <h3 className="font-extrabold text-sm text-[#1B1F1D]">{recommendedProd.name}</h3>
-                <p className="text-xs text-[#5B655F] line-clamp-2">{recommendedProd.benefitSummary}</p>
+                <h3 className="font-heading font-extrabold text-sm text-slate-900">{recommendedProd.name}</h3>
+                <p className="text-xs text-slate-500 line-clamp-2">{recommendedProd.benefitSummary}</p>
                 <div className="pt-2 flex items-center justify-between sm:justify-start gap-4">
-                  <span className="text-lg font-black text-[#0F3D2B]">₹{recommendedProd.price}</span>
-                  <span className="text-xs text-[#5B655F] line-through">₹{recommendedProd.originalPrice}</span>
+                  <span className="text-lg font-black text-[#0A7E8C]">₹{recommendedProd.price}</span>
+                  <span className="text-xs text-slate-400 line-through">₹{recommendedProd.originalPrice}</span>
                 </div>
               </div>
             </div>
@@ -197,14 +197,14 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
               <Link
                 to={`/products/${recommendedProd.slug}`}
                 onClick={onClose}
-                className="btn-primary w-full py-3.5 font-bold shadow-glow-forest text-center flex justify-center"
+                className="btn-primary w-full py-3.5 font-bold shadow-glow-primary text-center flex justify-center"
               >
                 <span>View Product & Claim Offer</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <button
                 onClick={handleReset}
-                className="w-full text-center text-xs text-[#5B655F] hover:text-[#1B1F1D] font-semibold py-2 flex items-center justify-center gap-1"
+                className="w-full text-center text-xs text-slate-500 hover:text-slate-900 font-semibold py-2 flex items-center justify-center gap-1"
               >
                 <RotateCcw className="w-3.5 h-3.5" /> Retake Quiz
               </button>
@@ -215,3 +215,4 @@ export const NeedsQuizModal = ({ isOpen, onClose }) => {
     </div>
   );
 };
+

@@ -1,82 +1,104 @@
-export const BRAND_NAME = "Hypril";
-export const BRAND_TAGLINE = "Hypril™ — Premium Men's Enlargement & Performance Care";
+export const BRAND_NAME = "BOLD";
+export const BRAND_TAGLINE = "India's No. 1 Sexual Health & Men's Wellness Brand";
 export const CURRENCY_SYMBOL = "₹";
 
 export const CONCERNS = [
   {
-    id: "enlargement-stamina",
-    name: "Enlargement & Stamina",
-    slug: "sexual-wellness",
+    id: "sexual-wellness",
+    name: "Sexual Health & Duration",
+    slug: "Sex",
     icon: "Zap",
-    desc: "Size enhancement & blood flow boosters",
-    img: "/images/hypril_oil.jpg"
-  },
-  {
-    id: "extended-delay",
-    name: "Extended Performance",
-    slug: "sexual-wellness",
-    icon: "Timer",
-    desc: "Desensitizing delay gels & endurance control",
+    desc: "Climax control, delay sprays & intimacy boosters",
     img: "/images/hypril_delay_gel.jpg"
   },
   {
-    id: "blood-flow",
-    name: "Blood Flow & Firmness",
-    slug: "sexual-wellness",
+    id: "hair-care",
+    name: "Hair Regrowth & Density",
+    slug: "Hair",
+    icon: "Sparkles",
+    desc: "Minoxidil serums, anti-hairfall shampoos & scalp care",
+    img: "/images/cat_extend.png"
+  },
+  {
+    id: "daily-performance",
+    name: "Stamina & Daily Vigor",
+    slug: "Performance",
     icon: "Flame",
-    desc: "Tissue vitality & vascular support",
-    img: "/images/hypril_oil.jpg"
+    desc: "Pure Himalayan Shilajit resin & testosterone boosters",
+    img: "/images/cat_shilajit.png"
+  },
+  {
+    id: "grooming-hygiene",
+    name: "Daily Nutrition & Wellness",
+    slug: "Daily",
+    icon: "HeartPulse",
+    desc: "Multivitamin gummies, intimate lubes & care kits",
+    img: "/images/cat_supplements.png"
   }
 ];
 
 export const CATEGORIES = [
   {
-    id: "enlargement-oils",
-    name: "Enlargement Oils",
-    slug: "enlargement-oils",
-    description: "High-potency herbal oils for size enhancement, blood flow, and firmness.",
+    id: "sex",
+    name: "Sex",
+    slug: "Sex",
+    description: "Climax control sprays, stamina capsules, lubricants & intimacy products.",
     icon: "Zap",
-    image: "/images/hypril_oil.jpg"
-  },
-  {
-    id: "delay-gels",
-    name: "Delay Gels",
-    slug: "delay-gels",
-    description: "Fast-acting desensitizing gels for climax timing control and endurance.",
-    icon: "Timer",
     image: "/images/hypril_delay_gel.jpg"
   },
   {
-    id: "sexual-wellness",
-    name: "Sexual Wellness",
-    slug: "sexual-wellness",
-    description: "Intimate health, stamina, and bedroom confidence formulas.",
+    id: "hair",
+    name: "Hair",
+    slug: "Hair",
+    description: "Minoxidil regrowth serums, DHT blocking shampoos & hair tonic.",
+    icon: "Sparkles",
+    image: "/images/cat_extend.png"
+  },
+  {
+    id: "performance",
+    name: "Performance",
+    slug: "Performance",
+    description: "Himalayan Shilajit resin, Ashwagandha KSM-66 & stamina boosters.",
+    icon: "Flame",
+    image: "/images/cat_shilajit.png"
+  },
+  {
+    id: "daily",
+    name: "Daily Care",
+    slug: "Daily",
+    description: "Essential multivitamin gummies, stress management & daily health.",
     icon: "HeartPulse",
-    image: "/images/hypril_oil.jpg"
+    image: "/images/cat_supplements.png"
+  },
+  {
+    id: "combos",
+    name: "Combos",
+    slug: "Combos",
+    description: "Regimen kits & money-saving performance bundles.",
+    icon: "PackageCheck",
+    image: "/images/cat_bestsellers.png"
   }
 ];
 
 export const TRUST_BADGES = [
   {
     title: "100% Plain Box Packaging",
-    desc: "Discreet outer packaging. Zero product names on label.",
+    desc: "Zero brand names or product labels on outer packaging for 100% privacy.",
     icon: "PackageCheck"
   },
   {
     title: "Clinically Validated & Skin-Safe",
-    desc: "100% Dermatologically tested botanical formulas.",
+    desc: "100% Dermatologically tested botanical & FDA approved formulas.",
     icon: "Stethoscope"
   },
   {
     title: "Fast 2-Day Express Shipping",
-    desc: "Dispatched within 24 hours across India.",
+    desc: "Dispatched within 24 hours across 19,000+ PIN codes in India.",
     icon: "Truck"
   },
   {
     title: "Secure Checkout & COD",
-    desc: "UPI, Cards, NetBanking, and Cash on Delivery.",
+    desc: "UPI, GPay, Paytm, Cards, and Cash on Delivery available.",
     icon: "ShieldCheck"
   }
 ];
-
-

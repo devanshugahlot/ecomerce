@@ -15,6 +15,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { formatCurrency } from '../utils/currency';
+import { BRAND_NAME } from '../utils/constants';
 import api from '../services/api';
 
 export const Checkout = () => {
@@ -47,9 +48,9 @@ export const Checkout = () => {
   if (cartItems.length === 0) {
     return (
       <div className="max-w-md mx-auto py-16 px-4 text-center space-y-4">
-        <h2 className="text-xl font-bold text-slate-900">Your cart is empty</h2>
+        <h2 className="text-xl font-heading font-bold text-slate-900">Your cart is empty</h2>
         <p className="text-xs text-slate-600 font-medium">Add products before checking out.</p>
-        <button onClick={() => navigate('/shop')} className="btn-primary text-xs py-3 px-6 font-bold">
+        <button onClick={() => navigate('/shop')} className="btn-primary text-xs py-3 px-6 font-extrabold">
           Shop Products
         </button>
       </div>
@@ -102,12 +103,12 @@ export const Checkout = () => {
         const res = await api.post('/orders', orderData);
         clearCart();
         addToast('Order placed successfully with Cash on Delivery!', 'success');
-        navigate('/order-success', { state: { order: res.data.order || { orderNumber: 'VYRO-' + Date.now().toString().slice(-6), totalPrice: total } } });
+        navigate('/order-success', { state: { order: res.data.order || { orderNumber: BRAND_NAME.toUpperCase() + '-' + Date.now().toString().slice(-6), totalPrice: total } } });
       } catch (err) {
         // Fallback for dev demo mode
         clearCart();
         addToast('Order placed successfully (COD Demo)', 'success');
-        navigate('/order-success', { state: { order: { orderNumber: 'VYRO-' + Date.now().toString().slice(-6), totalPrice: total, paymentMethod: 'COD' } } });
+        navigate('/order-success', { state: { order: { orderNumber: BRAND_NAME.toUpperCase() + '-' + Date.now().toString().slice(-6), totalPrice: total, paymentMethod: 'COD' } } });
       }
       setLoading(false);
       return;
@@ -138,10 +139,10 @@ export const Checkout = () => {
 
       // 2. Options for Razorpay Popup
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_VyroMockKey123',
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_HyprilMockKey123',
         amount: razorpayOrder.amount,
         currency: razorpayOrder.currency || 'INR',
-        name: 'VYRO Wellness',
+        name: `${BRAND_NAME} Wellness`,
         description: 'Order Payment — 100% Discreet Packaging',
         image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=200',
         order_id: razorpayOrder.id,
@@ -163,7 +164,7 @@ export const Checkout = () => {
           navigate('/order-success', {
             state: {
               order: {
-                orderNumber: 'VYRO-' + Date.now().toString().slice(-6),
+                orderNumber: BRAND_NAME.toUpperCase() + '-' + Date.now().toString().slice(-6),
                 totalPrice: total,
                 paymentMethod: 'Razorpay (Paid)'
               }
@@ -172,11 +173,11 @@ export const Checkout = () => {
         },
         prefill: {
           name: address.fullName,
-          email: user?.email || 'customer@vyro.men',
+          email: user?.email || `customer@${BRAND_NAME.toLowerCase()}.com`,
           contact: address.phone
         },
         theme: {
-          color: '#00A86B'
+          color: '#0A7E8C'
         }
       };
 
@@ -193,17 +194,17 @@ export const Checkout = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 bg-[#FAF9F6] text-slate-900">
-      <SEO title="Secure Checkout" description="Complete your VYRO wellness purchase." noIndex={true} />
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 bg-slate-50 text-slate-900">
+      <SEO title={`Secure Checkout — ${BRAND_NAME}`} description="Complete your wellness purchase." noIndex={true} />
 
       {/* Header */}
       <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-        <h1 className="text-3xl font-serif font-extrabold text-slate-900 flex items-center gap-3">
-          <Lock className="w-7 h-7 text-emerald-600" />
+        <h1 className="text-3xl font-heading font-extrabold text-slate-900 flex items-center gap-3">
+          <Lock className="w-7 h-7 text-[#0A7E8C]" />
           Encrypted Checkout
         </h1>
-        <div className="flex items-center gap-2 text-xs text-emerald-800 font-extrabold bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-200">
-          <ShieldCheck className="w-4 h-4 text-emerald-600" /> 256-Bit SSL Protected
+        <div className="flex items-center gap-2 text-xs text-[#0A7E8C] font-extrabold bg-teal-50 px-3.5 py-1.5 rounded-full border border-[#0A7E8C]/20">
+          <ShieldCheck className="w-4 h-4 text-[#0A7E8C]" /> 256-Bit SSL Protected
         </div>
       </div>
 
@@ -213,12 +214,12 @@ export const Checkout = () => {
           {/* Step 1: Delivery Address */}
           <div className="bg-white rounded-3xl p-6 border border-slate-200 space-y-4 shadow-sm">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h2 className="font-extrabold text-lg text-slate-900 flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center">1</span>
+              <h2 className="font-heading font-extrabold text-lg text-slate-900 flex items-center gap-2">
+                <span className="w-6 h-6 rounded-full bg-[#0A7E8C] text-white font-black text-xs flex items-center justify-center">1</span>
                 Shipping Address
               </h2>
               {step > 1 && (
-                <button onClick={() => setStep(1)} className="text-xs text-emerald-700 font-bold hover:underline">
+                <button onClick={() => setStep(1)} className="text-xs text-[#0A7E8C] font-bold hover:underline">
                   Edit
                 </button>
               )}
@@ -284,7 +285,7 @@ export const Checkout = () => {
                     />
                   </div>
                 </div>
-                <button type="submit" className="btn-primary text-xs py-3 px-6 font-bold">
+                <button type="submit" className="btn-primary text-xs py-3 px-6 font-extrabold">
                   Continue to Delivery & Payment
                 </button>
               </form>
@@ -300,8 +301,8 @@ export const Checkout = () => {
           {step >= 2 && (
             <div className="bg-white rounded-3xl p-6 border border-slate-200 space-y-4 shadow-sm">
               <div className="border-b border-slate-100 pb-3">
-                <h2 className="font-extrabold text-lg text-slate-900 flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center">2</span>
+                <h2 className="font-heading font-extrabold text-lg text-slate-900 flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-[#0A7E8C] text-white font-black text-xs flex items-center justify-center">2</span>
                   Payment Method
                 </h2>
               </div>
@@ -312,18 +313,18 @@ export const Checkout = () => {
                   onClick={() => setPaymentMethod('razorpay')}
                   className={`p-4 rounded-2xl border cursor-pointer transition-all space-y-2 ${
                     paymentMethod === 'razorpay'
-                      ? 'bg-emerald-50 border-emerald-600 text-slate-900 shadow-sm'
+                      ? 'bg-teal-50 border-[#0A7E8C] text-slate-900 shadow-sm'
                       : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-extrabold text-sm text-slate-900">Online Payment (Razorpay)</span>
-                    <CreditCard className="w-5 h-5 text-emerald-600" />
+                    <span className="font-heading font-extrabold text-sm text-slate-900">Online Payment (Razorpay)</span>
+                    <CreditCard className="w-5 h-5 text-[#0A7E8C]" />
                   </div>
                   <p className="text-xs text-slate-600 font-medium">
                     UPI (Google Pay, PhonePe, Paytm), Cards & NetBanking.
                   </p>
-                  <span className="inline-block text-[10px] text-emerald-800 font-bold bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                  <span className="inline-block text-[10px] text-[#0A7E8C] font-bold bg-teal-100 px-2.5 py-0.5 rounded-full">
                     Instant Confirmation
                   </span>
                 </div>
@@ -333,13 +334,13 @@ export const Checkout = () => {
                   onClick={() => setPaymentMethod('cod')}
                   className={`p-4 rounded-2xl border cursor-pointer transition-all space-y-2 ${
                     paymentMethod === 'cod'
-                      ? 'bg-emerald-50 border-emerald-600 text-slate-900 shadow-sm'
+                      ? 'bg-teal-50 border-[#0A7E8C] text-slate-900 shadow-sm'
                       : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-extrabold text-sm text-slate-900">Cash on Delivery (COD)</span>
-                    <Truck className="w-5 h-5 text-amber-600" />
+                    <span className="font-heading font-extrabold text-sm text-slate-900">Cash on Delivery (COD)</span>
+                    <Truck className="w-5 h-5 text-[#D4A373]" />
                   </div>
                   <p className="text-xs text-slate-600 font-medium">
                     Pay with cash or UPI at your doorstep upon package arrival.
@@ -352,7 +353,7 @@ export const Checkout = () => {
                 <button
                   onClick={handlePlaceOrder}
                   disabled={loading}
-                  className="btn-primary w-full py-4 text-sm font-black"
+                  className="btn-primary w-full py-4 text-sm font-extrabold shadow-glow-primary"
                 >
                   {loading ? (
                     <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
@@ -370,14 +371,14 @@ export const Checkout = () => {
 
         {/* Order Summary Sidebar - 4 Cols */}
         <div className="lg:col-span-4 bg-white rounded-3xl p-6 border border-slate-200 space-y-6 shadow-sm">
-          <h2 className="font-serif font-extrabold text-lg text-slate-900 pb-3 border-b border-slate-100">
+          <h2 className="font-heading font-extrabold text-lg text-slate-900 pb-3 border-b border-slate-100">
             Order Items ({cartItems.length})
           </h2>
 
           <div className="space-y-3 max-h-60 overflow-y-auto">
             {cartItems.map((item) => (
               <div key={item.key} className="flex gap-3 items-center text-xs">
-                <img src={item.image} alt={item.name} className="w-12 h-12 rounded-lg object-cover bg-slate-50 shrink-0" />
+                <img src={item.image} alt={item.name} className="w-12 h-12 rounded-lg object-cover bg-slate-50 shrink-0 border border-slate-100" />
                 <div className="flex-1 min-w-0">
                   <h4 className="font-extrabold text-slate-900 truncate">{item.name}</h4>
                   <span className="text-slate-500 font-medium">Qty: {item.quantity}</span>
@@ -393,24 +394,24 @@ export const Checkout = () => {
               <span className="font-extrabold text-slate-900">{formatCurrency(subtotal)}</span>
             </div>
             {discount > 0 && (
-              <div className="flex justify-between text-emerald-700 font-bold">
+              <div className="flex justify-between text-[#0A7E8C] font-bold">
                 <span>Discount</span>
                 <span>-{formatCurrency(discount)}</span>
               </div>
             )}
             <div className="flex justify-between">
               <span>Shipping</span>
-              <span>{shipping === 0 ? <strong className="text-emerald-700 font-extrabold">FREE</strong> : formatCurrency(shipping)}</span>
+              <span>{shipping === 0 ? <strong className="text-[#0A7E8C] font-extrabold">FREE</strong> : formatCurrency(shipping)}</span>
             </div>
             <div className="flex justify-between text-base font-black text-slate-900 pt-2 border-t border-slate-200">
               <span>Total Payable</span>
-              <span className="text-emerald-700">{formatCurrency(total)}</span>
+              <span className="text-[#0A7E8C]">{formatCurrency(total)}</span>
             </div>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 space-y-2 font-medium">
             <div className="flex items-center gap-2 text-slate-900 font-bold">
-              <Package className="w-4 h-4 text-emerald-600 shrink-0" />
+              <Package className="w-4 h-4 text-[#0A7E8C] shrink-0" />
               <span>100% Plain Unmarked Outer Box Packaging</span>
             </div>
             <p className="text-[10px] text-slate-500">
@@ -422,3 +423,4 @@ export const Checkout = () => {
     </div>
   );
 };
+

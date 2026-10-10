@@ -95,8 +95,7 @@ const StorefrontLayout = () => {
   const { products } = useProducts();
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FAF7F2] text-[#1B1F1D] font-sans">
-      <AnnouncementBar />
+    <div className="flex flex-col min-h-screen bg-[#F1F5F9] text-[#0F172A] font-sans">
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenQuiz={() => setIsQuizOpen(true)}

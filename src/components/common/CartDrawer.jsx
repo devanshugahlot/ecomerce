@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, ShoppingBag, Plus, Minus, Trash2, ArrowRight, Tag, PackageCheck, ShieldCheck, Lock, Sparkles } from 'lucide-react';
+import { X, ShoppingBag, Plus, Minus, Trash2, ArrowRight, Tag, PackageCheck, ShieldCheck, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../../context/CartContext';
+import { useProducts } from '../../context/ProductContext';
 import { formatCurrency } from '../../utils/currency';
-import { MOCK_PRODUCTS } from '../../utils/mockProducts';
 
 export const CartDrawer = () => {
   const {
@@ -23,6 +23,7 @@ export const CartDrawer = () => {
     removeCoupon,
   } = useCart();
 
+  const { products } = useProducts();
   const [couponCode, setCouponCode] = useState('');
   const navigate = useNavigate();
 
@@ -33,18 +34,16 @@ export const CartDrawer = () => {
   const discount = getDiscountAmount();
   const total = getTotal();
 
-  const FREE_SHIPPING_THRESHOLD = 999;
-  const progressPercent = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100);
+  const FREE_SHIPPING_THRESHOLD = 500;
+  const progressPercent = Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
 
   const handleApplyCoupon = (e) => {
     e.preventDefault();
     if (!couponCode.trim()) return;
     
     const code = couponCode.trim().toUpperCase();
-    if (code === 'HYPRIL10' || code === 'BOLD10' || code === 'VYRO10') {
+    if (code === 'BOLD10' || code === 'HYPRIL10' || code === 'VYRO10') {
       applyCoupon(code, 'percentage', 10, 0);
-    } else if (code === 'FREESHIP') {
-      applyCoupon('FREESHIP', 'fixed', 99, 0);
     } else {
       applyCoupon(code, 'percentage', 10, 0);
     }
@@ -56,8 +55,9 @@ export const CartDrawer = () => {
     navigate('/checkout');
   };
 
-  // Upsell suggestion product (not already in cart)
-  const upsellProduct = MOCK_PRODUCTS.find((p) => !cartItems.some((item) => item.id === p.id)) || MOCK_PRODUCTS[0];
+  // Upsell suggestion product
+  const productList = products && products.length > 0 ? products : [];
+  const upsellProduct = productList.find((p) => !cartItems.some((item) => (item._id || item.id) === (p._id || p.id))) || productList[0];
 
   return (
     <AnimatePresence>
@@ -68,7 +68,7 @@ export const CartDrawer = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={() => setIsCartOpen(false)}
-          className="fixed inset-0 bg-[#1B1F1D]/70 backdrop-blur-sm"
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs"
         />
 
         {/* Drawer Panel */}
@@ -77,42 +77,42 @@ export const CartDrawer = () => {
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="relative w-full max-w-md bg-[#FAF7F2] border-l border-[#E4E0D8] h-full flex flex-col z-10 shadow-2xl"
+          className="relative w-full max-w-md bg-white border-l border-slate-200 h-full flex flex-col z-10 shadow-2xl"
         >
           {/* Header */}
-          <div className="p-5 border-b border-[#E4E0D8] flex items-center justify-between bg-white">
+          <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-white">
             <div className="flex items-center gap-2.5">
-              <ShoppingBag className="w-5 h-5 text-[#0F3D2B]" />
-              <h2 className="font-serif font-extrabold text-lg text-[#1B1F1D]">Your Cart</h2>
-              <span className="text-xs bg-[#0F3D2B] text-white px-2.5 py-0.5 rounded-full font-extrabold">
+              <ShoppingBag className="w-5 h-5 text-[#0D472E]" />
+              <h2 className="font-heading font-black text-lg text-slate-900">Your Cart</h2>
+              <span className="text-xs bg-[#0D472E] text-white px-2.5 py-0.5 rounded-full font-black">
                 {cartItems.length}
               </span>
             </div>
             <button
               onClick={() => setIsCartOpen(false)}
-              className="text-[#5B655F] hover:text-[#1B1F1D] p-1.5 rounded-xl hover:bg-[#EEF3EE] transition-colors"
+              className="text-slate-500 hover:text-slate-900 p-1.5 rounded-xl hover:bg-slate-100 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Free Shipping Progress Bar */}
-          <div className="bg-[#EEF3EE] p-3.5 border-b border-[#E4E0D8] space-y-1.5 text-xs">
-            <div className="flex justify-between font-bold text-[#1B1F1D]">
+          {/* FREE SHIPPING PROGRESS BAR (Matching Screenshot 2) */}
+          <div className="bg-[#F0FDF4] p-4 border-b border-emerald-100 space-y-2 text-xs">
+            <div className="flex justify-between font-black text-slate-900">
               {subtotal >= FREE_SHIPPING_THRESHOLD ? (
-                <span className="text-[#0F3D2B] flex items-center gap-1">
-                  <ShieldCheck className="w-4 h-4 text-[#B8924A]" /> You've unlocked FREE Express Shipping!
+                <span className="text-emerald-800 flex items-center gap-1">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" /> You've unlocked FREE Shipping!
                 </span>
               ) : (
                 <span>
-                  Add <strong className="text-[#0F3D2B]">₹{FREE_SHIPPING_THRESHOLD - subtotal}</strong> more for FREE shipping
+                  Add <strong className="text-[#0D472E]">₹{FREE_SHIPPING_THRESHOLD - subtotal}</strong> more for FREE shipping
                 </span>
               )}
-              <span className="text-[#5B655F] font-semibold">{Math.round(progressPercent)}%</span>
+              <span className="text-slate-700 font-extrabold">{progressPercent}%</span>
             </div>
-            <div className="w-full h-2 rounded-full bg-white border border-[#E4E0D8] overflow-hidden">
+            <div className="w-full h-2.5 rounded-full bg-slate-200 overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-[#0F3D2B] to-[#B8924A] transition-all duration-300 rounded-full"
+                className="h-full bg-gradient-to-r from-[#0D472E] to-[#E5B869] transition-all duration-300 rounded-full"
                 style={{ width: `${progressPercent}%` }}
               ></div>
             </div>
@@ -122,21 +122,21 @@ export const CartDrawer = () => {
           <div className="flex-1 overflow-y-auto p-5 space-y-5">
             {cartItems.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-12">
-                <div className="w-16 h-16 rounded-full bg-[#EEF3EE] flex items-center justify-center text-[#0F3D2B]">
+                <div className="w-16 h-16 rounded-full bg-[#F0FDF4] flex items-center justify-center text-[#0D472E]">
                   <ShoppingBag className="w-8 h-8" />
                 </div>
-                <h3 className="font-serif font-extrabold text-[#1B1F1D] text-lg">Your cart is empty</h3>
-                <p className="text-xs text-[#5B655F] font-medium max-w-xs leading-relaxed">
-                  Explore our doctor-backed stamina gummies, Himalayan Shilajit gold, and discreet products.
+                <h3 className="font-heading font-black text-slate-900 text-lg">Your cart is empty</h3>
+                <p className="text-xs text-slate-500 font-medium max-w-xs leading-relaxed">
+                  Add items to your cart to enjoy free discreet express shipping.
                 </p>
                 <button
                   onClick={() => {
                     setIsCartOpen(false);
                     navigate('/shop');
                   }}
-                  className="btn-primary font-bold shadow-glow-forest"
+                  className="bg-[#0D472E] hover:bg-[#08301E] text-white font-black text-xs py-3.5 px-7 rounded-full shadow-md"
                 >
-                  Shop Bestsellers
+                  Explore Products
                 </button>
               </div>
             ) : (
@@ -146,19 +146,23 @@ export const CartDrawer = () => {
                   {cartItems.map((item) => (
                     <div
                       key={item.key}
-                      className="p-3.5 bg-white rounded-2xl border border-[#E4E0D8] flex gap-3.5 items-center shadow-sm"
+                      className="p-3.5 bg-white rounded-2xl border border-slate-200 flex gap-3.5 items-center shadow-2xs"
                     >
                       <img
-                        src={item.image}
+                        src={item.image || '/images/hypril_delay_gel.jpg'}
                         alt={item.name}
-                        className="w-16 h-16 rounded-xl object-cover bg-[#FAF7F2] shrink-0"
+                        className="w-16 h-16 rounded-xl object-cover bg-slate-50 shrink-0 border border-slate-100"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=200';
+                        }}
                       />
                       <div className="flex-1 min-w-0 space-y-0.5">
-                        <h4 className="font-bold text-xs text-[#1B1F1D] line-clamp-1">{item.name}</h4>
+                        <h4 className="font-heading font-black text-xs text-slate-900 line-clamp-1">{item.name}</h4>
                         {item.variant && (
-                          <p className="text-[10px] text-[#5B655F] font-semibold">{item.variant.name}</p>
+                          <p className="text-[10px] text-slate-500 font-bold">{item.variant.name}</p>
                         )}
-                        <p className="text-xs font-black text-[#0F3D2B]">
+                        <p className="text-xs font-black text-[#0D472E]">
                           {formatCurrency(item.price)}
                         </p>
                       </div>
@@ -167,23 +171,23 @@ export const CartDrawer = () => {
                       <div className="flex flex-col items-end gap-2">
                         <button
                           onClick={() => removeFromCart(item.key)}
-                          className="text-[#5B655F] hover:text-red-600 p-1 transition-colors"
+                          className="text-slate-400 hover:text-red-600 p-1 transition-colors"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
-                        <div className="flex items-center border border-[#E4E0D8] rounded-lg bg-[#FAF7F2] overflow-hidden">
+                        <div className="flex items-center border border-slate-200 rounded-lg bg-slate-50 overflow-hidden">
                           <button
                             onClick={() => updateQuantity(item.key, -1)}
-                            className="p-1 text-[#5B655F] hover:text-[#1B1F1D]"
+                            className="p-1 text-slate-600 hover:text-slate-900"
                           >
                             <Minus className="w-3 h-3" />
                           </button>
-                          <span className="px-2 text-xs font-black text-[#1B1F1D]">
+                          <span className="px-2 text-xs font-black text-slate-900">
                             {item.quantity}
                           </span>
                           <button
                             onClick={() => updateQuantity(item.key, 1)}
-                            className="p-1 text-[#5B655F] hover:text-[#1B1F1D]"
+                            className="p-1 text-slate-600 hover:text-slate-900"
                           >
                             <Plus className="w-3 h-3" />
                           </button>
@@ -193,25 +197,34 @@ export const CartDrawer = () => {
                   ))}
                 </div>
 
-                {/* Upsell "Complete the routine" Module */}
+                {/* "COMPLETE THE ROUTINE" MODULE (Matching Screenshot 3) */}
                 {upsellProduct && (
-                  <div className="p-3.5 bg-white rounded-2xl border border-[#B8924A]/30 shadow-sm space-y-2">
-                    <div className="flex items-center justify-between text-[11px]">
-                      <span className="font-extrabold text-[#0F3D2B] uppercase tracking-wider flex items-center gap-1">
-                        <Sparkles className="w-3 h-3 text-[#B8924A]" /> Complete The Routine
-                      </span>
+                  <div className="p-4 bg-[#FAF4E8]/60 rounded-2xl border border-[#E6D7C3] space-y-3 shadow-2xs">
+                    <div className="flex items-center gap-1.5 text-xs font-black text-[#0D472E] uppercase tracking-wider">
+                      <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500" />
+                      <span>COMPLETE THE ROUTINE</span>
                     </div>
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <img src={upsellProduct.images[0]} alt={upsellProduct.name} className="w-10 h-10 rounded-lg object-cover bg-[#FAF7F2] shrink-0" />
-                        <div className="truncate">
-                          <h5 className="font-bold text-xs text-[#1B1F1D] truncate">{upsellProduct.name}</h5>
-                          <p className="text-[10px] font-black text-[#0F3D2B]">₹{upsellProduct.price}</p>
+
+                    <div className="flex items-center justify-between gap-3 bg-white p-3 rounded-xl border border-[#E6D7C3]/60">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <img
+                          src={(upsellProduct.images && upsellProduct.images[0]) || upsellProduct.image || '/images/hypril_delay_gel.jpg'}
+                          alt={upsellProduct.name}
+                          className="w-12 h-12 rounded-lg object-cover bg-slate-50 shrink-0 border border-slate-200"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=200';
+                          }}
+                        />
+                        <div className="min-w-0">
+                          <h5 className="font-heading font-black text-xs text-slate-900 truncate">{upsellProduct.name}</h5>
+                          <p className="text-xs font-black text-[#0D472E]">₹{upsellProduct.price}</p>
                         </div>
                       </div>
+
                       <button
                         onClick={() => addToCart(upsellProduct)}
-                        className="btn-gold py-1.5 px-3 text-[11px] font-bold shrink-0"
+                        className="bg-[#0D472E] hover:bg-[#08301E] text-white text-xs font-black px-4 py-2 rounded-full shadow-xs shrink-0 flex items-center gap-1"
                       >
                         + Add
                       </button>
@@ -219,18 +232,15 @@ export const CartDrawer = () => {
                   </div>
                 )}
 
-                {/* Coupon Code Section */}
+                {/* Coupon Input */}
                 <div>
                   {appliedCoupon ? (
-                    <div className="flex items-center justify-between p-3 bg-[#EEF3EE] border border-[#0F3D2B]/20 rounded-xl text-xs">
-                      <div className="flex items-center gap-2 text-[#0F3D2B] font-bold">
-                        <Tag className="w-4 h-4 text-[#B8924A]" />
+                    <div className="flex items-center justify-between p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs">
+                      <div className="flex items-center gap-2 text-[#0D472E] font-bold">
+                        <Tag className="w-4 h-4 text-[#E5B869]" />
                         <span>Code: {appliedCoupon.code}</span>
                       </div>
-                      <button
-                        onClick={removeCoupon}
-                        className="text-red-600 hover:underline font-bold"
-                      >
+                      <button onClick={removeCoupon} className="text-rose-600 hover:underline font-bold">
                         Remove
                       </button>
                     </div>
@@ -240,10 +250,10 @@ export const CartDrawer = () => {
                         type="text"
                         value={couponCode}
                         onChange={(e) => setCouponCode(e.target.value)}
-                        placeholder="Discount code (HYPRIL10)"
-                        className="flex-1 bg-white border border-[#E4E0D8] rounded-xl px-3 py-2 text-xs text-[#1B1F1D] font-bold placeholder-slate-400 focus:outline-none focus:border-[#0F3D2B]"
+                        placeholder="Discount code (BOLD10)"
+                        className="flex-1 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 font-bold focus:outline-none focus:border-[#0D472E]"
                       />
-                      <button type="submit" className="btn-secondary px-4 py-2 text-xs font-bold shrink-0">
+                      <button type="submit" className="bg-[#0D472E] text-white px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-[#08301E]">
                         Apply
                       </button>
                     </form>
@@ -253,48 +263,40 @@ export const CartDrawer = () => {
             )}
           </div>
 
-          {/* Footer Calculations & Checkout */}
+          {/* Footer Totals */}
           {cartItems.length > 0 && (
-            <div className="p-5 border-t border-[#E4E0D8] bg-white space-y-3">
-              <div className="space-y-1 text-xs text-[#5B655F] font-medium">
+            <div className="p-5 border-t border-slate-200 bg-white space-y-3">
+              <div className="space-y-1 text-xs text-slate-600 font-medium">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-black text-[#1B1F1D]">{formatCurrency(subtotal)}</span>
+                  <span className="font-black text-slate-900">{formatCurrency(subtotal)}</span>
                 </div>
                 {discount > 0 && (
-                  <div className="flex justify-between text-[#0F3D2B] font-bold">
+                  <div className="flex justify-between text-[#0D472E] font-bold">
                     <span>Discount</span>
                     <span>-{formatCurrency(discount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <span>Discreet Shipping</span>
-                  <span>{shipping === 0 ? <strong className="text-[#0F3D2B] font-extrabold">FREE</strong> : formatCurrency(shipping)}</span>
+                  <span>{shipping === 0 ? <strong className="text-emerald-700 font-black">FREE</strong> : formatCurrency(shipping)}</span>
                 </div>
-                <div className="flex justify-between text-base font-black text-[#1B1F1D] pt-2 border-t border-[#E4E0D8]">
+                <div className="flex justify-between text-base font-black text-slate-900 pt-2 border-t border-slate-100">
                   <span>Total</span>
-                  <span className="text-[#0F3D2B]">{formatCurrency(total)}</span>
+                  <span className="text-[#0D472E]">{formatCurrency(total)}</span>
                 </div>
               </div>
 
-              <button onClick={handleCheckout} className="btn-primary w-full py-3.5 text-sm font-bold shadow-glow-forest">
+              <button onClick={handleCheckout} className="bg-[#0D472E] hover:bg-[#08301E] text-white w-full py-4 text-sm font-heading font-black rounded-full shadow-md flex items-center justify-center gap-2">
                 <span>Proceed to Checkout</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              {/* Discreet Trust Signal */}
-              <div className="space-y-1.5 text-[11px] text-center text-[#5B655F] pt-1">
-                <p className="font-bold flex items-center justify-center gap-1.5 text-[#0F3D2B]">
-                  <PackageCheck className="w-3.5 h-3.5 text-[#B8924A]" />
+              <div className="text-[11px] text-center text-slate-500 pt-1">
+                <p className="font-bold flex items-center justify-center gap-1.5 text-[#0D472E]">
+                  <PackageCheck className="w-3.5 h-3.5 text-[#E5B869]" />
                   Ships in plain, unmarked packaging. 100% Confidential.
                 </p>
-                <div className="flex justify-center items-center gap-3 text-[10px] text-slate-400">
-                  <span>COD Available</span>
-                  <span>•</span>
-                  <span>UPI Instant</span>
-                  <span>•</span>
-                  <span>256-Bit SSL Encrypted</span>
-                </div>
               </div>
             </div>
           )}
