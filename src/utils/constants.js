@@ -37,48 +37,7 @@ export const CONCERNS = [
   }
 ];
 
-export const CATEGORIES = [
-  {
-    id: "sex",
-    name: "Sex",
-    slug: "Sex",
-    description: "Climax control sprays, stamina capsules, lubricants & intimacy products.",
-    icon: "Zap",
-    image: "/images/hypril_delay_gel.jpg"
-  },
-  {
-    id: "hair",
-    name: "Hair",
-    slug: "Hair",
-    description: "Minoxidil regrowth serums, DHT blocking shampoos & hair tonic.",
-    icon: "Sparkles",
-    image: "/images/cat_extend.png"
-  },
-  {
-    id: "performance",
-    name: "Performance",
-    slug: "Performance",
-    description: "Himalayan Shilajit resin, Ashwagandha KSM-66 & stamina boosters.",
-    icon: "Flame",
-    image: "/images/cat_shilajit.png"
-  },
-  {
-    id: "daily",
-    name: "Daily Care",
-    slug: "Daily",
-    description: "Essential multivitamin gummies, stress management & daily health.",
-    icon: "HeartPulse",
-    image: "/images/cat_supplements.png"
-  },
-  {
-    id: "combos",
-    name: "Combos",
-    slug: "Combos",
-    description: "Regimen kits & money-saving performance bundles.",
-    icon: "PackageCheck",
-    image: "/images/cat_bestsellers.png"
-  }
-];
+export const CATEGORIES = [];
 
 export const TRUST_BADGES = [
   {

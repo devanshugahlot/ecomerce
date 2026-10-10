@@ -99,11 +99,6 @@ export const Navbar = ({ onOpenSearch }) => {
                     <Link to="/account" className="block px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 rounded-xl">
                       My Account
                     </Link>
-                    {isAdmin && (
-                      <Link to="/admin" className="block px-3 py-2 text-xs font-bold text-[#0D472E] hover:bg-emerald-50 rounded-xl">
-                        Admin Control Panel
-                      </Link>
-                    )}
                     <button onClick={logout} className="w-full text-left px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl">
                       Sign Out
                     </button>

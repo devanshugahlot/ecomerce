@@ -4,15 +4,7 @@ import { Sparkles, Flame, Zap, Shield, Heart, Award } from 'lucide-react';
 import { useProducts } from '../../context/ProductContext';
 
 export const CategoryScroll = ({ activeCategory, onSelectCategory }) => {
-  const { categories } = useProducts();
-
-  const categoriesList = categories && categories.length > 0 ? categories : [
-    { id: 'all', name: 'Bestsellers', badge: 'HOT', image: '/images/cat_bestsellers.png' },
-    { id: 'Sex', name: 'Sex', badge: 'POPULAR', image: '/images/hypril_delay_gel.jpg' },
-    { id: 'Hair', name: 'Hair', badge: 'NEW', image: '/images/cat_extend.png' },
-    { id: 'Performance', name: 'Performance', badge: 'SHILAJIT', image: '/images/cat_shilajit.png' },
-    { id: 'Daily', name: 'Daily Care', badge: 'DAILY', image: '/images/cat_supplements.png' },
-  ];
+  if (!categories || categories.length === 0) return null;
 
   return (
     <div className="w-full bg-white border-b border-slate-200/80 py-4 px-4 overflow-x-auto no-scrollbar shadow-xs">
@@ -40,7 +32,7 @@ export const CategoryScroll = ({ activeCategory, onSelectCategory }) => {
         </button>
 
         {/* Dynamic Categories Created by Admin */}
-        {categoriesList.map((cat) => {
+        {categories.map((cat) => {
           const isSelected = activeCategory === cat.slug || activeCategory === cat.name;
 
           return (

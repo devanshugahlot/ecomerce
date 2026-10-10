@@ -25,7 +25,7 @@ import { useToast } from '../context/ToastContext';
 import { useProducts } from '../context/ProductContext';
 
 export const Home = () => {
-  const { products, categories, siteBanners } = useProducts();
+  const { products, categories, siteBanners, seedSampleData } = useProducts();
   const [activeFaq, setActiveFaq] = useState(0);
   const [selectedBestsellerCategory, setSelectedBestsellerCategory] = useState('All');
   const [bestsellerSliderIdx, setBestsellerSliderIdx] = useState(0);
@@ -89,8 +89,8 @@ export const Home = () => {
       )}
 
       {/* SECTION 1: HERO BANNER (100:27 Aspect Ratio - Dynamic from Admin) */}
-      <section className="max-w-[1536px] mx-auto px-4 sm:px-8">
-        {siteBanners?.heroBanner ? (
+      {siteBanners?.heroBanner && (
+        <section className="max-w-[1536px] mx-auto px-4 sm:px-8">
           <Link to="/shop" className="block relative rounded-[24px] overflow-hidden shadow-sm border border-[#E6D7C3] group">
             <div className="w-full aspect-[100/27] max-h-[324px] bg-slate-100 overflow-hidden">
               <img
@@ -100,19 +100,8 @@ export const Home = () => {
               />
             </div>
           </Link>
-        ) : (
-          <div className="bg-[#FAF4E8] rounded-[24px] p-8 sm:p-12 text-center border border-[#E6D7C3] space-y-3">
-            <ImageIcon className="w-10 h-10 text-[#0D472E] mx-auto" />
-            <h2 className="text-2xl font-heading font-black text-slate-900">Welcome to {BRAND_NAME} Storefront</h2>
-            <p className="text-xs text-slate-600 max-w-md mx-auto">
-              No hero banner uploaded yet. Upload your custom hero banner image from Admin Panel.
-            </p>
-            <Link to="/admin" className="bg-[#0D472E] text-white text-xs font-black py-3 px-6 rounded-full inline-block">
-              Go to Admin Panel
-            </Link>
-          </div>
-        )}
-      </section>
+        </section>
+      )}
 
       {/* SECTION 2: BESTSELLERS CATALOG */}
       <section className="section-card-float">
@@ -173,13 +162,10 @@ export const Home = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 bg-[#F9F9F6] rounded-2xl border border-dashed border-slate-300 p-8 space-y-3">
+          <div className="text-center py-12 bg-[#F9F9F6] rounded-2xl border border-dashed border-slate-300 p-8 space-y-2">
             <Package className="w-10 h-10 text-slate-400 mx-auto" />
-            <h4 className="font-heading font-black text-slate-800 text-base">No products added yet</h4>
-            <p className="text-xs text-slate-500">Create products from Admin Panel to display them live on the storefront.</p>
-            <Link to="/admin/products" className="bg-[#0D472E] text-white text-xs font-black py-2.5 px-5 rounded-full inline-block">
-              Add Products in Admin
-            </Link>
+            <h4 className="font-heading font-black text-slate-800 text-base">No products available</h4>
+            <p className="text-xs text-slate-500">Check back soon for new arrivals in our catalog.</p>
           </div>
         )}
       </section>

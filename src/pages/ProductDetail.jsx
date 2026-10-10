@@ -32,11 +32,21 @@ export const ProductDetail = () => {
   const navigate = useNavigate();
   const { products } = useProducts();
 
-  const productList = products && products.length > 0 ? products : MOCK_PRODUCTS;
-
-  const product = productList.find(
+  const product = products.find(
     (p) => p.slug === slug || p._id === slug || p.id === slug
-  ) || productList[0];
+  );
+
+  if (!product) {
+    return (
+      <div className="min-h-[60vh] bg-[#F9F9F6] flex flex-col items-center justify-center p-8 text-center space-y-4">
+        <h2 className="text-2xl font-heading font-black text-slate-900">Product Not Found</h2>
+        <p className="text-xs text-slate-500">This product is not available in the catalog yet.</p>
+        <Link to="/shop" className="bg-[#0D472E] text-white text-xs font-black py-3 px-6 rounded-full shadow-md">
+          Browse Storefront
+        </Link>
+      </div>
+    );
+  }
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedPackIndex, setSelectedPackIndex] = useState(0);

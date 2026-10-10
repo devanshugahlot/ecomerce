@@ -4,18 +4,11 @@ import { MOCK_PRODUCTS as INITIAL_PRODUCTS } from '../utils/mockProducts';
 const ProductContext = createContext();
 
 const SAMPLE_SITE_BANNERS = {
-  heroBanner: '/images/hero_banner.png',
-  promoBanner1: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=1400',
-  promoBanner2: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=1400',
+  heroBanner: '',
+  promoBanner1: '',
 };
 
-const SAMPLE_CATEGORIES = [
-  { id: 'cat_sex', name: 'Sex', slug: 'Sex', badge: 'POPULAR', image: '/images/hypril_delay_gel.jpg' },
-  { id: 'cat_hair', name: 'Hair', slug: 'Hair', badge: 'NEW', image: '/images/cat_extend.png' },
-  { id: 'cat_performance', name: 'Performance', slug: 'Performance', badge: '80% FULVIC', image: '/images/cat_shilajit.png' },
-  { id: 'cat_daily', name: 'Daily Care', slug: 'Daily', badge: 'DAILY', image: '/images/cat_supplements.png' },
-  { id: 'cat_combos', name: 'Combos', slug: 'Combos', badge: 'SAVE 40%', image: '/images/cat_bestsellers.png' }
-];
+const SAMPLE_CATEGORIES = [];
 
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState(() => {
@@ -68,47 +61,53 @@ export const ProductProvider = ({ children }) => {
     return [];
   });
 
-  // Sync to LocalStorage & Dispatch custom storage event for instant cross-tab & page update
+  // Sync to LocalStorage
   useEffect(() => {
-    localStorage.setItem('bold_products_clean', JSON.stringify(products));
-    window.dispatchEvent(new Event('bold_data_updated'));
+    try {
+      localStorage.setItem('bold_products_clean', JSON.stringify(products));
+    } catch (e) {
+      console.warn('LocalStorage quota warning:', e);
+    }
   }, [products]);
 
   useEffect(() => {
-    localStorage.setItem('bold_categories_clean', JSON.stringify(categories));
-    window.dispatchEvent(new Event('bold_data_updated'));
+    try {
+      localStorage.setItem('bold_categories_clean', JSON.stringify(categories));
+    } catch (e) {
+      console.warn('LocalStorage quota warning:', e);
+    }
   }, [categories]);
 
   useEffect(() => {
-    localStorage.setItem('bold_site_banners_clean', JSON.stringify(siteBanners));
-    window.dispatchEvent(new Event('bold_data_updated'));
+    try {
+      localStorage.setItem('bold_site_banners_clean', JSON.stringify(siteBanners));
+    } catch (e) {
+      console.warn('LocalStorage quota warning:', e);
+    }
   }, [siteBanners]);
 
   useEffect(() => {
-    localStorage.setItem('bold_reviews_clean', JSON.stringify(reviewsMap));
-    window.dispatchEvent(new Event('bold_data_updated'));
+    try {
+      localStorage.setItem('bold_reviews_clean', JSON.stringify(reviewsMap));
+    } catch (e) {
+      console.warn('LocalStorage quota warning:', e);
+    }
   }, [reviewsMap]);
 
-  // Listen to storage changes across windows
+  // Listen to native storage changes across separate browser windows
   useEffect(() => {
-    const handleStorageUpdate = () => {
+    const handleStorageUpdate = (e) => {
       try {
-        const p = localStorage.getItem('bold_products_clean');
-        if (p) setProducts(JSON.parse(p));
-        const c = localStorage.getItem('bold_categories_clean');
-        if (c) setCategories(JSON.parse(c));
-        const b = localStorage.getItem('bold_site_banners_clean');
-        if (b) setSiteBanners(JSON.parse(b));
-        const r = localStorage.getItem('bold_reviews_clean');
-        if (r) setReviewsMap(JSON.parse(r));
-      } catch (e) {}
+        if (e.key === 'bold_products_clean' && e.newValue) setProducts(JSON.parse(e.newValue));
+        if (e.key === 'bold_categories_clean' && e.newValue) setCategories(JSON.parse(e.newValue));
+        if (e.key === 'bold_site_banners_clean' && e.newValue) setSiteBanners(JSON.parse(e.newValue));
+        if (e.key === 'bold_reviews_clean' && e.newValue) setReviewsMap(JSON.parse(e.newValue));
+      } catch (err) {}
     };
 
     window.addEventListener('storage', handleStorageUpdate);
-    window.addEventListener('bold_data_updated', handleStorageUpdate);
     return () => {
       window.removeEventListener('storage', handleStorageUpdate);
-      window.removeEventListener('bold_data_updated', handleStorageUpdate);
     };
   }, []);
 

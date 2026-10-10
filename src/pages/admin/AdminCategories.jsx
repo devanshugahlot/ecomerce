@@ -3,6 +3,7 @@ import { FolderTree, Plus, Edit2, Trash2, X, Upload, Sparkles, Image as ImageIco
 import { SEO } from '../../components/common/SEO';
 import { useToast } from '../../context/ToastContext';
 import { useProducts } from '../../context/ProductContext';
+import { compressImage } from '../../utils/imageCompressor';
 
 export const AdminCategories = () => {
   const { categories, addCategory, updateCategory, deleteCategory } = useProducts();
@@ -36,19 +37,17 @@ export const AdminCategories = () => {
     setShowModal(true);
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 8 * 1024 * 1024) {
-        addToast('Image size must be less than 8MB', 'error');
-        return;
+      try {
+        addToast('Optimizing category image...', 'info');
+        const compressedBase64 = await compressImage(file, 800, 800, 0.75);
+        setForm((prev) => ({ ...prev, image: compressedBase64 }));
+        addToast('Category image uploaded & optimized!', 'success');
+      } catch (err) {
+        addToast('Failed to process category image', 'error');
       }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setForm((prev) => ({ ...prev, image: reader.result }));
-        addToast('Category image uploaded from device!', 'success');
-      };
-      reader.readAsDataURL(file);
     }
   };
 

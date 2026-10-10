@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Star, CheckCircle2, ThumbsUp, MessageSquarePlus, Upload, Image as ImageIcon, X } from 'lucide-react';
 import { useToast } from '../../context/ToastContext';
 import { useProducts } from '../../context/ProductContext';
+import { compressImage } from '../../utils/imageCompressor';
 
 export const ReviewsSection = ({ productId }) => {
   const { addToast } = useToast();
@@ -13,19 +14,16 @@ export const ReviewsSection = ({ productId }) => {
   const [imagePreview, setImagePreview] = useState(null);
   const [previewModalImg, setPreviewModalImg] = useState(null);
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        addToast('Image size must be less than 5MB', 'error');
-        return;
+      try {
+        const compressedBase64 = await compressImage(file, 800, 800, 0.75);
+        setNewReview((prev) => ({ ...prev, image: compressedBase64 }));
+        setImagePreview(compressedBase64);
+      } catch (err) {
+        addToast('Failed to process image file', 'error');
       }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setNewReview((prev) => ({ ...prev, image: reader.result }));
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
     }
   };
 

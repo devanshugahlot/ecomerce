@@ -4,9 +4,10 @@ import { SEO } from '../../components/common/SEO';
 import { formatCurrency } from '../../utils/currency';
 import { useToast } from '../../context/ToastContext';
 import { useProducts } from '../../context/ProductContext';
+import { compressImage } from '../../utils/imageCompressor';
 
 export const AdminProducts = () => {
-  const { products, addProduct, updateProduct, deleteProduct, categories, siteBanners, updateSiteBanners } = useProducts();
+  const { products, addProduct, updateProduct, deleteProduct, categories, addCategory, siteBanners, updateSiteBanners } = useProducts();
   const [activeTab, setActiveTab] = useState('products'); // 'products' | 'banners'
   const [query, setQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -68,23 +69,21 @@ export const AdminProducts = () => {
     setShowModal(true);
   };
 
-  const handleImageUpload = (e, field) => {
+  const handleImageUpload = async (e, field) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 8 * 1024 * 1024) {
-        addToast('File size must be less than 8MB', 'error');
-        return;
-      }
-      const reader = new FileReader();
-      reader.onloadend = () => {
+      try {
+        addToast('Optimizing image...', 'info');
+        const compressedBase64 = await compressImage(file, 1200, 1200, 0.75);
         if (field === 'product') {
-          setForm((prev) => ({ ...prev, image: reader.result }));
+          setForm((prev) => ({ ...prev, image: compressedBase64 }));
         } else {
-          setBannersForm((prev) => ({ ...prev, [field]: reader.result }));
+          setBannersForm((prev) => ({ ...prev, [field]: compressedBase64 }));
         }
-        addToast('Image uploaded successfully from device!', 'success');
-      };
-      reader.readAsDataURL(file);
+        addToast('Image uploaded & optimized successfully!', 'success');
+      } catch (err) {
+        addToast('Failed to process image file', 'error');
+      }
     }
   };
 
@@ -102,10 +101,17 @@ export const AdminProducts = () => {
       return;
     }
 
+    const catName = (form.category || 'General').trim();
+
+    // Auto-create category if it does not exist yet in categories list
+    if (catName && !categories.some((c) => (c.name || '').toLowerCase() === catName.toLowerCase())) {
+      addCategory({ name: catName, badge: 'NEW', image: form.image || '' });
+    }
+
     const payload = {
       name: form.name,
       slug: form.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-      category: form.category,
+      category: catName,
       price: Number(form.price),
       comparePrice: Number(form.comparePrice) || Number(form.price * 1.4),
       stock: Number(form.stock),

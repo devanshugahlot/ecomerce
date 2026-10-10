@@ -261,7 +261,7 @@ export const Shop = () => {
               <Package className="w-12 h-12 text-slate-400 mx-auto" />
               <h4 className="font-heading font-black text-slate-900 text-lg">No products found</h4>
               <p className="text-slate-500 text-xs font-medium max-w-sm mx-auto">
-                No products found in catalog matching your filters. Add products in Admin Panel or reset filters.
+                No products found in catalog matching your filters. Try resetting your filters.
               </p>
               <button onClick={resetFilters} className="bg-[#0D472E] text-white text-xs font-black py-2.5 px-6 rounded-full shadow-xs">
                 Reset All Filters
