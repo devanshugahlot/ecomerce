@@ -4,6 +4,7 @@ import { Sparkles, Flame, Zap, Shield, Heart, Award } from 'lucide-react';
 import { useProducts } from '../../context/ProductContext';
 
 export const CategoryScroll = ({ activeCategory, onSelectCategory }) => {
+  const { categories } = useProducts();
   if (!categories || categories.length === 0) return null;
 
   return (
