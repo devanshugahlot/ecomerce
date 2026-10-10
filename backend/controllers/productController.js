@@ -1,55 +1,11 @@
 import { Product } from '../models/Product.js';
 
-const MOCK_PRODUCTS_BACKEND = [
-  {
-    _id: "prod_hypril_oil",
-    id: "prod_hypril_oil",
-    name: "Hypril™ Enlargement Oil (100 ml)",
-    slug: "hypril-enlargement-oil",
-    category: "Sexual Wellness",
-    price: 799,
-    comparePrice: 1299,
-    rating: 4.95,
-    reviewCount: 482,
-    stock: 100,
-    isBestSeller: true,
-    isFeatured: true,
-    benefitSummary: "Enhances size, improves stamina & boosts blood flow. Formulated for peak performance.",
-    description: "Hypril™ Enlargement Oil is a high-potency male enhancement topical formulation engineered to boost blood circulation, improve tissue stamina, and support natural firmness.",
-    images: ["/images/hypril_oil.jpg"],
-    benefits: ["Enhances size & firmness", "Improves stamina & blood flow"],
-    ingredients: "Pure Ashwagandha Root Extract, Gokshura Oil, Shatavari, Clove Oil, Sesame Base, Vitamin E.",
-    usage: "Apply 8-10 drops daily and massage gently for 2-3 minutes."
-  },
-  {
-    _id: "prod_hypril_gel",
-    id: "prod_hypril_gel",
-    name: "Hypril™ Extended Delay Gel (50 ml)",
-    slug: "hypril-extended-delay-gel",
-    category: "Sexual Wellness",
-    price: 699,
-    comparePrice: 1099,
-    rating: 4.92,
-    reviewCount: 360,
-    stock: 85,
-    isBestSeller: true,
-    isFeatured: true,
-    benefitSummary: "Longer performance, climax control & pleasant cooling sensation.",
-    description: "Hypril™ Extended Delay Gel is a fast-acting desensitizing gel engineered to control climax timing, delay premature climax, and provide a refreshing cooling sensation.",
-    images: ["/images/hypril_delay_gel.jpg"],
-    benefits: ["Extends intimacy duration", "Cooling sensation & non-sticky"],
-    ingredients: "Lidocaine USP 10% w/v, Menthol Cooling Essence, Aloe Vera Gel Base, Tocopherol.",
-    usage: "Apply a pea-sized amount onto the head and shaft 10-15 minutes before intimacy."
-  }
-];
+const MOCK_PRODUCTS_BACKEND = [];
 
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find({ isActive: true }).sort({ createdAt: -1 });
-    if (products.length > 0) {
-      return res.json(products);
-    }
-    return res.json(MOCK_PRODUCTS_BACKEND);
+    return res.json(products);
   } catch (error) {
     return res.json(MOCK_PRODUCTS_BACKEND);
   }

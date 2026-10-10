@@ -39,15 +39,19 @@ export const AdminCategories = () => {
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      try {
-        addToast('Optimizing category image...', 'info');
-        const compressedBase64 = await compressImage(file, 800, 800, 0.75);
-        setForm((prev) => ({ ...prev, image: compressedBase64 }));
-        addToast('Category image uploaded & optimized!', 'success');
-      } catch (err) {
-        addToast('Failed to process category image', 'error');
-      }
+    if (!file) return;
+    try {
+      addToast('Processing category image...', 'info');
+      const compressedBase64 = await compressImage(file, 800, 800, 0.75);
+      setForm((prev) => ({ ...prev, image: compressedBase64 || '' }));
+      addToast('Category image uploaded!', 'success');
+    } catch (err) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm((prev) => ({ ...prev, image: reader.result }));
+        addToast('Category image uploaded from device!', 'success');
+      };
+      reader.readAsDataURL(file);
     }
   };
 

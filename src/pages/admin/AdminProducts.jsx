@@ -71,19 +71,28 @@ export const AdminProducts = () => {
 
   const handleImageUpload = async (e, field) => {
     const file = e.target.files[0];
-    if (file) {
-      try {
-        addToast('Optimizing image...', 'info');
-        const compressedBase64 = await compressImage(file, 1200, 1200, 0.75);
-        if (field === 'product') {
-          setForm((prev) => ({ ...prev, image: compressedBase64 }));
-        } else {
-          setBannersForm((prev) => ({ ...prev, [field]: compressedBase64 }));
-        }
-        addToast('Image uploaded & optimized successfully!', 'success');
-      } catch (err) {
-        addToast('Failed to process image file', 'error');
+    if (!file) return;
+    try {
+      addToast('Processing image...', 'info');
+      const compressedBase64 = await compressImage(file, 1200, 1200, 0.75);
+      const imgVal = compressedBase64 || '';
+      if (field === 'product') {
+        setForm((prev) => ({ ...prev, image: imgVal }));
+      } else {
+        setBannersForm((prev) => ({ ...prev, [field]: imgVal }));
       }
+      addToast('Image uploaded successfully!', 'success');
+    } catch (err) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (field === 'product') {
+          setForm((prev) => ({ ...prev, image: reader.result }));
+        } else {
+          setBannersForm((prev) => ({ ...prev, [field]: reader.result }));
+        }
+        addToast('Image uploaded from device!', 'success');
+      };
+      reader.readAsDataURL(file);
     }
   };
 
