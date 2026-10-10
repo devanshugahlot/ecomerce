@@ -72,10 +72,11 @@ export const validateCoupon = async (req, res) => {
 
 export const getCoupons = async (req, res) => {
   try {
-    const coupons = await Coupon.find().sort({ createdAt: -1 });
+    const coupons = await Coupon.find().sort({ createdAt: -1 }).lean();
     return res.json(coupons);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('[Coupon Controller Error - getCoupons]:', error);
+    res.status(500).json({ message: error.message || 'Failed to fetch coupons' });
   }
 };
 

@@ -2,7 +2,7 @@ import { Banner } from '../models/Banner.js';
 
 export const getBanners = async (req, res) => {
   try {
-    const bannerDoc = await Banner.findOne().sort({ updatedAt: -1 });
+    const bannerDoc = await Banner.findOne().sort({ updatedAt: -1 }).lean();
     if (bannerDoc) {
       return res.json({
         heroBanner: bannerDoc.heroBanner || '',
@@ -12,7 +12,8 @@ export const getBanners = async (req, res) => {
 
     return res.json({ heroBanner: '', promoBanner1: '' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('[Banner Controller Error - getBanners]:', error);
+    res.status(500).json({ message: error.message || 'Failed to fetch site banners' });
   }
 };
 

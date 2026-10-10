@@ -3,10 +3,11 @@ import { Product } from '../models/Product.js';
 
 export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find({ isActive: true }).sort({ createdAt: -1 });
+    const products = await Product.find({ isActive: true }).sort({ createdAt: -1 }).lean();
     return res.json(products);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('[Product Controller Error - getProducts]:', error);
+    return res.status(500).json({ message: error.message || 'Failed to fetch products' });
   }
 };
 
@@ -18,13 +19,14 @@ export const getProductBySlug = async (req, res) => {
       query.push({ _id: slug });
     }
 
-    const product = await Product.findOne({ $or: query });
+    const product = await Product.findOne({ $or: query }).lean();
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
     return res.json(product);
   } catch (error) {
+    console.error('[Product Controller Error - getProductBySlug]:', error);
     return res.status(404).json({ message: 'Product not found' });
   }
 };

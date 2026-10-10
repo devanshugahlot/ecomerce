@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import compression from 'compression';
 import { connectDB } from './config/db.js';
 
 import authRoutes from './routes/authRoutes.js';
@@ -25,10 +26,12 @@ dotenv.config();
 
 const app = express();
 
-// Security Middlewares
+// Performance & Security Middlewares
+app.use(compression());
 app.use(helmet());
 app.use(cors({ origin: true, credentials: true }));
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '25mb' }));
+app.use(express.urlencoded({ limit: '25mb', extended: true }));
 
 // Rate Limiting
 const limiter = rateLimit({

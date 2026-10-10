@@ -19,9 +19,11 @@ const productSchema = new mongoose.Schema(
     reviewCount: { type: Number, default: 0 },
     isBestSeller: { type: Boolean, default: false },
     isFeatured: { type: Boolean, default: false },
-    isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
+
+productSchema.index({ isActive: 1, createdAt: -1 });
+productSchema.index({ category: 1 });
 
 export const Product = mongoose.model('Product', productSchema);

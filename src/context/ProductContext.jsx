@@ -12,9 +12,15 @@ export const ProductProvider = ({ children }) => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [serverWakingUp, setServerWakingUp] = useState(false);
+
   // Fetch live backend data
   const fetchBackendData = async () => {
     setLoading(true);
+    const wakeTimer = setTimeout(() => {
+      setServerWakingUp(true);
+    }, 2500);
+
     try {
       const [prodRes, catRes, banRes, coupRes, ordRes, revRes] = await Promise.allSettled([
         api.get('/products'),
@@ -46,6 +52,8 @@ export const ProductProvider = ({ children }) => {
     } catch (err) {
       console.warn('Backend data load error:', err);
     } finally {
+      clearTimeout(wakeTimer);
+      setServerWakingUp(false);
       setLoading(false);
     }
   };
@@ -64,6 +72,7 @@ export const ProductProvider = ({ children }) => {
       }
     } catch (err) {
       console.error('Category creation failed:', err);
+      throw err;
     }
   };
 
@@ -74,9 +83,11 @@ export const ProductProvider = ({ children }) => {
         setCategories((prev) =>
           prev.map((c) => (c._id === id || c.id === id ? { ...c, ...res.data } : c))
         );
+        return res.data;
       }
     } catch (err) {
       console.error('Category update failed:', err);
+      throw err;
     }
   };
 
@@ -86,6 +97,7 @@ export const ProductProvider = ({ children }) => {
       setCategories((prev) => prev.filter((c) => c._id !== id && c.id !== id));
     } catch (err) {
       console.error('Category delete failed:', err);
+      throw err;
     }
   };
 
@@ -95,9 +107,11 @@ export const ProductProvider = ({ children }) => {
       const res = await api.put('/banners', newBanners);
       if (res.data) {
         setSiteBanners(res.data);
+        return res.data;
       }
     } catch (err) {
       console.error('Banners update failed:', err);
+      throw err;
     }
   };
 
@@ -111,6 +125,7 @@ export const ProductProvider = ({ children }) => {
       }
     } catch (err) {
       console.error('Product add failed:', err);
+      throw err;
     }
   };
 
@@ -121,9 +136,11 @@ export const ProductProvider = ({ children }) => {
         setProducts((prev) =>
           prev.map((p) => (p._id === id || p.id === id ? { ...p, ...res.data } : p))
         );
+        return res.data;
       }
     } catch (err) {
       console.error('Product update failed:', err);
+      throw err;
     }
   };
 
@@ -133,6 +150,7 @@ export const ProductProvider = ({ children }) => {
       setProducts((prev) => prev.filter((p) => p._id !== id && p.id !== id));
     } catch (err) {
       console.error('Product delete failed:', err);
+      throw err;
     }
   };
 
@@ -146,6 +164,7 @@ export const ProductProvider = ({ children }) => {
       }
     } catch (err) {
       console.error('Coupon creation failed:', err);
+      throw err;
     }
   };
 
@@ -156,9 +175,11 @@ export const ProductProvider = ({ children }) => {
         setCoupons((prev) =>
           prev.map((c) => (c._id === id || c.id === id ? { ...c, ...res.data } : c))
         );
+        return res.data;
       }
     } catch (err) {
       console.error('Coupon toggle failed:', err);
+      throw err;
     }
   };
 
@@ -168,6 +189,7 @@ export const ProductProvider = ({ children }) => {
       setCoupons((prev) => prev.filter((c) => c._id !== id && c.id !== id));
     } catch (err) {
       console.error('Coupon delete failed:', err);
+      throw err;
     }
   };
 
@@ -251,6 +273,7 @@ export const ProductProvider = ({ children }) => {
         getAllReviewsFlat,
         fetchBackendData,
         loading,
+        serverWakingUp,
       }}
     >
       {children}

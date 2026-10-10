@@ -3,10 +3,11 @@ import { Category } from '../models/Category.js';
 
 export const getCategories = async (req, res) => {
   try {
-    const categories = await Category.find().sort({ createdAt: -1 });
+    const categories = await Category.find().sort({ createdAt: -1 }).lean();
     return res.json(categories);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('[Category Controller Error - getCategories]:', error);
+    res.status(500).json({ message: error.message || 'Failed to fetch categories' });
   }
 };
 

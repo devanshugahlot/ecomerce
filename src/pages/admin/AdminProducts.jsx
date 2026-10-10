@@ -96,10 +96,17 @@ export const AdminProducts = () => {
     }
   };
 
+  const [isSavingProduct, setIsSavingProduct] = useState(false);
+  const [isSavingBanners, setIsSavingBanners] = useState(false);
+
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
-      await deleteProduct(id);
-      addToast('Product removed from catalog', 'info');
+      try {
+        await deleteProduct(id);
+        addToast('Product removed from catalog', 'info');
+      } catch (err) {
+        addToast(err.response?.data?.message || 'Failed to delete product', 'error');
+      }
     }
   };
 
@@ -110,40 +117,58 @@ export const AdminProducts = () => {
       return;
     }
 
-    const catName = (form.category || 'General').trim();
+    setIsSavingProduct(true);
+    try {
+      const catName = (form.category || 'General').trim();
 
-    if (catName && !categories.some((c) => (c.name || '').toLowerCase() === catName.toLowerCase())) {
-      await addCategory({ name: catName, badge: 'NEW', image: form.image || '' });
+      if (catName && !categories.some((c) => (c.name || '').toLowerCase() === catName.toLowerCase())) {
+        try {
+          await addCategory({ name: catName, badge: 'NEW', image: form.image || '' });
+        } catch (cErr) {
+          console.warn('Auto-create category notice:', cErr.message);
+        }
+      }
+
+      const payload = {
+        name: form.name,
+        slug: form.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        category: catName,
+        price: Number(form.price),
+        comparePrice: Number(form.comparePrice) || Number(form.price * 1.4),
+        stock: Number(form.stock),
+        description: form.description || form.name,
+        benefitSummary: form.benefitSummary || form.name,
+        isBestSeller: form.isBestSeller,
+        image: form.image,
+        images: [form.image],
+      };
+
+      if (editingId) {
+        await updateProduct(editingId, payload);
+        addToast('Product saved successfully!', 'success');
+      } else {
+        await addProduct(payload);
+        addToast('New product created & saved!', 'success');
+      }
+      setShowModal(false);
+    } catch (err) {
+      addToast(err.response?.data?.message || 'Failed to save product', 'error');
+    } finally {
+      setIsSavingProduct(false);
     }
-
-    const payload = {
-      name: form.name,
-      slug: form.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-      category: catName,
-      price: Number(form.price),
-      comparePrice: Number(form.comparePrice) || Number(form.price * 1.4),
-      stock: Number(form.stock),
-      description: form.description || form.name,
-      benefitSummary: form.benefitSummary || form.name,
-      isBestSeller: form.isBestSeller,
-      image: form.image,
-      images: [form.image],
-    };
-
-    if (editingId) {
-      await updateProduct(editingId, payload);
-      addToast('Product saved successfully!', 'success');
-    } else {
-      await addProduct(payload);
-      addToast('New product created & saved!', 'success');
-    }
-    setShowModal(false);
   };
 
   const handleSaveBanners = async (e) => {
     e.preventDefault();
-    await updateSiteBanners(bannersForm);
-    addToast('Website banner images saved & applied live!', 'success');
+    setIsSavingBanners(true);
+    try {
+      await updateSiteBanners(bannersForm);
+      addToast('Website banner images saved & applied live!', 'success');
+    } catch (err) {
+      addToast(err.response?.data?.message || 'Failed to save banners', 'error');
+    } finally {
+      setIsSavingBanners(false);
+    }
   };
 
   return (
@@ -360,9 +385,17 @@ export const AdminProducts = () => {
 
             <button
               type="submit"
-              className="bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold py-3.5 px-8 rounded-2xl text-xs shadow-glow-amber min-h-[44px]"
+              disabled={isSavingBanners}
+              className="bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold py-3.5 px-8 rounded-2xl text-xs shadow-glow-amber min-h-[44px] disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              Save Banner Images
+              {isSavingBanners ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-dark-900 border-t-transparent rounded-full animate-spin"></span>
+                  <span>Saving Banner Images...</span>
+                </>
+              ) : (
+                <span>Save Banner Images</span>
+              )}
             </button>
           </form>
         </div>
@@ -510,16 +543,25 @@ export const AdminProducts = () => {
               <div className="flex justify-end gap-3 pt-4 border-t border-dark-600">
                 <button
                   type="button"
+                  disabled={isSavingProduct}
                   onClick={() => setShowModal(false)}
-                  className="px-5 py-3 rounded-full bg-dark-700 text-slate-300 font-bold min-h-[44px]"
+                  className="px-5 py-3 rounded-full bg-dark-700 text-slate-300 font-bold min-h-[44px] disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-amber-500 text-dark-900 px-7 py-3 font-extrabold rounded-full hover:bg-amber-400 shadow-glow-amber min-h-[44px]"
+                  disabled={isSavingProduct}
+                  className="bg-amber-500 text-dark-900 px-7 py-3 font-extrabold rounded-full hover:bg-amber-400 shadow-glow-amber min-h-[44px] disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  Save Product
+                  {isSavingProduct ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-dark-900 border-t-transparent rounded-full animate-spin"></span>
+                      <span>Saving Product...</span>
+                    </>
+                  ) : (
+                    <span>Save Product</span>
+                  )}
                 </button>
               </div>
             </form>

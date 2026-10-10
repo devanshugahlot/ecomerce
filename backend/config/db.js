@@ -12,6 +12,8 @@ export const connectDB = async () => {
     await mongoose.connect(mongoUri, {
       dbName: 'hypril',
       serverSelectionTimeoutMS: 10000,
+      maxPoolSize: 10,
+      socketTimeoutMS: 45000,
     });
     console.log("MongoDB connected");
     return true;

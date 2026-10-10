@@ -9,7 +9,7 @@ export const AdminCoupons = () => {
   const [code, setCode] = useState('');
   const [value, setValue] = useState('');
   const [minOrder, setMinOrder] = useState('');
-  const [discountType, setDiscountType] = useState('percentage');
+  const [isCreating, setIsCreating] = useState(false);
   const { addToast } = useToast();
 
   const handleCreate = async (e) => {
@@ -19,27 +19,42 @@ export const AdminCoupons = () => {
       return;
     }
 
-    await addCoupon({
-      code: code.trim().toUpperCase(),
-      discountType,
-      discountValue: Number(value),
-      minOrderAmount: Number(minOrder) || 0,
-    });
+    setIsCreating(true);
+    try {
+      await addCoupon({
+        code: code.trim().toUpperCase(),
+        discountType,
+        discountValue: Number(value),
+        minOrderAmount: Number(minOrder) || 0,
+      });
 
-    addToast(`Coupon '${code.toUpperCase()}' created & activated!`, 'success');
-    setCode('');
-    setValue('');
-    setMinOrder('');
+      addToast(`Coupon '${code.toUpperCase()}' created & activated!`, 'success');
+      setCode('');
+      setValue('');
+      setMinOrder('');
+    } catch (err) {
+      addToast(err.response?.data?.message || 'Failed to create coupon', 'error');
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   const handleDelete = async (id) => {
-    await deleteCoupon(id);
-    addToast('Coupon deleted', 'info');
+    try {
+      await deleteCoupon(id);
+      addToast('Coupon deleted', 'info');
+    } catch (err) {
+      addToast(err.response?.data?.message || 'Failed to delete coupon', 'error');
+    }
   };
 
   const handleToggle = async (id) => {
-    await toggleCouponStatus(id);
-    addToast('Coupon status updated', 'info');
+    try {
+      await toggleCouponStatus(id);
+      addToast('Coupon status updated', 'info');
+    } catch (err) {
+      addToast(err.response?.data?.message || 'Failed to toggle coupon', 'error');
+    }
   };
 
   return (
@@ -89,9 +104,22 @@ export const AdminCoupons = () => {
           onChange={(e) => setMinOrder(e.target.value)}
           className="bg-dark-700 border border-dark-600 rounded-2xl px-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 w-full sm:w-32 min-h-[44px]"
         />
-        <button type="submit" className="btn-primary bg-amber-500 hover:bg-amber-600 text-dark-900 py-3 px-6 text-xs font-extrabold shadow-glow-amber shrink-0 w-full sm:w-auto min-h-[44px] flex items-center justify-center gap-2">
-          <Plus className="w-4 h-4" />
-          <span>Create Coupon</span>
+        <button
+          type="submit"
+          disabled={isCreating}
+          className="btn-primary bg-amber-500 hover:bg-amber-600 text-dark-900 py-3 px-6 text-xs font-extrabold shadow-glow-amber shrink-0 w-full sm:w-auto min-h-[44px] flex items-center justify-center gap-2 disabled:opacity-50"
+        >
+          {isCreating ? (
+            <>
+              <span className="w-4 h-4 border-2 border-dark-900 border-t-transparent rounded-full animate-spin"></span>
+              <span>Creating...</span>
+            </>
+          ) : (
+            <>
+              <Plus className="w-4 h-4" />
+              <span>Create Coupon</span>
+            </>
+          )}
         </button>
       </form>
 

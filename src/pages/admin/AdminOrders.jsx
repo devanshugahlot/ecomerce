@@ -13,14 +13,23 @@ export const AdminOrders = () => {
   const [trackingNo, setTrackingNo] = useState('');
   const { addToast } = useToast();
 
+  const [isUpdating, setIsUpdating] = useState(false);
+
   const handleUpdateStatus = async (e) => {
     e.preventDefault();
     if (!selectedOrder) return;
     const orderId = selectedOrder._id || selectedOrder.id || selectedOrder.orderNumber;
 
-    await updateOrderStatus(orderId, newStatus, trackingNo);
-    addToast(`Order ${selectedOrder.orderNumber || orderId} status updated to '${newStatus}'!`, 'success');
-    setSelectedOrder(null);
+    setIsUpdating(true);
+    try {
+      await updateOrderStatus(orderId, newStatus, trackingNo);
+      addToast(`Order ${selectedOrder.orderNumber || orderId} status updated to '${newStatus}'!`, 'success');
+      setSelectedOrder(null);
+    } catch (err) {
+      addToast(err.response?.data?.message || 'Failed to update order status', 'error');
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   const filtered = orders.filter(

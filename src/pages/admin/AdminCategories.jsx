@@ -11,6 +11,8 @@ export const AdminCategories = () => {
   const [editingId, setEditingId] = useState(null);
   const { addToast } = useToast();
 
+  const [isSaving, setIsSaving] = useState(false);
+
   const [form, setForm] = useState({
     name: '',
     badge: 'NEW',
@@ -55,28 +57,39 @@ export const AdminCategories = () => {
     }
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
-      deleteCategory(id);
-      addToast('Category removed from website', 'info');
+      try {
+        await deleteCategory(id);
+        addToast('Category removed from website', 'info');
+      } catch (err) {
+        addToast(err.response?.data?.message || 'Failed to delete category', 'error');
+      }
     }
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     if (!form.name) {
       addToast('Category name is required', 'error');
       return;
     }
 
-    if (editingId) {
-      updateCategory(editingId, form);
-      addToast('Category saved successfully!', 'success');
-    } else {
-      addCategory(form);
-      addToast('Category created & saved! It will show on the website.', 'success');
+    setIsSaving(true);
+    try {
+      if (editingId) {
+        await updateCategory(editingId, form);
+        addToast('Category saved successfully!', 'success');
+      } else {
+        await addCategory(form);
+        addToast('Category created & saved! It will show on the website.', 'success');
+      }
+      setShowModal(false);
+    } catch (err) {
+      addToast(err.response?.data?.message || 'Failed to save category', 'error');
+    } finally {
+      setIsSaving(false);
     }
-    setShowModal(false);
   };
 
   return (
@@ -234,16 +247,25 @@ export const AdminCategories = () => {
               <div className="flex justify-end gap-3 pt-4 border-t border-dark-600">
                 <button
                   type="button"
+                  disabled={isSaving}
                   onClick={() => setShowModal(false)}
-                  className="px-5 py-3 rounded-full bg-dark-700 text-slate-300 font-bold"
+                  className="px-5 py-3 rounded-full bg-dark-700 text-slate-300 font-bold disabled:opacity-50 min-h-[44px]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-amber-500 text-dark-900 px-7 py-3 font-extrabold rounded-full hover:bg-amber-400 shadow-glow-amber"
+                  disabled={isSaving}
+                  className="bg-amber-500 text-dark-900 px-7 py-3 font-extrabold rounded-full hover:bg-amber-400 shadow-glow-amber disabled:opacity-50 min-h-[44px] flex items-center justify-center gap-2"
                 >
-                  Save Category
+                  {isSaving ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-dark-900 border-t-transparent rounded-full animate-spin"></span>
+                      <span>Saving...</span>
+                    </>
+                  ) : (
+                    <span>Save Category</span>
+                  )}
                 </button>
               </div>
             </form>
