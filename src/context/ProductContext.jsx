@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import api from '../services/api';
 import { MOCK_PRODUCTS as INITIAL_PRODUCTS } from '../utils/mockProducts';
 
 const ProductContext = createContext();
@@ -61,6 +62,39 @@ export const ProductProvider = ({ children }) => {
     return [];
   });
 
+  // Fetch initial products, categories, and banners from Render backend REST API
+  useEffect(() => {
+    let isMounted = true;
+    const fetchBackendData = async () => {
+      try {
+        const [prodRes, catRes, banRes] = await Promise.allSettled([
+          api.get('/products'),
+          api.get('/categories'),
+          api.get('/banners'),
+        ]);
+
+        if (isMounted) {
+          if (prodRes.status === 'fulfilled' && Array.isArray(prodRes.value.data)) {
+            setProducts(prodRes.value.data);
+          }
+          if (catRes.status === 'fulfilled' && Array.isArray(catRes.value.data)) {
+            setCategories(catRes.value.data);
+          }
+          if (banRes.status === 'fulfilled' && banRes.value.data && typeof banRes.value.data === 'object') {
+            setSiteBanners((prev) => ({ ...prev, ...banRes.value.data }));
+          }
+        }
+      } catch (err) {
+        console.warn('Backend API initial load error:', err);
+      }
+    };
+
+    fetchBackendData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // Sync to LocalStorage
   useEffect(() => {
     try {
@@ -112,33 +146,65 @@ export const ProductProvider = ({ children }) => {
   }, []);
 
   // Category CRUD
-  const addCategory = (newCat) => {
-    const id = 'cat_' + Date.now();
+  const addCategory = async (newCat) => {
+    const tempId = 'cat_' + Date.now();
     const catToAdd = {
-      id: id,
+      id: tempId,
       name: newCat.name.trim(),
       slug: newCat.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       badge: newCat.badge || 'NEW',
       image: newCat.image || '',
       ...newCat
     };
+
     setCategories((prev) => [...prev, catToAdd]);
+
+    try {
+      const res = await api.post('/categories', catToAdd);
+      if (res.data && (res.data._id || res.data.id)) {
+        const savedCat = res.data;
+        setCategories((prev) =>
+          prev.map((c) => (c.id === tempId || c._id === tempId ? { ...c, ...savedCat } : c))
+        );
+        return savedCat;
+      }
+    } catch (err) {
+      console.error('Category backend sync failed:', err);
+    }
     return catToAdd;
   };
 
-  const updateCategory = (id, updatedData) => {
+  const updateCategory = async (id, updatedData) => {
     setCategories((prev) =>
       prev.map((c) => (c.id === id || c._id === id ? { ...c, ...updatedData } : c))
     );
+
+    try {
+      await api.put(`/categories/${id}`, updatedData);
+    } catch (err) {
+      console.error('Category update backend sync failed:', err);
+    }
   };
 
-  const deleteCategory = (id) => {
+  const deleteCategory = async (id) => {
     setCategories((prev) => prev.filter((c) => c.id !== id && c._id !== id));
+
+    try {
+      await api.delete(`/categories/${id}`);
+    } catch (err) {
+      console.error('Category delete backend sync failed:', err);
+    }
   };
 
   // Banner Updates
-  const updateSiteBanners = (newBanners) => {
+  const updateSiteBanners = async (newBanners) => {
     setSiteBanners((prev) => ({ ...prev, ...newBanners }));
+
+    try {
+      await api.put('/banners', newBanners);
+    } catch (err) {
+      console.error('Banners update backend sync failed:', err);
+    }
   };
 
   // Review CRUD
@@ -205,21 +271,21 @@ export const ProductProvider = ({ children }) => {
   };
 
   // Product CRUD
-  const addProduct = (newProd) => {
-    const id = 'prod_' + Date.now();
+  const addProduct = async (newProd) => {
+    const tempId = 'prod_' + Date.now();
     const productToAdd = {
-      _id: id,
-      id: id,
+      _id: tempId,
+      id: tempId,
       rating: 5.0,
       reviewCount: 0,
       isBestSeller: true,
       isFeatured: true,
       isRx: false,
-      images: [newProd.image || ''],
-      packs: [
+      images: newProd.images || [newProd.image || ''],
+      packs: newProd.packs || [
         { name: newProd.packName || 'Pack of 1', price: Number(newProd.price), comparePrice: Number(newProd.comparePrice || newProd.price * 1.5), savings: '20% OFF' }
       ],
-      benefits: ['High Quality Formula'],
+      benefits: newProd.benefits || ['High Quality Formula'],
       ingredients: newProd.ingredients || 'Ingredients details as specified.',
       usage: newProd.usage || 'Use as directed.',
       ...newProd,
@@ -227,18 +293,44 @@ export const ProductProvider = ({ children }) => {
       comparePrice: Number(newProd.comparePrice || newProd.price * 1.5),
       stock: Number(newProd.stock || 50),
     };
+
     setProducts((prev) => [productToAdd, ...prev]);
+
+    try {
+      const res = await api.post('/products', productToAdd);
+      if (res.data && (res.data._id || res.data.id)) {
+        const savedProd = res.data;
+        setProducts((prev) =>
+          prev.map((p) => (p._id === tempId || p.id === tempId ? { ...p, ...savedProd } : p))
+        );
+        return savedProd;
+      }
+    } catch (err) {
+      console.error('Product backend sync failed:', err);
+    }
     return productToAdd;
   };
 
-  const updateProduct = (id, updatedData) => {
+  const updateProduct = async (id, updatedData) => {
     setProducts((prev) =>
       prev.map((p) => (p._id === id || p.id === id ? { ...p, ...updatedData } : p))
     );
+
+    try {
+      await api.put(`/products/${id}`, updatedData);
+    } catch (err) {
+      console.error('Product update backend sync failed:', err);
+    }
   };
 
-  const deleteProduct = (id) => {
+  const deleteProduct = async (id) => {
     setProducts((prev) => prev.filter((p) => p._id !== id && p.id !== id));
+
+    try {
+      await api.delete(`/products/${id}`);
+    } catch (err) {
+      console.error('Product delete backend sync failed:', err);
+    }
   };
 
   const clearAllData = () => {
