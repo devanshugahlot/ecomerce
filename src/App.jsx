@@ -59,15 +59,15 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-[#FAF7F2] text-[#1B1F1D] flex items-center justify-center p-6 text-center">
-          <div className="bg-white border border-[#E4E0D8] rounded-3xl p-8 max-w-md w-full space-y-4 shadow-xl">
-            <h2 className="text-xl font-serif font-extrabold text-[#0F3D2B]">Something went wrong</h2>
-            <p className="text-xs text-[#5B655F] font-medium">
+        <div className="min-h-screen bg-white text-black flex items-center justify-center p-6 text-center">
+          <div className="bg-white border border-neutral-200 rounded-2xl p-8 max-w-md w-full space-y-4 shadow-xl">
+            <h2 className="text-xl font-heading font-black text-black">Something went wrong</h2>
+            <p className="text-xs text-neutral-500 font-medium">
               An unexpected display issue occurred. Click below to return to the storefront.
             </p>
             {this.state.error && (
-              <div className="bg-red-50 border border-red-200 p-3 rounded-xl text-left">
-                <p className="text-[11px] font-mono text-red-700 break-words">
+              <div className="bg-neutral-50 border border-neutral-200 p-3 rounded-xl text-left">
+                <p className="text-[11px] font-mono text-neutral-800 break-words">
                   {this.state.error.toString()}
                 </p>
               </div>
@@ -77,9 +77,9 @@ class ErrorBoundary extends Component {
                 this.setState({ hasError: false, error: null });
                 window.location.href = '/';
               }}
-              className="btn-primary text-xs py-3 px-6 w-full font-bold"
+              className="btn-primary text-xs py-3.5 px-6 w-full font-bold rounded-full min-h-[48px]"
             >
-              Return to Hypril™ Storefront
+              Return to Hypril Storefront
             </button>
           </div>
         </div>
@@ -95,7 +95,7 @@ const StorefrontLayout = () => {
   const { products } = useProducts();
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F1F5F9] text-[#0F172A] font-sans">
+    <div className="flex flex-col min-h-screen bg-white text-black font-sans">
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenQuiz={() => setIsQuizOpen(true)}

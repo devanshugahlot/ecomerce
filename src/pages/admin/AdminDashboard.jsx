@@ -23,12 +23,12 @@ export const AdminDashboard = () => {
   const pendingCount = orders.filter((o) => o.status === 'Pending' || o.status === 'Confirmed' || o.status === 'Processing').length;
 
   const stats = [
-    { title: 'Total Gross Revenue', value: formatCurrency(totalRevenue || 124800), icon: DollarSign, change: 'Live orders revenue', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
-    { title: 'Customer Orders', value: (orders.length || 2).toString(), icon: ShoppingBag, change: 'Connected storefront checkout', color: 'text-amber-400 bg-amber-500/10 border-amber-500/20' },
-    { title: 'Live Products', value: (products.length || 2).toString(), icon: Package, change: 'Active items in shop', color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
-    { title: 'Active Coupons', value: (coupons.filter(c => c.isActive).length || 4).toString(), icon: Tag, change: 'Promos active on checkout', color: 'text-purple-400 bg-purple-500/10 border-purple-500/20' },
-    { title: 'Pending Dispatch', value: (pendingCount || 1).toString(), icon: Clock, change: 'Requires fulfillment', color: 'text-amber-500 bg-amber-500/10 border-amber-500/20' },
-    { title: 'Discreet Packaging', value: '100%', icon: AlertTriangle, change: 'Unmarked outer box', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
+    { title: 'Total Gross Revenue', value: formatCurrency(totalRevenue || 124800), icon: DollarSign, change: 'Live orders revenue', color: 'text-white bg-white/10 border-white/20' },
+    { title: 'Customer Orders', value: (orders.length || 2).toString(), icon: ShoppingBag, change: 'Connected storefront checkout', color: 'text-white bg-white/10 border-white/20' },
+    { title: 'Live Products', value: (products.length || 2).toString(), icon: Package, change: 'Active items in shop', color: 'text-white bg-white/10 border-white/20' },
+    { title: 'Active Coupons', value: (coupons.filter(c => c.isActive).length || 4).toString(), icon: Tag, change: 'Promos active on checkout', color: 'text-white bg-white/10 border-white/20' },
+    { title: 'Pending Dispatch', value: (pendingCount || 1).toString(), icon: Clock, change: 'Requires fulfillment', color: 'text-white bg-white/10 border-white/20' },
+    { title: 'Discreet Packaging', value: '100%', icon: AlertTriangle, change: 'Unmarked outer box', color: 'text-white bg-white/10 border-white/20' },
   ];
 
   return (
@@ -38,8 +38,8 @@ export const AdminDashboard = () => {
       <div className="bg-dark-800 p-6 rounded-3xl border border-dark-600 shadow-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-white flex items-center gap-2.5">
-            <Sparkles className="w-7 h-7 text-amber-400" />
-            Hypril™ Admin Analytics & Control
+            <Sparkles className="w-7 h-7 text-white" />
+            Hypril Admin Analytics & Control
           </h1>
           <p className="text-xs text-slate-400 mt-1">
             Real-time management console connected to Hypril storefront catalog and customer checkout.
@@ -73,12 +73,12 @@ export const AdminDashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-extrabold text-base text-white flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-amber-400" />
+                <TrendingUp className="w-5 h-5 text-white" />
                 Hypril Revenue Trend (2026)
               </h3>
               <p className="text-xs text-slate-400">Total net revenue calculated from website checkouts</p>
             </div>
-            <span className="text-xs font-extrabold text-amber-400 bg-amber-500/10 px-3.5 py-1.5 rounded-full border border-amber-500/30">
+            <span className="text-xs font-extrabold text-white bg-white/10 px-3.5 py-1.5 rounded-full border border-white/20">
               {formatCurrency(totalRevenue || 124800)}
             </span>
           </div>
@@ -93,12 +93,12 @@ export const AdminDashboard = () => {
               { month: 'Oct', height: '95%', val: formatCurrency(totalRevenue || 124800) },
             ].map((bar, i) => (
               <div key={i} className="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
-                <span className="text-[10px] text-amber-400 font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-[10px] text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity">
                   {bar.val}
                 </span>
                 <div
                   style={{ height: bar.height }}
-                  className="w-full bg-gradient-to-t from-amber-600 to-amber-400 rounded-t-xl transition-all group-hover:brightness-125 shadow-glow-amber"
+                  className="w-full bg-white/70 rounded-t-xl transition-all group-hover:bg-white"
                 ></div>
                 <span className="text-[10px] text-slate-400 font-semibold">{bar.month}</span>
               </div>
@@ -110,7 +110,7 @@ export const AdminDashboard = () => {
         <div className="lg:col-span-5 bg-dark-800 rounded-3xl p-6 border border-dark-600 shadow-2xl space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="font-extrabold text-base text-white">Recent Website Orders</h3>
-            <Link to="/admin/orders" className="text-xs font-extrabold text-amber-400 hover:underline flex items-center gap-1">
+            <Link to="/admin/orders" className="text-xs font-extrabold text-white hover:underline flex items-center gap-1">
               <span>View All</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
@@ -127,10 +127,8 @@ export const AdminDashboard = () => {
                     <span className="text-slate-400 text-[11px] font-medium">{name}</span>
                   </div>
                   <div className="text-right">
-                    <span className="font-black text-amber-400 block">{formatCurrency(ord.totalPrice || ord.total || 799)}</span>
-                    <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full inline-block mt-0.5 ${
-                      ord.status === 'Shipped' ? 'bg-blue-500/20 text-blue-400' : 'bg-amber-500/20 text-amber-400'
-                    }`}>
+                    <span className="font-black text-white font-mono block">{formatCurrency(ord.totalPrice || ord.total || 799)}</span>
+                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-block mt-0.5 bg-white/10 text-slate-300 border border-white/20">
                       {ord.status || 'Confirmed'}
                     </span>
                   </div>

@@ -179,8 +179,8 @@ export const AdminProducts = () => {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-dark-800 p-6 rounded-3xl border border-dark-600 shadow-2xl">
         <div>
           <h1 className="text-2xl font-extrabold text-white flex items-center gap-2.5">
-            <Package className="w-7 h-7 text-amber-400" />
-            Hypril™ Admin Catalog & Banners
+            <Package className="w-7 h-7 text-white" />
+            Hypril Admin Catalog & Banners
           </h1>
           <p className="text-xs text-slate-400 mt-1">
             Upload images directly from device and manage live listings & banners.
@@ -192,7 +192,7 @@ export const AdminProducts = () => {
           <button
             onClick={() => setActiveTab('products')}
             className={`flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs font-bold transition-all min-h-[44px] ${
-              activeTab === 'products' ? 'bg-amber-500 text-dark-900 shadow-md' : 'text-slate-300 hover:text-white'
+              activeTab === 'products' ? 'bg-white text-black shadow-md' : 'text-neutral-400 hover:text-white'
             }`}
           >
             Products ({products.length})
@@ -200,7 +200,7 @@ export const AdminProducts = () => {
           <button
             onClick={() => setActiveTab('banners')}
             className={`flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs font-bold transition-all min-h-[44px] ${
-              activeTab === 'banners' ? 'bg-amber-500 text-dark-900 shadow-md' : 'text-slate-300 hover:text-white'
+              activeTab === 'banners' ? 'bg-white text-black shadow-md' : 'text-neutral-400 hover:text-white'
             }`}
           >
             Site Banners
@@ -219,13 +219,13 @@ export const AdminProducts = () => {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search catalog..."
-                className="w-full bg-dark-800 border border-dark-600 rounded-2xl pl-10 pr-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 min-h-[44px]"
+                className="w-full bg-dark-800 border border-dark-600 rounded-2xl pl-10 pr-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-white min-h-[44px]"
               />
             </div>
 
             <button
               onClick={handleOpenAdd}
-              className="bg-amber-500 hover:bg-amber-600 text-dark-900 py-3 px-6 rounded-2xl text-xs font-extrabold flex items-center gap-2 shadow-md shrink-0 w-full sm:w-auto justify-center min-h-[44px]"
+              className="bg-white hover:bg-neutral-200 text-black py-3 px-6 rounded-2xl text-xs font-extrabold flex items-center gap-2 shadow-md shrink-0 w-full sm:w-auto justify-center min-h-[44px]"
             >
               <Plus className="w-4 h-4" />
               <span>Add New Product</span>
@@ -235,7 +235,7 @@ export const AdminProducts = () => {
           <div className="bg-dark-800 rounded-3xl border border-dark-600 overflow-hidden shadow-2xl">
             <div className="overflow-x-auto w-full">
               <table className="w-full text-left text-xs text-slate-300 min-w-[600px]">
-                <thead className="bg-dark-700 text-amber-400 font-extrabold border-b border-dark-600 uppercase tracking-wider text-[10px]">
+                <thead className="bg-dark-700 text-neutral-400 font-extrabold border-b border-dark-600 uppercase tracking-wider text-[10px]">
                   <tr>
                     <th className="p-4">Product</th>
                     <th className="p-4">Category</th>
@@ -274,13 +274,13 @@ export const AdminProducts = () => {
                             {p.category}
                           </span>
                         </td>
-                        <td className="p-4 font-black text-amber-400 text-sm">{formatCurrency(p.price)}</td>
-                        <td className="p-4 font-bold text-emerald-400">{p.stock} units</td>
+                        <td className="p-4 font-black text-white font-mono text-sm">{formatCurrency(p.price)}</td>
+                        <td className="p-4 font-semibold text-slate-300">{p.stock} units</td>
                         <td className="p-4 text-right">
                           <div className="flex items-center justify-end gap-2">
                             <button
                               onClick={() => handleOpenEdit(p)}
-                              className="p-2.5 rounded-xl bg-dark-700 hover:bg-dark-600 text-amber-400 border border-dark-600 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                              className="p-2.5 rounded-xl bg-dark-700 hover:bg-dark-600 text-white border border-dark-600 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                               title="Edit Product"
                             >
                               <Edit3 className="w-4 h-4" />
@@ -316,7 +316,7 @@ export const AdminProducts = () => {
         <div className="bg-dark-800 rounded-3xl p-6 sm:p-8 border border-dark-600 shadow-2xl space-y-6 max-w-3xl">
           <div>
             <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
-              <ImageIcon className="w-6 h-6 text-amber-400" />
+              <ImageIcon className="w-6 h-6 text-white" />
               Upload Website Banner Images From Device
             </h2>
             <p className="text-xs text-slate-400 mt-1">
@@ -327,7 +327,7 @@ export const AdminProducts = () => {
           <form onSubmit={handleSaveBanners} className="space-y-6">
             {/* Hero Section Banner Image */}
             <div className="space-y-3 p-5 bg-dark-700/60 rounded-2xl border border-dark-600">
-              <label className="block text-sm font-bold text-amber-400">
+              <label className="block text-sm font-bold text-white">
                 1. Main Top Hero Banner Image
               </label>
 
@@ -342,7 +342,7 @@ export const AdminProducts = () => {
                 </div>
               )}
 
-              <label className="bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold text-xs py-3 px-6 rounded-xl cursor-pointer inline-flex items-center gap-2 shadow-md min-h-[44px]">
+              <label className="bg-white hover:bg-slate-200 text-black font-extrabold text-xs py-3 px-6 rounded-full cursor-pointer inline-flex items-center gap-2 shadow-md min-h-[44px]">
                 <Upload className="w-4 h-4" />
                 <span>Choose Hero Banner Image from Device</span>
                 <input
@@ -356,7 +356,7 @@ export const AdminProducts = () => {
 
             {/* Promo Section Banner Image */}
             <div className="space-y-3 p-5 bg-dark-700/60 rounded-2xl border border-dark-600">
-              <label className="block text-sm font-bold text-amber-400">
+              <label className="block text-sm font-bold text-white">
                 2. Promo Section Banner Image
               </label>
 
@@ -371,7 +371,7 @@ export const AdminProducts = () => {
                 </div>
               )}
 
-              <label className="bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold text-xs py-3 px-6 rounded-xl cursor-pointer inline-flex items-center gap-2 shadow-md min-h-[44px]">
+              <label className="bg-white hover:bg-slate-200 text-black font-extrabold text-xs py-3 px-6 rounded-full cursor-pointer inline-flex items-center gap-2 shadow-md min-h-[44px]">
                 <Upload className="w-4 h-4" />
                 <span>Choose Promo Banner Image from Device</span>
                 <input
@@ -386,11 +386,11 @@ export const AdminProducts = () => {
             <button
               type="submit"
               disabled={isSavingBanners}
-              className="bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold py-3.5 px-8 rounded-2xl text-xs shadow-glow-amber min-h-[44px] disabled:opacity-50 flex items-center justify-center gap-2"
+              className="bg-white hover:bg-slate-200 text-black font-extrabold py-3.5 px-8 rounded-full text-xs shadow-md min-h-[48px] disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isSavingBanners ? (
                 <>
-                  <span className="w-4 h-4 border-2 border-dark-900 border-t-transparent rounded-full animate-spin"></span>
+                  <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
                   <span>Saving Banner Images...</span>
                 </>
               ) : (
@@ -407,7 +407,7 @@ export const AdminProducts = () => {
           <div className="bg-dark-800 border border-dark-600 rounded-3xl p-6 sm:p-8 max-w-xl w-full max-h-[90vh] overflow-y-auto space-y-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-dark-600 pb-4">
               <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-amber-400" />
+                <Sparkles className="w-5 h-5 text-white" />
                 {editingId ? 'Edit Product' : 'Add New Product'}
               </h2>
               <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center">
@@ -424,7 +424,7 @@ export const AdminProducts = () => {
                   placeholder="e.g. Hypril™ Extended Delay Gel (50ml)"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 min-h-[44px]"
+                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
                 />
               </div>
 
@@ -435,7 +435,7 @@ export const AdminProducts = () => {
                     <select
                       value={form.category}
                       onChange={(e) => setForm({ ...form, category: e.target.value })}
-                      className="w-full bg-dark-700 border border-dark-600 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-amber-500 min-h-[44px]"
+                      className="w-full bg-dark-700 border border-dark-600 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
                     >
                       {categories.map((c) => (
                         <option key={c.id || c.slug || c.name} value={c.name}>
@@ -449,7 +449,7 @@ export const AdminProducts = () => {
                       placeholder="Category name"
                       value={form.category}
                       onChange={(e) => setForm({ ...form, category: e.target.value })}
-                      className="w-full bg-dark-700 border border-dark-600 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-amber-500 min-h-[44px]"
+                      className="w-full bg-dark-700 border border-dark-600 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
                     />
                   )}
                 </div>
@@ -460,7 +460,7 @@ export const AdminProducts = () => {
                     type="number"
                     value={form.stock}
                     onChange={(e) => setForm({ ...form, stock: e.target.value })}
-                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 min-h-[44px]"
+                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
                   />
                 </div>
               </div>
@@ -474,7 +474,7 @@ export const AdminProducts = () => {
                     placeholder="999"
                     value={form.price}
                     onChange={(e) => setForm({ ...form, price: e.target.value })}
-                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 font-bold text-amber-400 min-h-[44px]"
+                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white font-mono min-h-[44px]"
                   />
                 </div>
 
@@ -485,7 +485,7 @@ export const AdminProducts = () => {
                     placeholder="1499"
                     value={form.comparePrice}
                     onChange={(e) => setForm({ ...form, comparePrice: e.target.value })}
-                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 min-h-[44px]"
+                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
                   />
                 </div>
               </div>
@@ -496,16 +496,16 @@ export const AdminProducts = () => {
                   {form.image ? (
                     <div className="flex flex-col items-center gap-2">
                       <img src={form.image} alt="Product Preview" className="w-24 h-24 object-cover rounded-xl border border-dark-600" />
-                      <span className="text-[11px] text-emerald-400 font-bold">Image selected! Click below to change file.</span>
+                      <span className="text-[11px] text-white font-bold">Image selected! Click below to change file.</span>
                     </div>
                   ) : (
                     <div className="space-y-1 text-slate-400">
-                      <ImageIcon className="w-8 h-8 text-amber-400 mx-auto" />
+                      <ImageIcon className="w-8 h-8 text-white mx-auto" />
                       <p className="text-xs">No image selected from device</p>
                     </div>
                   )}
 
-                  <label className="mt-3 bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold text-xs py-2.5 px-5 rounded-xl cursor-pointer inline-flex items-center gap-2 shadow-md min-h-[44px]">
+                  <label className="mt-3 bg-white hover:bg-slate-200 text-black font-extrabold text-xs py-2.5 px-5 rounded-full cursor-pointer inline-flex items-center gap-2 shadow-md min-h-[44px]">
                     <Upload className="w-4 h-4" />
                     <span>Upload Product Photo from Device</span>
                     <input
@@ -525,7 +525,7 @@ export const AdminProducts = () => {
                   placeholder="e.g. Non-transferable delay gel formula."
                   value={form.benefitSummary}
                   onChange={(e) => setForm({ ...form, benefitSummary: e.target.value })}
-                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 min-h-[44px]"
+                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-white min-h-[44px]"
                 />
               </div>
 
@@ -536,7 +536,7 @@ export const AdminProducts = () => {
                   placeholder="Detailed product description..."
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  className="w-full bg-dark-700 border border-dark-600 rounded-xl p-3 text-white placeholder-slate-500"
+                  className="w-full bg-dark-700 border border-dark-600 rounded-xl p-3 text-white placeholder-slate-500 focus:outline-none focus:border-white"
                 ></textarea>
               </div>
 
@@ -552,11 +552,11 @@ export const AdminProducts = () => {
                 <button
                   type="submit"
                   disabled={isSavingProduct}
-                  className="bg-amber-500 text-dark-900 px-7 py-3 font-extrabold rounded-full hover:bg-amber-400 shadow-glow-amber min-h-[44px] disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="bg-white text-black px-7 py-3 font-extrabold rounded-full hover:bg-slate-200 shadow-md min-h-[48px] disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isSavingProduct ? (
                     <>
-                      <span className="w-4 h-4 border-2 border-dark-900 border-t-transparent rounded-full animate-spin"></span>
+                      <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
                       <span>Saving Product...</span>
                     </>
                   ) : (

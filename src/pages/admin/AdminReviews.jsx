@@ -24,7 +24,7 @@ export const AdminReviews = () => {
       <div className="flex justify-between items-center bg-dark-800 p-6 rounded-3xl border border-dark-600 shadow-2xl">
         <div>
           <h1 className="text-2xl font-extrabold text-white flex items-center gap-2.5">
-            <Star className="w-7 h-7 text-amber-400 fill-amber-400" />
+            <Star className="w-7 h-7 text-white fill-white" />
             Customer Reviews Moderation ({reviews.length})
           </h1>
           <p className="text-xs text-slate-400 mt-1">
@@ -60,7 +60,7 @@ export const AdminReviews = () => {
 
               {r.image && (
                 <div className="pt-2 flex items-center gap-2">
-                  <span className="text-[10px] text-amber-400 font-bold flex items-center gap-1">
+                  <span className="text-[10px] text-white font-bold flex items-center gap-1">
                     <ImageIcon className="w-3.5 h-3.5" /> Photo Attached:
                   </span>
                   <img src={r.image} alt="Uploaded review photo" className="w-14 h-14 object-cover rounded-xl border border-dark-600" />

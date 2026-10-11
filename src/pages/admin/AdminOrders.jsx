@@ -45,7 +45,7 @@ export const AdminOrders = () => {
       <div className="bg-dark-800 p-6 rounded-3xl border border-dark-600 shadow-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-white flex items-center gap-2.5">
-            <ShoppingBag className="w-7 h-7 text-amber-400" />
+            <ShoppingBag className="w-7 h-7 text-white" />
             Customer Orders Management ({orders.length})
           </h1>
           <p className="text-xs text-slate-400 mt-1">
@@ -61,14 +61,14 @@ export const AdminOrders = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search by Order ID or Customer Name..."
-          className="w-full bg-dark-800 border border-dark-600 rounded-2xl pl-10 pr-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+          className="w-full bg-dark-800 border border-dark-600 rounded-2xl pl-10 pr-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-white"
         />
       </div>
 
       <div className="bg-dark-800 rounded-3xl border border-dark-600 overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-dark-700 text-amber-400 font-extrabold border-b border-dark-600 uppercase tracking-wider text-[10px]">
+            <thead className="bg-dark-700 text-white font-extrabold border-b border-dark-600 uppercase tracking-wider text-[10px]">
               <tr>
                 <th className="p-4">Order ID</th>
                 <th className="p-4">Customer</th>
@@ -99,18 +99,10 @@ export const AdminOrders = () => {
                         <span>Hypril Package ({itemsCount})</span>
                       )}
                     </td>
-                    <td className="p-4 font-black text-amber-400 text-sm">{formatCurrency(ord.totalPrice || ord.total || 799)}</td>
+                    <td className="p-4 font-black text-white font-mono text-sm">{formatCurrency(ord.totalPrice || ord.total || 799)}</td>
                     <td className="p-4 font-semibold text-slate-300">{ord.paymentMethod || 'COD'}</td>
                     <td className="p-4">
-                      <span className={`px-3 py-1 rounded-full font-extrabold text-[10px] uppercase border ${
-                        ord.status === 'Shipped'
-                          ? 'bg-blue-500/10 text-blue-400 border-blue-500/30'
-                          : ord.status === 'Delivered'
-                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                          : ord.status === 'Cancelled'
-                          ? 'bg-red-500/10 text-red-400 border-red-500/30'
-                          : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                      }`}>
+                      <span className="px-3 py-1 rounded-full font-extrabold text-[10px] uppercase border bg-white/10 text-slate-200 border-white/20">
                         {ord.status || 'Confirmed'}
                       </span>
                     </td>
@@ -121,7 +113,7 @@ export const AdminOrders = () => {
                           setNewStatus(ord.status || 'Confirmed');
                           setTrackingNo(ord.trackingNumber || 'EXP-904128IN');
                         }}
-                        className="btn-primary bg-amber-500 hover:bg-amber-600 text-dark-900 text-[11px] py-1.5 px-3.5 font-extrabold shadow-glow-amber"
+                        className="bg-white hover:bg-slate-200 text-black text-[11px] py-2 px-4 rounded-full font-bold transition-all min-h-[44px] inline-flex items-center justify-center shadow-md"
                       >
                         Update Status
                       </button>
@@ -158,7 +150,7 @@ export const AdminOrders = () => {
                 <select
                   value={newStatus}
                   onChange={(e) => setNewStatus(e.target.value)}
-                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 font-bold"
+                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white font-bold min-h-[44px]"
                 >
                   <option value="Confirmed">Confirmed</option>
                   <option value="Processing">Processing</option>
@@ -176,15 +168,15 @@ export const AdminOrders = () => {
                   value={trackingNo}
                   onChange={(e) => setTrackingNo(e.target.value)}
                   placeholder="e.g. EXP-9041284IN"
-                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
                 />
               </div>
 
               <div className="flex justify-end gap-3 pt-3 border-t border-dark-600">
-                <button type="button" onClick={() => setSelectedOrder(null)} className="px-5 py-2.5 rounded-full bg-dark-700 hover:bg-dark-600 text-slate-300 font-bold">
+                <button type="button" onClick={() => setSelectedOrder(null)} className="px-5 py-2.5 rounded-full bg-dark-700 hover:bg-dark-600 text-slate-300 font-bold min-h-[44px]">
                   Cancel
                 </button>
-                <button type="submit" className="btn-primary bg-amber-500 hover:bg-amber-600 text-dark-900 py-2.5 px-6 font-extrabold shadow-glow-amber">
+                <button type="submit" className="bg-white hover:bg-slate-200 text-black py-2.5 px-6 rounded-full font-extrabold shadow-md min-h-[44px]">
                   Save Changes
                 </button>
               </div>

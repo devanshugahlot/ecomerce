@@ -1,5 +1,5 @@
 export const BRAND_NAME = "Hypril";
-export const BRAND_TAGLINE = "India's No. 1 Sexual Health & Men's Wellness Brand";
+export const BRAND_TAGLINE = "Premium Men's Wellness — Free & Discreet Delivery";
 export const CURRENCY_SYMBOL = "₹";
 
 export const CONCERNS = [

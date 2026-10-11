@@ -72,15 +72,15 @@ export const Home = () => {
   ];
 
   return (
-    <div className="bg-[#F9F9F6] min-h-screen py-4 space-y-6 sm:space-y-8">
+    <div className="bg-white min-h-screen py-2 sm:py-4 space-y-6 sm:space-y-10 text-[#0A0A0A]">
       <SEO
-        title={`${BRAND_NAME} Care — Official Storefront`}
-        description="Doctor-approved male performance formulations. 100% discreet packaging, COD available."
+        title={`${BRAND_NAME} — Premium Men's Wellness`}
+        description="Doctor-backed performance formulations. 100% discreet packaging, Cash on Delivery available."
       />
 
-      {/* TOP STORY CATEGORY BUBBLES (DYNAMICALLY RENDERED FROM ADMIN) */}
+      {/* 3. ROUND CATEGORY ICONS STRIP (REAL CATEGORIES) */}
       {categories && categories.length > 0 && (
-        <section className="max-w-[1536px] mx-auto px-2 sm:px-6">
+        <section className="max-w-[1536px] mx-auto">
           <CategoryScroll
             activeCategory={selectedBestsellerCategory}
             onSelectCategory={(cat) => setSelectedBestsellerCategory(cat)}
@@ -88,27 +88,37 @@ export const Home = () => {
         </section>
       )}
 
-      {/* SECTION 1: HERO BANNER (100:27 Aspect Ratio - Dynamic from Admin) */}
-      {siteBanners?.heroBanner && (
-        <section className="max-w-[1536px] mx-auto px-4 sm:px-8">
-          <Link to="/shop" className="block relative rounded-[24px] overflow-hidden shadow-sm border border-[#E6D7C3] group">
-            <div className="w-full aspect-[100/27] max-h-[324px] bg-slate-100 overflow-hidden">
-              <img
-                src={siteBanners.heroBanner}
-                alt="Hypril Hero Banner"
-                className="w-full h-full object-cover object-center group-hover:scale-[1.01] transition-transform duration-500"
-              />
+      {/* 4. HERO BANNER: Tall on mobile (4:5 ratio) and wide on desktop */}
+      <section className="max-w-[1536px] mx-auto px-4 sm:px-8">
+        <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs border border-[#E5E5E5] bg-neutral-900 group">
+          <div className="w-full aspect-[4/5] sm:aspect-[16/7] lg:aspect-[21/9] max-h-[580px] overflow-hidden relative">
+            <img
+              src={siteBanners?.heroBanner || '/images/hero_banner.png'}
+              alt="Hypril Hero Banner"
+              className="w-full h-full object-cover object-center group-hover:scale-[1.01] transition-transform duration-500"
+            />
+            {/* Overlay with Shop Now button */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end p-6 sm:p-10">
+              <div className="space-y-3">
+                <Link
+                  to="/shop"
+                  className="bg-black hover:bg-neutral-800 text-white font-bold px-8 py-3.5 rounded-full inline-flex items-center gap-2 text-xs sm:text-sm tracking-wide shadow-lg border border-white/20 min-h-[48px] transition-all active:scale-[0.98]"
+                >
+                  <span>Shop Now</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
-          </Link>
-        </section>
-      )}
+          </div>
+        </div>
+      </section>
 
-      {/* SECTION 2: BESTSELLERS CATALOG */}
+      {/* 5. BESTSELLERS: 2-column on mobile, 4 on desktop */}
       <section className="section-card-float">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
-            <span className="eyebrow-label text-[#0D472E]">POPULAR PICK</span>
-            <h2 className="text-3xl sm:text-4xl font-heading font-black text-slate-900">
+            <span className="eyebrow-label text-[#6B6B6B]">BESTSELLERS</span>
+            <h2 className="text-2xl sm:text-4xl font-heading font-black text-black">
               Bestsellers
             </h2>
           </div>
@@ -123,10 +133,10 @@ export const Home = () => {
                       setSelectedBestsellerCategory(cat);
                       setBestsellerSliderIdx(0);
                     }}
-                    className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
+                    className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap min-h-[36px] ${
                       selectedBestsellerCategory === cat
-                        ? 'bg-[#0D472E] text-white shadow-xs'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                        ? 'bg-black text-white shadow-xs'
+                        : 'bg-[#F5F5F5] text-neutral-800 hover:bg-[#E5E5E5]'
                     }`}
                   >
                     {cat}
@@ -138,13 +148,15 @@ export const Home = () => {
                 <div className="hidden sm:flex items-center gap-1.5 shrink-0">
                   <button
                     onClick={handlePrevBestseller}
-                    className="w-10 h-10 rounded-full border border-slate-300 text-slate-700 flex items-center justify-center hover:bg-slate-100"
+                    className="w-10 h-10 rounded-full border border-[#E5E5E5] text-black flex items-center justify-center hover:bg-[#F5F5F5] transition-colors"
+                    aria-label="Previous bestsellers"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
                   <button
                     onClick={handleNextBestseller}
-                    className="w-10 h-10 rounded-full border border-[#0D472E] bg-[#0D472E] text-white flex items-center justify-center hover:bg-[#08301E]"
+                    className="w-10 h-10 rounded-full border border-black bg-black text-white flex items-center justify-center hover:bg-neutral-800 transition-colors"
+                    aria-label="Next bestsellers"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>
@@ -154,49 +166,49 @@ export const Home = () => {
           )}
         </div>
 
-        {/* Clean Product Cards Grid */}
+        {/* 2-column grid on mobile, 4 on desktop */}
         {displayedBestsellers.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {displayedBestsellers.slice(bestsellerSliderIdx, bestsellerSliderIdx + 4).map((product) => (
               <ProductCard key={product._id || product.id} product={product} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 bg-[#F9F9F6] rounded-2xl border border-dashed border-slate-300 p-8 space-y-2">
-            <Package className="w-10 h-10 text-slate-400 mx-auto" />
-            <h4 className="font-heading font-black text-slate-800 text-base">No products available</h4>
-            <p className="text-xs text-slate-500">Check back soon for new arrivals in our catalog.</p>
+          <div className="text-center py-12 bg-[#F5F5F5] rounded-2xl border border-dashed border-[#E5E5E5] p-8 space-y-2">
+            <Package className="w-10 h-10 text-neutral-400 mx-auto" />
+            <h4 className="font-heading font-bold text-neutral-800 text-base">No products available</h4>
+            <p className="text-xs text-neutral-500">Check back soon for new arrivals in our catalog.</p>
           </div>
         )}
       </section>
 
       {/* SECTION 3: YOUR NIGHT, YOUR RULES SUMMARY BAR */}
       <section className="max-w-[1536px] mx-auto px-4 sm:px-8">
-        <div className="bg-[#0D472E] text-white rounded-[24px] p-6 sm:p-8 text-center space-y-2 shadow-sm">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#E5B869]">CLINICAL WELLNESS</span>
+        <div className="bg-black text-white rounded-2xl sm:rounded-3xl p-6 sm:p-10 text-center space-y-2 border border-neutral-900 shadow-sm">
+          <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">CLINICAL WELLNESS</span>
           <h2 className="text-2xl sm:text-3xl font-heading font-black">Your Night, Your Rules.</h2>
-          <p className="text-xs sm:text-sm text-emerald-100 max-w-lg mx-auto font-medium">
+          <p className="text-xs sm:text-sm text-neutral-300 max-w-lg mx-auto font-medium">
             100% Plain Box Discreet Packaging Across India
           </p>
         </div>
       </section>
 
-      {/* SECTION 4: SHOP BY CATEGORY (DYNAMICALLY RENDERED FROM ADMIN CATEGORIES) */}
+      {/* SECTION 4: SHOP BY CATEGORY */}
       {categories && categories.length > 0 && (
         <section className="section-card-float">
           <div className="mb-6">
-            <span className="eyebrow-label text-[#0D472E]">EXPLORE CATALOG</span>
-            <h2 className="text-3xl sm:text-4xl font-heading font-black text-slate-900">
-              Shop by category
+            <span className="eyebrow-label text-[#6B6B6B]">EXPLORE CATALOG</span>
+            <h2 className="text-2xl sm:text-4xl font-heading font-black text-black">
+              Shop by Category
             </h2>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {categories.map((cat) => (
               <Link
-                key={cat.id || cat.slug}
+                key={cat.id || cat.slug || cat._id}
                 to={`/shop?category=${cat.slug || cat.name}`}
-                className="group relative aspect-[4/5] rounded-[20px] overflow-hidden shadow-xs hover:shadow-lg transition-all duration-300 border border-slate-200 bg-white"
+                className="group relative aspect-[4/5] rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 border border-[#E5E5E5] bg-[#F5F5F5]"
               >
                 {cat.image ? (
                   <img
@@ -205,13 +217,13 @@ export const Home = () => {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 ) : (
-                  <div className="w-full h-full bg-slate-100 flex items-center justify-center">
-                    <FolderTree className="w-8 h-8 text-slate-400" />
+                  <div className="w-full h-full bg-[#F5F5F5] flex items-center justify-center">
+                    <FolderTree className="w-8 h-8 text-neutral-400" />
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                 <div className="absolute bottom-3 left-3 right-3 text-white">
-                  <h3 className="font-heading font-black text-sm leading-tight group-hover:text-[#E5B869] transition-colors">
+                  <h3 className="font-heading font-bold text-sm leading-tight text-white group-hover:text-neutral-200 transition-colors">
                     {cat.name}
                   </h3>
                 </div>
@@ -224,11 +236,11 @@ export const Home = () => {
       {/* SECTION 5: PROMO BANNER IMAGE */}
       {siteBanners?.promoBanner1 && (
         <section className="max-w-[1536px] mx-auto px-4 sm:px-8">
-          <Link to="/shop" className="block relative rounded-[24px] overflow-hidden shadow-md border border-slate-200 group">
+          <Link to="/shop" className="block relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm border border-[#E5E5E5] group">
             <img
               src={siteBanners.promoBanner1}
               alt="Promo Banner"
-              className="w-full h-auto max-h-[300px] object-cover rounded-[24px] group-hover:scale-[1.01] transition-transform duration-500"
+              className="w-full h-auto max-h-[320px] object-cover rounded-2xl sm:rounded-3xl group-hover:scale-[1.01] transition-transform duration-500"
             />
           </Link>
         </section>
@@ -236,11 +248,11 @@ export const Home = () => {
 
       {/* SECTION 6: FAQ ACCORDION SECTION */}
       <section id="faq" className="max-w-[1536px] mx-auto px-4 sm:px-8">
-        <div className="bg-white rounded-[24px] p-6 sm:p-10 border border-slate-200/80 shadow-xs">
+        <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-10 border border-[#E5E5E5] shadow-xs">
           <div className="text-center max-w-xl mx-auto mb-8">
-            <span className="eyebrow-label text-[#0D472E]">GOT QUESTIONS?</span>
-            <h2 className="text-3xl font-heading font-black text-slate-900">
-              Your questions, answered
+            <span className="eyebrow-label text-[#6B6B6B]">GOT QUESTIONS?</span>
+            <h2 className="text-2xl sm:text-3xl font-heading font-black text-black">
+              Your Questions, Answered
             </h2>
           </div>
 
@@ -250,20 +262,20 @@ export const Home = () => {
               return (
                 <div
                   key={idx}
-                  className="border border-slate-200 rounded-2xl overflow-hidden transition-all"
+                  className="border border-[#E5E5E5] rounded-xl overflow-hidden transition-all"
                 >
                   <button
                     onClick={() => setActiveFaq(isOpen ? -1 : idx)}
-                    className="w-full p-4 sm:p-5 text-left font-heading font-bold text-slate-900 text-sm sm:text-base flex items-center justify-between bg-[#F9F9F6] hover:bg-slate-100"
+                    className="w-full p-4 sm:p-5 text-left font-heading font-bold text-black text-sm sm:text-base flex items-center justify-between bg-white hover:bg-[#F5F5F5] min-h-[48px]"
                   >
                     <span>{faq.q}</span>
-                    <div className="w-7 h-7 rounded-full bg-white text-[#0D472E] flex items-center justify-center shrink-0 border border-slate-200">
+                    <div className="w-7 h-7 rounded-full bg-[#F5F5F5] text-black flex items-center justify-center shrink-0 border border-[#E5E5E5]">
                       {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                     </div>
                   </button>
 
                   {isOpen && (
-                    <div className="p-4 sm:p-5 bg-white text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200">
+                    <div className="p-4 sm:p-5 bg-[#F5F5F5] text-xs sm:text-sm text-neutral-600 leading-relaxed border-t border-[#E5E5E5]">
                       {faq.a}
                     </div>
                   )}
@@ -276,26 +288,26 @@ export const Home = () => {
 
       {/* SECTION 7: WEEKLY NEWSLETTER */}
       <section className="max-w-[1536px] mx-auto px-4 sm:px-8">
-        <div className="bg-[#FAF4E8] rounded-[24px] p-6 sm:p-10 border border-[#E6D7C3] text-center space-y-4 shadow-xs">
-          <h2 className="text-2xl sm:text-3xl font-heading font-black text-slate-900">
+        <div className="bg-[#F5F5F5] rounded-2xl sm:rounded-3xl p-6 sm:p-10 border border-[#E5E5E5] text-center space-y-4">
+          <h2 className="text-2xl sm:text-3xl font-heading font-black text-black">
             Stay in the loop with our weekly newsletter
           </h2>
-          <p className="text-xs text-slate-600 font-medium max-w-md mx-auto">
+          <p className="text-xs text-neutral-600 font-medium max-w-md mx-auto">
             Get exclusive wellness tips, doctor guides, and special discount codes delivered straight to your inbox.
           </p>
 
-          <form onSubmit={handleNewsletterSubmit} className="flex max-w-md mx-auto gap-2 pt-2">
+          <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row max-w-md mx-auto gap-2 pt-2">
             <input
               type="email"
               required
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 bg-white border border-slate-300 rounded-full px-4 py-3 text-xs font-medium focus:outline-none focus:border-[#0D472E]"
+              className="flex-1 bg-white border border-[#E5E5E5] rounded-full px-5 py-3 text-xs font-medium focus:outline-none focus:border-black min-h-[48px]"
             />
             <button
               type="submit"
-              className="bg-[#0D472E] hover:bg-[#08301E] text-white text-xs font-black py-3 px-6 rounded-full shadow-md"
+              className="btn-primary bg-black hover:bg-neutral-800 text-white text-xs font-bold py-3 px-8 rounded-full min-h-[48px] shrink-0"
             >
               Subscribe
             </button>

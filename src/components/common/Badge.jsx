@@ -2,11 +2,11 @@ import React from 'react';
 
 export const Badge = ({ children, variant = 'brand', className = '' }) => {
   const variants = {
-    brand: 'bg-brand-500/10 text-brand-400 border-brand-500/30',
-    amber: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-    red: 'bg-red-500/10 text-red-400 border-red-500/30',
-    dark: 'bg-dark-400 text-slate-300 border-dark-300',
-    emerald: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+    brand: 'bg-black text-white border-black',
+    amber: 'bg-neutral-100 text-neutral-800 border-neutral-300',
+    red: 'bg-neutral-100 text-black border-neutral-300',
+    dark: 'bg-neutral-900 text-white border-neutral-800',
+    emerald: 'bg-black text-white border-black',
   };
 
   return (

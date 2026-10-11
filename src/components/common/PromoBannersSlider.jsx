@@ -7,7 +7,7 @@ const PROMO_CARDS = [
     id: 1,
     title: 'DATE NIGHT KITS',
     subtitle: 'Flat 35% OFF on Ultimate Intimacy Combo',
-    gradient: 'from-amber-600 via-orange-600 to-amber-700',
+    gradient: 'from-black via-neutral-900 to-neutral-800',
     tag: 'LIMITED EDITION BUNDLE',
     image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=400'
   },
@@ -15,7 +15,7 @@ const PROMO_CARDS = [
     id: 2,
     title: 'STAMINA 90-DAY PACK',
     subtitle: 'Buy 3 Packs & Save ₹800 instantly',
-    gradient: 'from-rose-700 via-pink-700 to-purple-800',
+    gradient: 'from-neutral-900 via-neutral-800 to-black',
     tag: 'MOST POPULAR VALUE',
     image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=400'
   },
@@ -23,8 +23,8 @@ const PROMO_CARDS = [
     id: 3,
     title: 'VITALITY ESSENTIALS',
     subtitle: 'Free Express Shipping + Plain Box Dispatch',
-    gradient: 'from-teal-700 via-emerald-800 to-secondary',
-    tag: 'AYUSH FORMULATED',
+    gradient: 'from-black via-neutral-950 to-neutral-900',
+    tag: 'PREMIUM FORMULATION',
     image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=400'
   }
 ];

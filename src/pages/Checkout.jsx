@@ -182,7 +182,7 @@ export const Checkout = () => {
           contact: address.phone
         },
         theme: {
-          color: '#0D472E'
+          color: '#000000'
         }
       };
 
@@ -199,17 +199,17 @@ export const Checkout = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 bg-slate-50 text-slate-900">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 bg-white text-black min-h-[80vh]">
       <SEO title={`Secure Checkout — ${BRAND_NAME}`} description="Complete your wellness purchase." noIndex={true} />
 
       {/* Header */}
-      <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-        <h1 className="text-3xl font-heading font-extrabold text-slate-900 flex items-center gap-3">
-          <Lock className="w-7 h-7 text-[#0D472E]" />
+      <div className="flex items-center justify-between pb-4 border-b border-neutral-200">
+        <h1 className="text-2xl sm:text-3xl font-heading font-black text-black flex items-center gap-3">
+          <Lock className="w-6 h-6 text-black" />
           Encrypted Checkout
         </h1>
-        <div className="flex items-center gap-2 text-xs text-[#0D472E] font-extrabold bg-teal-50 px-3.5 py-1.5 rounded-full border border-[#0D472E]/20">
-          <ShieldCheck className="w-4 h-4 text-[#0D472E]" /> 256-Bit SSL Protected
+        <div className="flex items-center gap-2 text-xs text-neutral-800 font-bold bg-neutral-100 px-3.5 py-1.5 rounded-full border border-neutral-200">
+          <ShieldCheck className="w-4 h-4 text-black" /> 256-Bit SSL Protected
         </div>
       </div>
 
@@ -217,14 +217,14 @@ export const Checkout = () => {
         {/* Checkout Steps Column - 8 Cols */}
         <div className="lg:col-span-8 space-y-6">
           {/* Step 1: Delivery Address */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 space-y-4 shadow-sm">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h2 className="font-heading font-extrabold text-lg text-slate-900 flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-[#0D472E] text-white font-black text-xs flex items-center justify-center">1</span>
+          <div className="bg-white rounded-2xl p-6 border border-neutral-200 space-y-4 shadow-2xs">
+            <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
+              <h2 className="font-heading font-bold text-lg text-black flex items-center gap-2">
+                <span className="w-6 h-6 rounded-full bg-black text-white font-black text-xs flex items-center justify-center">1</span>
                 Shipping Address
               </h2>
               {step > 1 && (
-                <button onClick={() => setStep(1)} className="text-xs text-[#0D472E] font-bold hover:underline">
+                <button onClick={() => setStep(1)} className="text-xs text-neutral-600 font-bold hover:text-black hover:underline">
                   Edit
                 </button>
               )}
@@ -234,51 +234,51 @@ export const Checkout = () => {
               <form onSubmit={handleAddressSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
+                    <label className="block text-xs font-bold text-neutral-700 mb-1">Full Name</label>
                     <input
                       type="text"
                       required
                       value={address.fullName}
                       onChange={(e) => setAddress({ ...address, fullName: e.target.value })}
                       placeholder="Vikram Rao"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-medium"
+                      className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-3.5 py-3 text-xs text-black font-medium focus:outline-none focus:border-black min-h-[44px]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">Phone Number (+91)</label>
+                    <label className="block text-xs font-bold text-neutral-700 mb-1">Phone Number (+91)</label>
                     <input
                       type="tel"
                       required
                       value={address.phone}
                       onChange={(e) => setAddress({ ...address, phone: e.target.value })}
                       placeholder="+91 9876543210"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-medium"
+                      className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-3.5 py-3 text-xs text-black font-medium focus:outline-none focus:border-black min-h-[44px]"
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="block text-xs font-bold text-slate-700 mb-1">Street Address / House No.</label>
+                    <label className="block text-xs font-bold text-neutral-700 mb-1">Street Address / House No.</label>
                     <input
                       type="text"
                       required
                       value={address.line1}
                       onChange={(e) => setAddress({ ...address, line1: e.target.value })}
                       placeholder="B-402, Green Palm Heights, HSR Layout"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-medium"
+                      className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-3.5 py-3 text-xs text-black font-medium focus:outline-none focus:border-black min-h-[44px]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">City</label>
+                    <label className="block text-xs font-bold text-neutral-700 mb-1">City</label>
                     <input
                       type="text"
                       required
                       value={address.city}
                       onChange={(e) => setAddress({ ...address, city: e.target.value })}
                       placeholder="Bengaluru"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-medium"
+                      className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-3.5 py-3 text-xs text-black font-medium focus:outline-none focus:border-black min-h-[44px]"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">PIN Code (6 Digits)</label>
+                    <label className="block text-xs font-bold text-neutral-700 mb-1">PIN Code (6 Digits)</label>
                     <input
                       type="text"
                       required
@@ -286,17 +286,17 @@ export const Checkout = () => {
                       value={address.postalCode}
                       onChange={(e) => setAddress({ ...address, postalCode: e.target.value })}
                       placeholder="560102"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-900 font-medium"
+                      className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-3.5 py-3 text-xs text-black font-medium focus:outline-none focus:border-black min-h-[44px]"
                     />
                   </div>
                 </div>
-                <button type="submit" className="btn-primary bg-[#0D472E] text-white text-xs py-3 px-6 font-extrabold">
+                <button type="submit" className="btn-primary text-white text-xs py-3.5 px-6 font-bold rounded-full min-h-[48px] inline-flex items-center justify-center">
                   Continue to Delivery & Payment
                 </button>
               </form>
             ) : (
-              <div className="text-xs text-slate-700 font-medium space-y-1">
-                <p className="font-extrabold text-slate-900">{address.fullName} ({address.phone})</p>
+              <div className="text-xs text-neutral-700 font-medium space-y-1">
+                <p className="font-bold text-black">{address.fullName} ({address.phone})</p>
                 <p>{address.line1}, {address.city} {address.postalCode}</p>
               </div>
             )}
@@ -304,10 +304,10 @@ export const Checkout = () => {
 
           {/* Step 2: Payment Method */}
           {step >= 2 && (
-            <div className="bg-white rounded-3xl p-6 border border-slate-200 space-y-4 shadow-sm">
-              <div className="border-b border-slate-100 pb-3">
-                <h2 className="font-heading font-extrabold text-lg text-slate-900 flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-[#0D472E] text-white font-black text-xs flex items-center justify-center">2</span>
+            <div className="bg-white rounded-2xl p-6 border border-neutral-200 space-y-4 shadow-2xs">
+              <div className="border-b border-neutral-100 pb-3">
+                <h2 className="font-heading font-bold text-lg text-black flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-black text-white font-black text-xs flex items-center justify-center">2</span>
                   Payment Method
                 </h2>
               </div>
@@ -316,20 +316,20 @@ export const Checkout = () => {
                 {/* Razorpay Option */}
                 <div
                   onClick={() => setPaymentMethod('razorpay')}
-                  className={`p-4 rounded-2xl border cursor-pointer transition-all space-y-2 ${
+                  className={`p-4 rounded-xl border cursor-pointer transition-all space-y-2 ${
                     paymentMethod === 'razorpay'
-                      ? 'bg-teal-50 border-[#0D472E] text-slate-900 shadow-sm'
-                      : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
+                      ? 'bg-neutral-100 border-black ring-1 ring-black text-black shadow-2xs'
+                      : 'bg-neutral-50 border-neutral-200 text-neutral-600 hover:border-neutral-400'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-heading font-extrabold text-sm text-slate-900">Online Payment (Razorpay)</span>
-                    <CreditCard className="w-5 h-5 text-[#0D472E]" />
+                    <span className="font-heading font-bold text-sm text-black">Online Payment (Razorpay)</span>
+                    <CreditCard className="w-5 h-5 text-black" />
                   </div>
-                  <p className="text-xs text-slate-600 font-medium">
+                  <p className="text-xs text-neutral-600 font-medium">
                     UPI (Google Pay, PhonePe, Paytm), Cards & NetBanking.
                   </p>
-                  <span className="inline-block text-[10px] text-[#0D472E] font-bold bg-teal-100 px-2.5 py-0.5 rounded-full">
+                  <span className="inline-block text-[10px] text-white font-bold bg-black px-2.5 py-0.5 rounded-full">
                     Instant Confirmation
                   </span>
                 </div>
@@ -337,28 +337,28 @@ export const Checkout = () => {
                 {/* Cash on Delivery Option */}
                 <div
                   onClick={() => setPaymentMethod('cod')}
-                  className={`p-4 rounded-2xl border cursor-pointer transition-all space-y-2 ${
+                  className={`p-4 rounded-xl border cursor-pointer transition-all space-y-2 ${
                     paymentMethod === 'cod'
-                      ? 'bg-teal-50 border-[#0D472E] text-slate-900 shadow-sm'
-                      : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
+                      ? 'bg-neutral-100 border-black ring-1 ring-black text-black shadow-2xs'
+                      : 'bg-neutral-50 border-neutral-200 text-neutral-600 hover:border-neutral-400'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-heading font-extrabold text-sm text-slate-900">Cash on Delivery (COD)</span>
-                    <Truck className="w-5 h-5 text-[#D4A373]" />
+                    <span className="font-heading font-bold text-sm text-black">Cash on Delivery (COD)</span>
+                    <Truck className="w-5 h-5 text-black" />
                   </div>
-                  <p className="text-xs text-slate-600 font-medium">
+                  <p className="text-xs text-neutral-600 font-medium">
                     Pay with cash or UPI at your doorstep upon package arrival.
                   </p>
                 </div>
               </div>
 
               {/* Final Place Order CTA */}
-              <div className="pt-4 border-t border-slate-100">
+              <div className="pt-4 border-t border-neutral-100">
                 <button
                   onClick={handlePlaceOrder}
                   disabled={loading}
-                  className="btn-primary bg-[#0D472E] text-white w-full py-4 text-sm font-extrabold shadow-glow-primary flex items-center justify-center gap-2"
+                  className="btn-primary w-full py-4 text-xs font-bold rounded-full min-h-[48px] flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
@@ -375,51 +375,51 @@ export const Checkout = () => {
         </div>
 
         {/* Order Summary Sidebar - 4 Cols */}
-        <div className="lg:col-span-4 bg-white rounded-3xl p-6 border border-slate-200 space-y-6 shadow-sm">
-          <h2 className="font-heading font-extrabold text-lg text-slate-900 pb-3 border-b border-slate-100">
+        <div className="lg:col-span-4 bg-white rounded-2xl p-6 border border-neutral-200 space-y-6 shadow-2xs">
+          <h2 className="font-heading font-bold text-lg text-black pb-3 border-b border-neutral-100">
             Order Items ({cartItems.length})
           </h2>
 
           <div className="space-y-3 max-h-60 overflow-y-auto">
             {cartItems.map((item) => (
               <div key={item.key} className="flex gap-3 items-center text-xs">
-                <img src={item.image} alt={item.name} className="w-12 h-12 rounded-lg object-cover bg-slate-50 shrink-0 border border-slate-100" />
+                <img src={item.image} alt={item.name} className="w-12 h-12 rounded-lg object-cover bg-neutral-100 shrink-0 border border-neutral-200" />
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-extrabold text-slate-900 truncate">{item.name}</h4>
-                  <span className="text-slate-500 font-medium">Qty: {item.quantity}</span>
+                  <h4 className="font-bold text-black truncate">{item.name}</h4>
+                  <span className="text-neutral-500 font-medium">Qty: {item.quantity}</span>
                 </div>
-                <span className="font-black text-slate-900 shrink-0">{formatCurrency(item.price * item.quantity)}</span>
+                <span className="font-black text-black shrink-0">{formatCurrency(item.price * item.quantity)}</span>
               </div>
             ))}
           </div>
 
-          <div className="space-y-2 text-xs text-slate-700 font-medium pt-3 border-t border-slate-100">
+          <div className="space-y-2.5 text-xs text-neutral-600 font-medium pt-3 border-t border-neutral-100">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span className="font-extrabold text-slate-900">{formatCurrency(subtotal)}</span>
+              <span className="font-bold text-black">{formatCurrency(subtotal)}</span>
             </div>
             {discount > 0 && (
-              <div className="flex justify-between text-[#0D472E] font-bold">
+              <div className="flex justify-between text-black font-bold">
                 <span>Discount ({appliedCoupon?.code})</span>
                 <span>-{formatCurrency(discount)}</span>
               </div>
             )}
             <div className="flex justify-between">
               <span>Shipping</span>
-              <span>{shipping === 0 ? <strong className="text-[#0D472E] font-extrabold">FREE</strong> : formatCurrency(shipping)}</span>
+              <span>{shipping === 0 ? <strong className="text-black font-bold">FREE</strong> : formatCurrency(shipping)}</span>
             </div>
-            <div className="flex justify-between text-base font-black text-slate-900 pt-2 border-t border-slate-200">
+            <div className="flex justify-between text-base font-black text-black pt-2 border-t border-neutral-200">
               <span>Total Payable</span>
-              <span className="text-[#0D472E]">{formatCurrency(total)}</span>
+              <span className="text-black">{formatCurrency(total)}</span>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 space-y-2 font-medium">
-            <div className="flex items-center gap-2 text-slate-900 font-bold">
-              <Package className="w-4 h-4 text-[#0D472E] shrink-0" />
-              <span>100% Plain Unmarked Outer Box Packaging</span>
+          <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200 text-[11px] text-neutral-600 space-y-2 font-medium">
+            <div className="flex items-center gap-2 text-black font-bold">
+              <Package className="w-4 h-4 text-black shrink-0" />
+              <span>Plain Unmarked Outer Box Packaging</span>
             </div>
-            <p className="text-[10px] text-slate-500">
+            <p className="text-[10px] text-neutral-500">
               Zero sensitive product names printed on shipping labels.
             </p>
           </div>

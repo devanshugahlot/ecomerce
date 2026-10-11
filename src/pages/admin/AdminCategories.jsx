@@ -99,7 +99,7 @@ export const AdminCategories = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-dark-800 p-6 rounded-3xl border border-dark-600 shadow-2xl">
         <div>
           <h1 className="text-2xl font-extrabold text-white flex items-center gap-2.5">
-            <FolderTree className="w-7 h-7 text-amber-400" />
+            <FolderTree className="w-7 h-7 text-white" />
             Website Categories ({categories.length})
           </h1>
           <p className="text-xs text-slate-400 mt-1">
@@ -109,7 +109,7 @@ export const AdminCategories = () => {
 
         <button
           onClick={handleOpenAdd}
-          className="bg-amber-500 hover:bg-amber-600 text-dark-900 font-extrabold text-xs py-3 px-6 rounded-2xl flex items-center gap-2 shadow-glow-amber shrink-0"
+          className="bg-white hover:bg-slate-200 text-black font-extrabold text-xs py-3 px-6 rounded-full flex items-center gap-2 shadow-md shrink-0 min-h-[44px]"
         >
           <Plus className="w-4 h-4" />
           <span>Add New Category</span>
@@ -136,7 +136,7 @@ export const AdminCategories = () => {
                     </div>
                   )}
                   {c.badge && (
-                    <span className="absolute top-2 left-2 bg-amber-500 text-dark-900 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">
+                    <span className="absolute top-2 left-2 bg-black text-white border border-white/20 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">
                       {c.badge}
                     </span>
                   )}
@@ -151,7 +151,7 @@ export const AdminCategories = () => {
               <div className="flex items-center justify-end gap-2 pt-3 border-t border-dark-600">
                 <button
                   onClick={() => handleOpenEdit(c)}
-                  className="p-2 rounded-xl bg-dark-700 hover:bg-dark-600 text-amber-400 border border-dark-600"
+                  className="p-2 rounded-xl bg-dark-700 hover:bg-dark-600 text-white border border-dark-600 min-h-[44px] min-w-[44px] flex items-center justify-center"
                   title="Edit Category"
                 >
                   <Edit2 className="w-4 h-4" />
@@ -183,7 +183,7 @@ export const AdminCategories = () => {
           <div className="bg-dark-800 border border-dark-600 rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-dark-600 pb-4">
               <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-amber-400" />
+                <Sparkles className="w-5 h-5 text-white" />
                 {editingId ? 'Edit Category' : 'Add New Category'}
               </h2>
               <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-white p-1">
@@ -200,7 +200,7 @@ export const AdminCategories = () => {
                   placeholder="e.g. Sexual Wellness"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
                 />
               </div>
 
@@ -211,7 +211,7 @@ export const AdminCategories = () => {
                   placeholder="POPULAR"
                   value={form.badge}
                   onChange={(e) => setForm({ ...form, badge: e.target.value })}
-                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
                 />
               </div>
 
@@ -222,16 +222,16 @@ export const AdminCategories = () => {
                   {form.image ? (
                     <div className="flex flex-col items-center gap-2">
                       <img src={form.image} alt="Preview" className="w-20 h-20 object-cover rounded-xl border border-dark-600" />
-                      <span className="text-[11px] text-emerald-400 font-bold">Image selected! Click below to change file.</span>
+                      <span className="text-[11px] text-white font-bold">Image selected! Click below to change file.</span>
                     </div>
                   ) : (
                     <div className="space-y-1 text-slate-400">
-                      <ImageIcon className="w-8 h-8 text-amber-400 mx-auto" />
+                      <ImageIcon className="w-8 h-8 text-white mx-auto" />
                       <p className="text-xs">No image selected from device</p>
                     </div>
                   )}
 
-                  <label className="mt-3 bg-amber-500 hover:bg-amber-400 text-dark-900 font-extrabold text-xs py-2.5 px-5 rounded-xl cursor-pointer inline-flex items-center gap-2 shadow-md">
+                  <label className="mt-3 bg-white hover:bg-slate-200 text-black font-extrabold text-xs py-2.5 px-5 rounded-full cursor-pointer inline-flex items-center gap-2 shadow-md min-h-[44px]">
                     <Upload className="w-4 h-4" />
                     <span>Upload Category Image from Device</span>
                     <input
@@ -256,11 +256,11 @@ export const AdminCategories = () => {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="bg-amber-500 text-dark-900 px-7 py-3 font-extrabold rounded-full hover:bg-amber-400 shadow-glow-amber disabled:opacity-50 min-h-[44px] flex items-center justify-center gap-2"
+                  className="bg-white text-black px-7 py-3 font-extrabold rounded-full hover:bg-slate-200 shadow-md disabled:opacity-50 min-h-[48px] flex items-center justify-center gap-2"
                 >
                   {isSaving ? (
                     <>
-                      <span className="w-4 h-4 border-2 border-dark-900 border-t-transparent rounded-full animate-spin"></span>
+                      <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
                       <span>Saving...</span>
                     </>
                   ) : (

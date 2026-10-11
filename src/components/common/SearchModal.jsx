@@ -46,7 +46,7 @@ export const SearchModal = ({ isOpen, onClose, products = [] }) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs"
         />
 
         {/* Modal Window */}
@@ -54,30 +54,31 @@ export const SearchModal = ({ isOpen, onClose, products = [] }) => {
           initial={{ opacity: 0, scale: 0.95, y: -20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: -20 }}
-          className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden z-10"
+          className="relative w-full max-w-2xl bg-white border border-neutral-200 rounded-2xl shadow-2xl overflow-hidden z-10"
         >
           {/* Input Header */}
-          <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-100 bg-slate-50">
-            <Search className="w-5 h-5 text-[#0A7E8C] shrink-0" />
+          <div className="flex items-center gap-3 px-5 py-4 border-b border-neutral-200 bg-white">
+            <Search className="w-5 h-5 text-black shrink-0" />
             <input
               ref={inputRef}
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search performance oil, delay gel, intimate care..."
-              className="w-full bg-transparent text-slate-900 placeholder-slate-400 focus:outline-none text-sm font-medium"
+              placeholder="Search formulations, sprays, shilajit, oils..."
+              className="w-full bg-transparent text-black placeholder-neutral-400 focus:outline-none text-sm font-medium"
             />
             {query && (
               <button
                 onClick={() => setQuery('')}
-                className="text-slate-400 hover:text-slate-800 p-1"
+                className="text-neutral-400 hover:text-black p-1"
+                aria-label="Clear search"
               >
                 <X className="w-4 h-4" />
               </button>
             )}
             <button
               onClick={onClose}
-              className="btn-secondary px-3 py-1.5 text-xs font-bold shrink-0"
+              className="btn-secondary px-3.5 py-1.5 text-xs font-bold shrink-0 rounded-full"
             >
               ESC
             </button>
@@ -88,16 +89,15 @@ export const SearchModal = ({ isOpen, onClose, products = [] }) => {
             {!query.trim() ? (
               <div className="space-y-5">
                 <div>
-                  <h4 className="text-xs font-black text-[#D4A373] uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-[#D4A373]" />
+                  <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-3">
                     Popular Categories
                   </h4>
                   <div className="flex flex-wrap gap-2">
-                    {['Enlargement Oils', 'Delay Gels', 'Sexual Wellness', 'Intimate Performance'].map((cat) => (
+                    {['Vitality & Stamina', 'Climax Control', 'Daily Performance', 'Intimate Care'].map((cat) => (
                       <button
                         key={cat}
                         onClick={() => handleQuickCategory(cat)}
-                        className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-teal-50 hover:text-[#0A7E8C] text-xs font-bold text-slate-700 border border-slate-200 transition-colors"
+                        className="px-3.5 py-2 rounded-full bg-neutral-100 hover:bg-black hover:text-white text-xs font-semibold text-black border border-neutral-200 transition-colors"
                       >
                         {cat}
                       </button>
@@ -106,18 +106,18 @@ export const SearchModal = ({ isOpen, onClose, products = [] }) => {
                 </div>
 
                 <div>
-                  <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-3">
+                  <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-3">
                     Featured Searches
                   </h4>
                   <div className="space-y-1">
-                    {['Enlargement Herbal Oil', 'Extended Delay Gel', 'Stamina Boost Combo'].map((term) => (
+                    {['Performance Spray', 'Pure Shilajit Resin', 'Stamina Combo Kit'].map((term) => (
                       <button
                         key={term}
                         onClick={() => setQuery(term)}
-                        className="w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50 text-xs font-bold text-slate-700 flex items-center justify-between group transition-colors"
+                        className="w-full text-left py-2.5 px-3 rounded-xl hover:bg-neutral-50 text-xs font-bold text-black flex items-center justify-between group transition-colors"
                       >
                         <span>{term}</span>
-                        <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#0A7E8C] transition-colors" />
+                        <ArrowRight className="w-4 h-4 text-neutral-400 group-hover:text-black transition-colors" />
                       </button>
                     ))}
                   </div>
@@ -125,7 +125,7 @@ export const SearchModal = ({ isOpen, onClose, products = [] }) => {
               </div>
             ) : filteredProducts.length > 0 ? (
               <div className="space-y-3">
-                <div className="text-xs text-slate-500 font-bold pb-2 border-b border-slate-100">
+                <div className="text-xs text-neutral-500 font-bold pb-2 border-b border-neutral-100">
                   Found {filteredProducts.length} product{filteredProducts.length > 1 ? 's' : ''}
                 </div>
                 <div className="space-y-2">
@@ -133,21 +133,21 @@ export const SearchModal = ({ isOpen, onClose, products = [] }) => {
                     <div
                       key={p._id || p.id}
                       onClick={() => handleSelectProduct(p)}
-                      className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-teal-50/50 border border-slate-200 cursor-pointer transition-all"
+                      className="flex items-center justify-between p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 cursor-pointer transition-all"
                     >
                       <div className="flex items-center gap-3">
                         <img
                           src={p.images?.[0] || p.image}
                           alt={p.name}
-                          className="w-12 h-12 rounded-xl object-cover bg-white shrink-0 border border-slate-200"
+                          className="w-12 h-12 rounded-lg object-cover bg-white shrink-0 border border-neutral-200"
                         />
                         <div>
-                          <h5 className="font-heading font-extrabold text-xs sm:text-sm text-slate-900">{p.name}</h5>
-                          <span className="text-[11px] text-[#0A7E8C] font-bold">{p.category}</span>
+                          <h5 className="font-heading font-bold text-xs sm:text-sm text-black">{p.name}</h5>
+                          <span className="text-[11px] text-neutral-500 font-medium">{p.category}</span>
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="font-black text-sm text-slate-900">
+                        <span className="font-black text-sm text-black">
                           {formatCurrency(p.price)}
                         </span>
                       </div>
@@ -157,8 +157,8 @@ export const SearchModal = ({ isOpen, onClose, products = [] }) => {
               </div>
             ) : (
               <div className="text-center py-10 space-y-2">
-                <p className="text-slate-600 text-sm font-medium">No products found matching "{query}"</p>
-                <p className="text-xs text-slate-400 font-bold">Try searching for oil, gel, or wellness.</p>
+                <p className="text-neutral-700 text-sm font-medium">No products found matching "{query}"</p>
+                <p className="text-xs text-neutral-400 font-bold">Try searching for stamina, spray, or shilajit.</p>
               </div>
             )}
           </div>

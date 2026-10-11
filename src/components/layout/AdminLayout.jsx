@@ -65,20 +65,20 @@ class AdminErrorBoundary extends React.Component {
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <button
               onClick={this.resetError}
-              className="px-5 py-2.5 rounded-full bg-amber-500 hover:bg-amber-600 text-dark-900 font-extrabold text-xs transition-colors min-h-[44px]"
+              className="px-5 py-2.5 rounded-full bg-white hover:bg-neutral-200 text-black font-bold text-xs transition-colors min-h-[44px]"
             >
               Try Again
             </button>
             <button
               onClick={() => window.location.reload()}
-              className="px-5 py-2.5 rounded-full bg-dark-700 hover:bg-dark-600 text-slate-200 font-bold text-xs transition-colors border border-dark-600 min-h-[44px]"
+              className="px-5 py-2.5 rounded-full bg-dark-700 hover:bg-dark-600 text-white font-bold text-xs transition-colors border border-dark-600 min-h-[44px]"
             >
               Reload Page
             </button>
             <Link
               to="/admin"
               onClick={this.resetError}
-              className="px-5 py-2.5 rounded-full bg-dark-700 hover:bg-dark-600 text-slate-200 font-bold text-xs transition-colors border border-dark-600 min-h-[44px] inline-flex items-center"
+              className="px-5 py-2.5 rounded-full bg-dark-700 hover:bg-dark-600 text-white font-bold text-xs transition-colors border border-dark-600 min-h-[44px] inline-flex items-center"
             >
               Back to Dashboard
             </Link>
@@ -100,19 +100,19 @@ export const AdminLayout = () => {
   if (!user || !isAdmin) {
     return (
       <div className="min-h-screen bg-dark-700 flex items-center justify-center p-4">
-        <div className="bg-dark-500 border border-red-500/30 rounded-2xl p-8 max-w-md w-full text-center space-y-4">
-          <div className="w-16 h-16 rounded-full bg-red-500/10 text-red-400 mx-auto flex items-center justify-center">
+        <div className="bg-dark-500 border border-neutral-700 rounded-2xl p-8 max-w-md w-full text-center space-y-4">
+          <div className="w-16 h-16 rounded-full bg-white/10 text-white mx-auto flex items-center justify-center">
             <ShieldAlert className="w-8 h-8" />
           </div>
           <h2 className="text-xl font-bold text-white">Admin Access Restricted</h2>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-neutral-400">
             You must be logged in with administrator privileges to access this area.
           </p>
           <div className="flex gap-3">
-            <button onClick={() => navigate('/admin/login')} className="btn-primary flex-1 text-xs py-3 min-h-[44px]">
+            <button onClick={() => navigate('/admin/login')} className="btn-primary flex-1 text-xs py-3.5 min-h-[48px] rounded-full">
               Admin Login
             </button>
-            <button onClick={() => navigate('/')} className="btn-secondary flex-1 text-xs py-3 min-h-[44px]">
+            <button onClick={() => navigate('/')} className="btn-secondary flex-1 text-xs py-3.5 min-h-[48px] rounded-full">
               Return Home
             </button>
           </div>
@@ -136,7 +136,7 @@ export const AdminLayout = () => {
       {/* Mobile Header with Hamburger */}
       <div className="md:hidden bg-dark-600 border-b border-dark-400 p-4 flex items-center justify-between sticky top-0 z-40">
         <Link to="/admin" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-amber-500 text-dark-900 font-extrabold flex items-center justify-center text-lg font-serif">
+          <div className="w-8 h-8 rounded-xl bg-white text-black font-extrabold flex items-center justify-center text-lg font-serif">
             H
           </div>
           <span className="font-bold text-sm text-white">HYPRIL ADMIN</span>
@@ -158,13 +158,13 @@ export const AdminLayout = () => {
         {/* Header Logo */}
         <div className="p-5 border-b border-dark-400/80 flex items-center justify-between">
           <Link to="/admin" className="flex items-center gap-2 overflow-hidden">
-            <div className="w-9 h-9 rounded-xl bg-amber-500 text-dark-900 font-extrabold flex items-center justify-center shrink-0 text-xl font-serif">
+            <div className="w-9 h-9 rounded-xl bg-white text-black font-extrabold flex items-center justify-center shrink-0 text-xl font-serif">
               H
             </div>
             {(!collapsed || mobileSidebarOpen) && (
               <div className="flex flex-col">
                 <span className="font-bold text-sm text-white">HYPRIL ADMIN</span>
-                <span className="text-[10px] text-amber-400 font-semibold uppercase tracking-wider">
+                <span className="text-[10px] text-neutral-400 font-semibold uppercase tracking-wider">
                   Management Console
                 </span>
               </div>
@@ -190,12 +190,12 @@ export const AdminLayout = () => {
                 onClick={() => setMobileSidebarOpen(false)}
                 className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-semibold transition-all min-h-[44px] ${
                   isActive
-                    ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-glow-amber'
-                    : 'text-slate-400 hover:text-white hover:bg-dark-500'
+                    ? 'bg-white text-black shadow-xs font-bold'
+                    : 'text-neutral-400 hover:text-white hover:bg-dark-500'
                 }`}
                 title={collapsed ? item.name : undefined}
               >
-                <Icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-amber-400' : 'text-slate-400'}`} />
+                <Icon className={`w-5 h-5 shrink-0 ${isActive ? 'text-black' : 'text-neutral-400'}`} />
                 {(!collapsed || mobileSidebarOpen) && <span>{item.name}</span>}
               </Link>
             );
@@ -207,14 +207,14 @@ export const AdminLayout = () => {
           <Link
             to="/"
             target="_blank"
-            className="flex items-center gap-2 text-xs text-amber-400 hover:underline px-2 py-1 font-medium"
+            className="flex items-center gap-2 text-xs text-white hover:underline px-2 py-1 font-medium"
           >
             <ExternalLink className="w-3.5 h-3.5" />
             {(!collapsed || mobileSidebarOpen) && <span>View Storefront</span>}
           </Link>
           <button
             onClick={logout}
-            className="w-full text-left px-3 py-2.5 rounded-xl text-xs text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors font-medium min-h-[44px]"
+            className="w-full text-left px-3 py-2.5 rounded-xl text-xs text-neutral-300 hover:text-white hover:bg-white/10 flex items-center gap-2 transition-colors font-medium min-h-[44px]"
           >
             <LogOut className="w-4 h-4 shrink-0" />
             {(!collapsed || mobileSidebarOpen) && <span>Sign Out</span>}
@@ -234,9 +234,9 @@ export const AdminLayout = () => {
           <div className="flex items-center gap-3">
             <div className="text-right">
               <span className="block text-xs font-semibold text-white">{user.name}</span>
-              <span className="block text-[10px] text-amber-400">Super Administrator</span>
+              <span className="block text-[10px] text-neutral-400">Super Administrator</span>
             </div>
-            <div className="w-8 h-8 rounded-full bg-amber-500 text-dark-900 font-bold flex items-center justify-center text-xs">
+            <div className="w-8 h-8 rounded-full bg-white text-black font-bold flex items-center justify-center text-xs">
               {user.name ? user.name[0].toUpperCase() : 'A'}
             </div>
           </div>

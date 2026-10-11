@@ -121,22 +121,22 @@ export const Account = () => {
   const statusSteps = ["Confirmed", "Processing", "Shipped", "Out for Delivery", "Delivered"];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 min-h-screen">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 min-h-[80vh] bg-white text-black">
       <SEO title="My Account Dashboard" description="Manage orders and profile." noIndex={true} />
 
       {/* Header Profile Summary */}
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-sm">
+      <div className="bg-white p-6 sm:p-8 rounded-2xl border border-neutral-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-2xs">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-[#0D472E] text-white font-heading font-black text-2xl flex items-center justify-center shadow-md">
+          <div className="w-16 h-16 rounded-2xl bg-black text-white font-heading font-black text-2xl flex items-center justify-center shadow-xs">
             {user.name ? user.name[0].toUpperCase() : 'U'}
           </div>
           <div>
-            <h1 className="text-2xl font-heading font-bold text-slate-900">{user.name}</h1>
-            <p className="text-xs text-slate-500 font-medium mt-0.5">{user.email} • {user.phone || '+91 User'}</p>
+            <h1 className="text-2xl font-heading font-bold text-black">{user.name}</h1>
+            <p className="text-xs text-neutral-500 font-medium mt-0.5">{user.email} • {user.phone || '+91 User'}</p>
           </div>
         </div>
 
-        <button onClick={logout} className="btn-secondary text-xs px-5 py-2.5 text-rose-600 hover:bg-rose-50 border-rose-200 font-bold flex items-center gap-2">
+        <button onClick={logout} className="btn-secondary text-xs px-5 py-2.5 text-neutral-800 hover:text-black hover:bg-neutral-100 border-neutral-200 font-bold flex items-center gap-2 min-h-[44px]">
           <LogOut className="w-4 h-4" />
           <span>Sign Out</span>
         </button>
@@ -145,21 +145,22 @@ export const Account = () => {
       {/* Main Grid: Tabs + Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Navigation Sidebar */}
-        <aside className="lg:col-span-3 bg-white rounded-2xl p-3 border border-slate-200/80 space-y-1 shadow-sm">
+        <aside className="lg:col-span-3 bg-white rounded-2xl p-3 border border-neutral-200 space-y-1 shadow-2xs">
           {[
             { id: 'orders', label: 'My Orders', icon: ShoppingBag },
             { id: 'addresses', label: 'Address Book', icon: MapPin },
             { id: 'profile', label: 'Account Profile', icon: User },
           ].map((tab) => {
             const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all ${
-                  activeTab === tab.id
-                    ? 'bg-[#0D472E]/10 text-[#0D472E] border border-[#0D472E]/20 font-black shadow-xs'
-                    : 'text-slate-600 hover:bg-slate-50'
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all min-h-[44px] ${
+                  isActive
+                    ? 'bg-black text-white shadow-xs'
+                    : 'text-neutral-600 hover:bg-neutral-50 hover:text-black'
                 }`}
               >
                 <Icon className="w-4 h-4 shrink-0" />
@@ -170,24 +171,24 @@ export const Account = () => {
         </aside>
 
         {/* Content Area */}
-        <div className="lg:col-span-9 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
+        <div className="lg:col-span-9 bg-white rounded-2xl p-6 sm:p-8 border border-neutral-200 shadow-2xs">
           {activeTab === 'orders' && (
             <div className="space-y-6">
-              <h2 className="font-heading font-bold text-xl text-slate-900 pb-3 border-b border-slate-100">
-                Order History & Live Tracking
+              <h2 className="font-heading font-bold text-xl text-black pb-3 border-b border-neutral-100">
+                Order History & Status
               </h2>
 
               {loadingOrders ? (
-                <div className="py-12 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
-                  <div className="w-5 h-5 border-2 border-[#0D472E] border-t-transparent rounded-full animate-spin"></div>
+                <div className="py-12 text-center text-xs text-neutral-500 flex items-center justify-center gap-2">
+                  <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
                   <span>Loading your orders...</span>
                 </div>
               ) : orders.length === 0 ? (
                 <div className="py-12 text-center space-y-3">
-                  <ShoppingBag className="w-12 h-12 text-slate-300 mx-auto" />
-                  <h3 className="font-heading font-bold text-slate-900 text-base">No previous orders found</h3>
-                  <p className="text-xs text-slate-500 font-medium">When you place orders, they will appear here live with status tracking.</p>
-                  <Link to="/shop" className="btn-primary inline-flex text-xs py-2.5 px-6 font-bold">
+                  <ShoppingBag className="w-12 h-12 text-neutral-300 mx-auto" />
+                  <h3 className="font-heading font-bold text-black text-base">No previous orders found</h3>
+                  <p className="text-xs text-neutral-500 font-medium">When you place orders, they will appear here live with status tracking.</p>
+                  <Link to="/shop" className="btn-primary inline-flex text-xs py-3 px-6 font-bold rounded-full min-h-[48px] items-center justify-center">
                     Start Shopping
                   </Link>
                 </div>
@@ -205,13 +206,13 @@ export const Account = () => {
                       : 'Standard Shipping';
 
                     return (
-                      <div key={orderId} className="p-6 bg-slate-50/70 rounded-2xl border border-slate-200/80 space-y-5">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-3">
+                      <div key={orderId} className="p-6 bg-neutral-50 rounded-2xl border border-neutral-200 space-y-5">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-neutral-200 pb-3">
                           <div>
-                            <span className="font-heading font-bold text-sm text-slate-900">{orderId}</span>
-                            <span className="text-xs text-slate-500 font-medium block sm:inline sm:ml-3">Placed on {orderDate}</span>
+                            <span className="font-heading font-bold text-sm text-black">{orderId}</span>
+                            <span className="text-xs text-neutral-500 font-medium block sm:inline sm:ml-3">Placed on {orderDate}</span>
                           </div>
-                          <span className="text-xs font-bold text-[#0D472E] bg-[#0D472E]/10 px-3 py-1 rounded-full border border-[#0D472E]/20 self-start sm:self-auto">
+                          <span className="text-xs font-bold text-black bg-neutral-200 px-3 py-1 rounded-full border border-neutral-300 self-start sm:self-auto">
                             {orderStatus}
                           </span>
                         </div>
@@ -219,33 +220,33 @@ export const Account = () => {
                         {/* Items */}
                         <div className="space-y-2">
                           {itemsList.map((it, i) => (
-                            <div key={i} className="flex justify-between text-xs text-slate-700 font-medium">
+                            <div key={i} className="flex justify-between text-xs text-neutral-700 font-medium">
                               <span>{it.quantity}x {it.name}</span>
-                              <span className="font-bold text-slate-900">{formatCurrency((it.price || 0) * (it.quantity || 1))}</span>
+                              <span className="font-bold text-black">{formatCurrency((it.price || 0) * (it.quantity || 1))}</span>
                             </div>
                           ))}
                         </div>
 
                         {/* Timeline Graphic */}
-                        <div className="pt-4 border-t border-slate-200/80 space-y-2">
-                          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Order Progress</span>
+                        <div className="pt-4 border-t border-neutral-200 space-y-2">
+                          <span className="text-[11px] font-bold text-neutral-500 uppercase tracking-wider">Order Progress</span>
                           <div className="grid grid-cols-5 gap-1 text-center text-[10px]">
                             {statusSteps.map((step, idx) => {
                               const currentIdx = statusSteps.indexOf(orderStatus);
                               const isPassed = idx <= currentIdx;
                               return (
                                 <div key={step} className="space-y-1">
-                                  <div className={`h-1.5 rounded-full ${isPassed ? 'bg-[#0D472E]' : 'bg-slate-200'}`}></div>
-                                  <span className={isPassed ? 'text-[#0D472E] font-bold' : 'text-slate-400'}>{step}</span>
+                                  <div className={`h-1.5 rounded-full ${isPassed ? 'bg-black' : 'bg-neutral-200'}`}></div>
+                                  <span className={isPassed ? 'text-black font-bold' : 'text-neutral-400'}>{step}</span>
                                 </div>
                               );
                             })}
                           </div>
                         </div>
 
-                        <div className="text-xs text-slate-600 font-medium flex flex-col sm:flex-row justify-between gap-2 pt-2 border-t border-slate-200/80">
-                          <span>Shipping to: <strong className="text-slate-900">{formattedAddress}</strong></span>
-                          <span>Tracking: <strong className="text-[#0D472E] font-bold">{ord.trackingNumber || 'Pending'}</strong></span>
+                        <div className="text-xs text-neutral-600 font-medium flex flex-col sm:flex-row justify-between gap-2 pt-2 border-t border-neutral-200">
+                          <span>Shipping to: <strong className="text-black">{formattedAddress}</strong></span>
+                          <span>Tracking: <strong className="text-black font-bold">{ord.trackingNumber || 'Pending'}</strong></span>
                         </div>
                       </div>
                     );
@@ -257,72 +258,72 @@ export const Account = () => {
 
           {activeTab === 'addresses' && (
             <div className="space-y-6">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                <h2 className="font-heading font-bold text-xl text-slate-900">Saved Address Book</h2>
-                <button onClick={() => setShowAddAddress(!showAddAddress)} className="btn-primary text-xs py-2.5 px-4 font-bold">
+              <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
+                <h2 className="font-heading font-bold text-xl text-black">Saved Address Book</h2>
+                <button onClick={() => setShowAddAddress(!showAddAddress)} className="btn-primary text-xs py-2.5 px-4 font-bold rounded-full min-h-[44px] flex items-center gap-1.5">
                   <Plus className="w-4 h-4" />
                   <span>Add New Address</span>
                 </button>
               </div>
 
               {showAddAddress && (
-                <form onSubmit={handleAddAddressSubmit} className="p-5 bg-slate-50/80 rounded-2xl border border-slate-200/80 space-y-4">
-                  <h3 className="font-heading font-bold text-slate-900 text-sm">Add Delivery Address</h3>
+                <form onSubmit={handleAddAddressSubmit} className="p-5 bg-neutral-50 rounded-2xl border border-neutral-200 space-y-4">
+                  <h3 className="font-heading font-bold text-black text-sm">Add Delivery Address</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <input
                       type="text"
                       placeholder="Full Name"
                       value={newAddr.fullName}
                       onChange={(e) => setNewAddr({ ...newAddr, fullName: e.target.value })}
-                      className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-[#0D472E]/20 focus:border-[#0D472E] outline-none"
+                      className="bg-white border border-neutral-200 rounded-xl p-3 text-xs text-black font-medium focus:border-black outline-none min-h-[44px]"
                     />
                     <input
                       type="tel"
                       placeholder="Phone Number (+91)"
                       value={newAddr.phone}
                       onChange={(e) => setNewAddr({ ...newAddr, phone: e.target.value })}
-                      className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-[#0D472E]/20 focus:border-[#0D472E] outline-none"
+                      className="bg-white border border-neutral-200 rounded-xl p-3 text-xs text-black font-medium focus:border-black outline-none min-h-[44px]"
                     />
                     <input
                       type="text"
                       placeholder="Address Line 1"
                       value={newAddr.line1}
                       onChange={(e) => setNewAddr({ ...newAddr, line1: e.target.value })}
-                      className="sm:col-span-2 bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-[#0D472E]/20 focus:border-[#0D472E] outline-none"
+                      className="sm:col-span-2 bg-white border border-neutral-200 rounded-xl p-3 text-xs text-black font-medium focus:border-black outline-none min-h-[44px]"
                     />
                     <input
                       type="text"
                       placeholder="City"
                       value={newAddr.city}
                       onChange={(e) => setNewAddr({ ...newAddr, city: e.target.value })}
-                      className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-[#0D472E]/20 focus:border-[#0D472E] outline-none"
+                      className="bg-white border border-neutral-200 rounded-xl p-3 text-xs text-black font-medium focus:border-black outline-none min-h-[44px]"
                     />
                     <input
                       type="text"
                       placeholder="PIN Code (6 digits)"
                       value={newAddr.postalCode}
                       onChange={(e) => setNewAddr({ ...newAddr, postalCode: e.target.value })}
-                      className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 font-medium focus:ring-2 focus:ring-[#0D472E]/20 focus:border-[#0D472E] outline-none"
+                      className="bg-white border border-neutral-200 rounded-xl p-3 text-xs text-black font-medium focus:border-black outline-none min-h-[44px]"
                     />
                   </div>
                   <div className="flex gap-3">
-                    <button type="submit" className="btn-primary text-xs py-2.5 px-5 font-bold">Save Address</button>
-                    <button type="button" onClick={() => setShowAddAddress(false)} className="btn-secondary text-xs py-2.5 px-5 font-bold">Cancel</button>
+                    <button type="submit" className="btn-primary text-xs py-2.5 px-5 font-bold rounded-full min-h-[44px]">Save Address</button>
+                    <button type="button" onClick={() => setShowAddAddress(false)} className="btn-secondary text-xs py-2.5 px-5 font-bold rounded-full min-h-[44px]">Cancel</button>
                   </div>
                 </form>
               )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {addresses.map((addr) => (
-                  <div key={addr.id} className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/80 space-y-2 relative">
+                  <div key={addr.id} className="p-5 rounded-2xl bg-neutral-50 border border-neutral-200 space-y-2 relative">
                     {addr.isDefault && (
-                      <span className="text-[10px] font-bold text-[#0D472E] bg-[#0D472E]/10 px-2.5 py-0.5 rounded-full border border-[#0D472E]/20">
+                      <span className="text-[10px] font-bold text-white bg-black px-2.5 py-0.5 rounded-full inline-block">
                         Default Shipping Address
                       </span>
                     )}
-                    <h4 className="font-heading font-bold text-sm text-slate-900">{addr.fullName}</h4>
-                    <p className="text-xs text-slate-700 font-medium">{addr.line1}, {addr.city} {addr.postalCode}</p>
-                    <p className="text-xs text-slate-500 font-medium">Phone: {addr.phone}</p>
+                    <h4 className="font-heading font-bold text-sm text-black">{addr.fullName}</h4>
+                    <p className="text-xs text-neutral-700 font-medium">{addr.line1}, {addr.city} {addr.postalCode}</p>
+                    <p className="text-xs text-neutral-500 font-medium">Phone: {addr.phone}</p>
                   </div>
                 ))}
               </div>
@@ -331,21 +332,21 @@ export const Account = () => {
 
           {activeTab === 'profile' && (
             <div className="space-y-4">
-              <h2 className="font-heading font-bold text-xl text-slate-900 pb-3 border-b border-slate-100">
+              <h2 className="font-heading font-bold text-xl text-black pb-3 border-b border-neutral-100">
                 Personal Information
               </h2>
-              <div className="space-y-4 max-w-md text-xs text-slate-700 font-medium">
-                <div className="p-4 bg-slate-50/70 rounded-2xl border border-slate-200/80 space-y-1">
-                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">Full Name</label>
-                  <span className="text-sm font-heading font-bold text-slate-900">{user.name}</span>
+              <div className="space-y-4 max-w-md text-xs text-neutral-700 font-medium">
+                <div className="p-4 bg-neutral-50 rounded-2xl border border-neutral-200 space-y-1">
+                  <label className="block text-[11px] font-bold text-neutral-400 uppercase tracking-wider">Full Name</label>
+                  <span className="text-sm font-heading font-bold text-black">{user.name}</span>
                 </div>
-                <div className="p-4 bg-slate-50/70 rounded-2xl border border-slate-200/80 space-y-1">
-                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">Email Address</label>
-                  <span className="text-sm font-heading font-bold text-slate-900">{user.email}</span>
+                <div className="p-4 bg-neutral-50 rounded-2xl border border-neutral-200 space-y-1">
+                  <label className="block text-[11px] font-bold text-neutral-400 uppercase tracking-wider">Email Address</label>
+                  <span className="text-sm font-heading font-bold text-black">{user.email}</span>
                 </div>
-                <div className="p-4 bg-slate-50/70 rounded-2xl border border-slate-200/80 space-y-1">
-                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">Mobile Number</label>
-                  <span className="text-sm font-heading font-bold text-slate-900">{user.phone || '+91 9876543210'}</span>
+                <div className="p-4 bg-neutral-50 rounded-2xl border border-neutral-200 space-y-1">
+                  <label className="block text-[11px] font-bold text-neutral-400 uppercase tracking-wider">Mobile Number</label>
+                  <span className="text-sm font-heading font-bold text-black">{user.phone || '+91 9876543210'}</span>
                 </div>
               </div>
             </div>

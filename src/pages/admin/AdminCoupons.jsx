@@ -65,7 +65,7 @@ export const AdminCoupons = () => {
       <div className="bg-dark-800 p-6 rounded-3xl border border-dark-600 shadow-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-white flex items-center gap-2.5">
-            <Tag className="w-7 h-7 text-amber-400" />
+            <Tag className="w-7 h-7 text-white" />
             Discount Coupons & Promos ({coupons.length})
           </h1>
           <p className="text-xs text-slate-400 mt-1">
@@ -81,12 +81,12 @@ export const AdminCoupons = () => {
           placeholder="Coupon Code (e.g. HYPRIL10)"
           value={code}
           onChange={(e) => setCode(e.target.value)}
-          className="bg-dark-700 border border-dark-600 rounded-2xl px-4 py-3 text-xs text-white uppercase placeholder-slate-500 focus:outline-none focus:border-amber-500 flex-1 w-full min-h-[44px]"
+          className="bg-dark-700 border border-dark-600 rounded-2xl px-4 py-3 text-xs text-white uppercase placeholder-slate-500 focus:outline-none focus:border-white flex-1 w-full min-h-[44px]"
         />
         <select
           value={discountType}
           onChange={(e) => setDiscountType(e.target.value)}
-          className="bg-dark-700 border border-dark-600 rounded-2xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-500 min-h-[44px] w-full sm:w-auto"
+          className="bg-dark-700 border border-dark-600 rounded-2xl px-4 py-3 text-xs text-white focus:outline-none focus:border-white min-h-[44px] w-full sm:w-auto"
         >
           <option value="percentage">Percentage (%)</option>
           <option value="fixed">Fixed Amount (₹)</option>
@@ -96,23 +96,23 @@ export const AdminCoupons = () => {
           placeholder="Discount Value"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          className="bg-dark-700 border border-dark-600 rounded-2xl px-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 w-full sm:w-32 font-bold text-amber-400 min-h-[44px]"
+          className="bg-dark-700 border border-dark-600 rounded-2xl px-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-white w-full sm:w-32 font-bold font-mono min-h-[44px]"
         />
         <input
           type="number"
           placeholder="Min Order (₹)"
           value={minOrder}
           onChange={(e) => setMinOrder(e.target.value)}
-          className="bg-dark-700 border border-dark-600 rounded-2xl px-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 w-full sm:w-32 min-h-[44px]"
+          className="bg-dark-700 border border-dark-600 rounded-2xl px-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-white w-full sm:w-32 min-h-[44px]"
         />
         <button
           type="submit"
           disabled={isCreating}
-          className="btn-primary bg-amber-500 hover:bg-amber-600 text-dark-900 py-3 px-6 text-xs font-extrabold shadow-glow-amber shrink-0 w-full sm:w-auto min-h-[44px] flex items-center justify-center gap-2 disabled:opacity-50"
+          className="bg-white hover:bg-slate-200 text-black py-3 px-6 text-xs font-extrabold rounded-full shadow-md shrink-0 w-full sm:w-auto min-h-[48px] flex items-center justify-center gap-2 disabled:opacity-50"
         >
           {isCreating ? (
             <>
-              <span className="w-4 h-4 border-2 border-dark-900 border-t-transparent rounded-full animate-spin"></span>
+              <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
               <span>Creating...</span>
             </>
           ) : (
@@ -128,7 +128,7 @@ export const AdminCoupons = () => {
       <div className="bg-dark-800 rounded-3xl border border-dark-600 overflow-hidden shadow-2xl">
         <div className="overflow-x-auto w-full">
           <table className="w-full text-left text-xs text-slate-300 min-w-[500px]">
-            <thead className="bg-dark-700 text-amber-400 font-extrabold border-b border-dark-600 uppercase tracking-wider text-[10px]">
+            <thead className="bg-dark-700 text-white font-extrabold border-b border-dark-600 uppercase tracking-wider text-[10px]">
               <tr>
                 <th className="p-4">Code</th>
                 <th className="p-4">Discount Type</th>
@@ -145,7 +145,7 @@ export const AdminCoupons = () => {
                   <tr key={cId} className="hover:bg-dark-700/50 transition-colors">
                     <td className="p-4 font-black text-white text-sm tracking-wider">{c.code}</td>
                     <td className="p-4 capitalize">{c.discountType}</td>
-                    <td className="p-4 font-black text-amber-400 text-sm">
+                    <td className="p-4 font-black text-white font-mono text-sm">
                       {c.discountType === 'percentage' ? `${c.discountValue}% OFF` : `₹${c.discountValue} OFF`}
                     </td>
                     <td className="p-4">₹{c.minOrderAmount || 0}</td>
@@ -154,8 +154,8 @@ export const AdminCoupons = () => {
                         onClick={() => handleToggle(cId)}
                         className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-extrabold border transition-all min-h-[36px] ${
                           c.isActive
-                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                            : 'bg-red-500/10 text-red-400 border-red-500/30'
+                            ? 'bg-white/10 text-white border-white/30'
+                            : 'bg-white/5 text-slate-400 border-white/10'
                         }`}
                       >
                         {c.isActive ? (

@@ -54,33 +54,33 @@ export const ProductCard = ({ product }) => {
     : (product.image && product.image.trim() !== '' ? product.image : 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=600');
 
   return (
-    <div className="group relative bg-[#F8FAFC] rounded-[20px] p-4 border border-slate-200/80 hover:border-[#0D472E]/50 transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-xs hover:shadow-lg">
+    <div className="group relative bg-white rounded-2xl p-3.5 sm:p-4 border border-[#E5E5E5] hover:border-black transition-all duration-200 flex flex-col justify-between overflow-hidden shadow-xs hover:shadow-md">
       
       {/* Top Row: Best Seller Pill + Star Rating */}
       <div className="flex items-center justify-between z-10 mb-2">
         {product.isBestSeller ? (
-          <span className="border border-[#0D472E]/20 bg-[#0D472E] text-white font-bold text-[10px] px-2.5 py-1 rounded-full shadow-2xs flex items-center gap-1 uppercase tracking-wider">
-            <Star className="w-3 h-3 text-amber-400 fill-amber-400" /> Best Seller
+          <span className="bg-black text-white font-bold text-[10px] px-2.5 py-0.5 rounded-full shadow-xs flex items-center gap-1 uppercase tracking-wider">
+            <Star className="w-2.5 h-2.5 text-amber-400 fill-amber-400" /> Best Seller
           </span>
         ) : (
-          <span className="border border-slate-200 bg-white text-slate-700 font-bold text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider">
+          <span className="border border-[#E5E5E5] bg-[#F5F5F5] text-neutral-700 font-bold text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider">
             {product.category || 'Product'}
           </span>
         )}
 
-        <div className="flex items-center gap-1 text-amber-500 font-bold text-xs bg-white px-2 py-1 rounded-full border border-slate-200/80 shadow-2xs">
-          <Star className="w-3.5 h-3.5 fill-current" />
-          <span className="text-slate-900">{product.rating || 5.0}</span>
+        <div className="flex items-center gap-1 text-amber-500 font-bold text-xs bg-[#F5F5F5] px-2 py-0.5 rounded-full border border-[#E5E5E5]">
+          <Star className="w-3 h-3 fill-current" />
+          <span className="text-black font-semibold">{product.rating || 5.0}</span>
         </div>
       </div>
 
-      {/* Product Image Container */}
-      <div className="relative aspect-square bg-white rounded-2xl overflow-hidden mb-3 group/img border border-slate-100">
+      {/* Product Image Container (Image on light grey) */}
+      <div className="relative aspect-square bg-[#F5F5F5] rounded-xl overflow-hidden mb-3 group/img border border-[#E5E5E5]">
         <Link to={`/products/${product.slug || id}`} className="block w-full h-full p-2">
           <img
             src={mainImage}
             alt={product.name}
-            className="w-full h-full object-cover object-center rounded-xl group-hover/img:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover object-center rounded-lg group-hover/img:scale-105 transition-transform duration-300"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=600';
@@ -93,10 +93,10 @@ export const ProductCard = ({ product }) => {
         <button
           onClick={handleWishlist}
           aria-label="Save to Wishlist"
-          className={`absolute top-2 right-2 p-2 rounded-full backdrop-blur-md transition-all duration-200 z-10 ${
+          className={`absolute top-2 right-2 p-2 rounded-full transition-all duration-200 z-10 min-h-[44px] min-w-[44px] flex items-center justify-center ${
             isSaved
-              ? 'bg-rose-600 text-white shadow-xs'
-              : 'bg-white/90 text-slate-600 hover:text-rose-600 border border-slate-200/80'
+              ? 'bg-black text-white shadow-xs'
+              : 'bg-white text-neutral-600 hover:text-black border border-[#E5E5E5]'
           }`}
         >
           <Heart className={`w-3.5 h-3.5 ${isSaved ? 'fill-current' : ''}`} />
@@ -107,15 +107,15 @@ export const ProductCard = ({ product }) => {
       <div className="space-y-3 text-center flex-1 flex flex-col justify-between">
         <div className="space-y-2">
           <Link to={`/products/${product.slug || id}`}>
-            <h3 className="font-heading font-extrabold text-[18px] sm:text-[20px] text-slate-900 group-hover:text-[#0D472E] transition-colors line-clamp-2 leading-tight">
+            <h3 className="font-heading font-bold text-base sm:text-lg text-black hover:opacity-80 transition-opacity line-clamp-2 leading-tight">
               {product.name}
             </h3>
           </Link>
 
           {/* Pack Options Selector */}
           {packs && packs.length > 0 && (
-            <div className="pt-1 flex items-center justify-center gap-2">
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Pack:</span>
+            <div className="pt-1 flex items-center justify-center gap-1.5">
+              <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Pack:</span>
               {packs.slice(0, 3).map((p, idx) => (
                 <button
                   key={idx}
@@ -123,10 +123,10 @@ export const ProductCard = ({ product }) => {
                     e.preventDefault();
                     setSelectedPackIndex(idx);
                   }}
-                  className={`w-[36px] h-[36px] rounded-[6px] text-xs font-bold flex items-center justify-center transition-all ${
+                  className={`w-[36px] h-[36px] rounded-lg text-xs font-bold flex items-center justify-center transition-all ${
                     selectedPackIndex === idx
-                      ? 'bg-[#0D472E] text-white font-black shadow-xs'
-                      : 'border border-slate-300 bg-white text-slate-700 hover:border-[#0D472E]'
+                      ? 'bg-black text-white shadow-xs'
+                      : 'border border-[#E5E5E5] bg-white text-neutral-800 hover:border-black'
                   }`}
                 >
                   {idx + 1}
@@ -138,34 +138,34 @@ export const ProductCard = ({ product }) => {
 
         {/* Price Row */}
         <div className="pt-2 space-y-3">
-          <div className="text-center space-y-0.5">
-            <div className="text-[26px] sm:text-[30px] font-heading font-black text-slate-900 leading-none">
+          <div className="text-center space-y-1">
+            <div className="text-2xl sm:text-3xl font-heading font-black text-black leading-none">
               {formatCurrency(currentPrice)}
             </div>
             <div className="flex items-center justify-center gap-2 text-xs">
               {currentCompare > currentPrice && (
-                <span className="text-slate-400 line-through font-medium">
+                <span className="text-neutral-400 line-through font-medium">
                   {formatCurrency(currentCompare)}
                 </span>
               )}
               {discount > 0 && (
-                <span className="font-extrabold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                <span className="font-bold text-neutral-900 bg-[#F5F5F5] px-2 py-0.5 rounded border border-[#E5E5E5] text-[11px]">
                   {discount}% OFF
                 </span>
               )}
             </div>
           </div>
 
-          {/* Full-width Add to Cart Button */}
+          {/* Full-width Solid Black Add to Cart Button (min 48px height) */}
           <button
             onClick={handleQuickAdd}
             disabled={adding}
-            className={`w-full h-[52px] rounded-[10px] bg-[#0D472E] hover:bg-[#08301E] text-white font-heading font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-[0.98] ${
-              added ? 'bg-emerald-800' : ''
+            className={`w-full min-h-[48px] rounded-xl bg-black hover:bg-neutral-800 text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-sm disabled:opacity-50 ${
+              added ? 'bg-neutral-800' : ''
             }`}
           >
             {adding ? (
-              <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
             ) : added ? (
               <>
                 <Check className="w-4 h-4" />
