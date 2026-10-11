@@ -8,6 +8,10 @@ export default {
   theme: {
     extend: {
       colors: {
+        brand: {
+          green: '#14452F',
+          greenDark: '#0F3524',
+        },
         pureBlack: '#000000',
         richBlack: '#0A0A0A',
         grey: {
@@ -24,13 +28,13 @@ export default {
           950: '#0A0A0A',
         },
         primary: {
-          DEFAULT: '#000000',
-          hover: '#1F1F1F',
+          DEFAULT: '#14452F',
+          hover: '#0F3524',
           50: '#F5F5F5',
           100: '#E5E5E5',
-          500: '#000000',
-          600: '#0A0A0A',
-          700: '#171717',
+          500: '#14452F',
+          600: '#0F3524',
+          700: '#0F3524',
         },
         secondary: {
           DEFAULT: '#FFFFFF',
@@ -41,19 +45,19 @@ export default {
           700: '#171717',
         },
         accent: {
-          DEFAULT: '#0A0A0A',
+          DEFAULT: '#14452F',
           light: '#F5F5F5',
-          500: '#000000',
+          500: '#14452F',
         },
         dark: {
-          950: '#000000',
-          900: '#0A0A0A',
-          800: '#141414',
-          700: '#1C1C1C',
-          600: '#262626',
-          500: '#404040',
-          400: '#6B6B6B',
-          300: '#A3A3A3',
+          950: '#0F3524',
+          900: '#14452F',
+          800: '#14452F',
+          700: '#0F3524',
+          600: '#14452F',
+          500: '#0F3524',
+          400: '#1F5A3E',
+          300: '#8EAA9D',
         },
       },
       fontFamily: {

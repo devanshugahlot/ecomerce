@@ -5,19 +5,22 @@
 @tailwind utilities;
 
 :root {
-  /* Brand Tokens: Pure Black, White, and Greys */
-  --primary: #000000;
-  --primary-light: #171717;
-  --primary-hover: #262626;
+  --brand-green: #14452F;
+  --brand-green-dark: #0F3524;
+
+  /* Brand Tokens: Green, White, and Greys */
+  --primary: #14452F;
+  --primary-light: #1A533A;
+  --primary-hover: #0F3524;
   --secondary: #FFFFFF;
   --secondary-hover: #F5F5F5;
-  --accent: #0A0A0A;
+  --accent: #14452F;
   --accent-light: #F5F5F5;
 
-  --color-primary: #000000;
-  --color-primary-light: #171717;
+  --color-primary: #14452F;
+  --color-primary-light: #1A533A;
   --color-secondary: #FFFFFF;
-  --color-accent: #0A0A0A;
+  --color-accent: #14452F;
   
   /* Background & Surface Colors */
   --bg-main: #FFFFFF;
@@ -86,15 +89,15 @@
   }
 
   .btn-primary {
-    @apply bg-black hover:bg-neutral-800 text-white font-bold px-7 py-3.5 rounded-full transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm tracking-wide min-h-[48px];
+    @apply bg-brand-green hover:bg-brand-greenDark text-white font-bold px-7 py-3.5 rounded-full transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm tracking-wide min-h-[48px];
   }
 
   .btn-secondary-dark {
-    @apply bg-neutral-900 hover:bg-black text-white font-bold px-7 py-3.5 rounded-full transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm tracking-wide min-h-[48px];
+    @apply bg-brand-green hover:bg-brand-greenDark text-white font-bold px-7 py-3.5 rounded-full transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm tracking-wide min-h-[48px];
   }
   
   .btn-accent {
-    @apply bg-black hover:bg-neutral-800 text-white font-bold px-7 py-3.5 rounded-full transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center space-x-2 text-xs sm:text-sm tracking-wide min-h-[48px];
+    @apply bg-brand-green hover:bg-brand-greenDark text-white font-bold px-7 py-3.5 rounded-full transition-all duration-200 active:scale-[0.98] shadow-sm flex items-center justify-center space-x-2 text-xs sm:text-sm tracking-wide min-h-[48px];
   }
 
   .btn-secondary {

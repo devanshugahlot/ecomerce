@@ -97,7 +97,7 @@ export const SearchModal = ({ isOpen, onClose, products = [] }) => {
                       <button
                         key={cat}
                         onClick={() => handleQuickCategory(cat)}
-                        className="px-3.5 py-2 rounded-full bg-neutral-100 hover:bg-black hover:text-white text-xs font-semibold text-black border border-neutral-200 transition-colors"
+                        className="px-3.5 py-2 rounded-full bg-neutral-100 hover:bg-brand-green hover:text-white text-xs font-semibold text-black border border-neutral-200 transition-colors"
                       >
                         {cat}
                       </button>

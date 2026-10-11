@@ -84,7 +84,7 @@ export const CartDrawer = () => {
             <div className="flex items-center gap-2.5">
               <ShoppingBag className="w-5 h-5 text-black" />
               <h2 className="font-heading font-black text-lg text-black">Your Cart</h2>
-              <span className="text-xs bg-black text-white px-2.5 py-0.5 rounded-full font-black">
+              <span className="text-xs bg-brand-green text-white px-2.5 py-0.5 rounded-full font-black">
                 {cartItems.length}
               </span>
             </div>
@@ -112,7 +112,7 @@ export const CartDrawer = () => {
             </div>
             <div className="w-full h-2 rounded-full bg-[#E5E5E5] overflow-hidden">
               <div
-                className="h-full bg-black transition-all duration-300 rounded-full"
+                className="h-full bg-brand-green transition-all duration-300 rounded-full"
                 style={{ width: `${progressPercent}%` }}
               ></div>
             </div>
@@ -134,7 +134,7 @@ export const CartDrawer = () => {
                     setIsCartOpen(false);
                     navigate('/shop');
                   }}
-                  className="bg-black hover:bg-neutral-800 text-white font-bold text-xs py-3.5 px-7 rounded-full shadow-sm min-h-[48px]"
+                  className="bg-brand-green hover:bg-brand-greenDark text-white font-bold text-xs py-3.5 px-7 rounded-full shadow-sm min-h-[48px]"
                 >
                   Explore Products
                 </button>
@@ -227,7 +227,7 @@ export const CartDrawer = () => {
 
                       <button
                         onClick={() => addToCart(upsellProduct)}
-                        className="bg-black hover:bg-neutral-800 text-white text-xs font-bold px-4 py-2 rounded-full shadow-xs shrink-0 flex items-center gap-1 min-h-[36px]"
+                        className="bg-brand-green hover:bg-brand-greenDark text-white text-xs font-bold px-4 py-2 rounded-full shadow-xs shrink-0 flex items-center gap-1 min-h-[36px]"
                       >
                         + Add
                       </button>
@@ -256,7 +256,7 @@ export const CartDrawer = () => {
                         placeholder="Discount code (HYPRIL10)"
                         className="flex-1 bg-white border border-[#E5E5E5] rounded-xl px-3.5 py-2.5 text-xs text-black font-bold focus:outline-none focus:border-black min-h-[44px]"
                       />
-                      <button type="submit" className="bg-black text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-neutral-800 min-h-[44px]">
+                      <button type="submit" className="bg-brand-green text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-brand-greenDark min-h-[44px]">
                         Apply
                       </button>
                     </form>
@@ -290,7 +290,7 @@ export const CartDrawer = () => {
                 </div>
               </div>
 
-              <button onClick={handleCheckout} className="bg-black hover:bg-neutral-800 text-white w-full py-3.5 text-sm font-heading font-bold rounded-full shadow-sm flex items-center justify-center gap-2 min-h-[48px]">
+              <button onClick={handleCheckout} className="bg-brand-green hover:bg-brand-greenDark text-white w-full py-3.5 text-sm font-heading font-bold rounded-full shadow-sm flex items-center justify-center gap-2 min-h-[48px]">
                 <span>Proceed to Checkout</span>
                 <ArrowRight className="w-4 h-4" />
               </button>

@@ -147,7 +147,7 @@ export const ProductDetail = () => {
               />
               
               <div className="absolute top-4 left-4 flex flex-col gap-1.5 z-10">
-                <span className="bg-black text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                <span className="bg-brand-green text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-xs">
                   BEST SELLER
                 </span>
               </div>
@@ -157,7 +157,7 @@ export const ProductDetail = () => {
                 aria-label="Save to Wishlist"
                 className={`absolute top-4 right-4 p-3 rounded-full backdrop-blur-md transition-all z-10 ${
                   isSaved
-                    ? 'bg-black text-white shadow-md'
+                    ? 'bg-brand-green text-white shadow-md'
                     : 'bg-white/90 text-neutral-800 hover:text-black border border-neutral-200'
                 }`}
               >
@@ -339,7 +339,7 @@ export const ProductDetail = () => {
 
           <div className="lg:col-span-7 bg-neutral-50 p-6 rounded-2xl border border-neutral-200 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="space-y-1">
-              <span className="text-[10px] font-bold uppercase text-white bg-black px-2.5 py-0.5 rounded-full">
+              <span className="text-[10px] font-bold uppercase text-white bg-brand-green px-2.5 py-0.5 rounded-full">
                 BEST VALUE BUNDLE
               </span>
               <h4 className="font-heading font-black text-lg text-black">Longer & Stronger Regimen Kit</h4>

@@ -59,7 +59,7 @@ export const PromoBannersSlider = () => {
 
             <Link
               to="/shop"
-              className="bg-slate-950 hover:bg-black text-white font-bold text-xs py-3 px-5 rounded-lg inline-flex items-center gap-2 self-start shadow-md group-hover:scale-105 transition-transform z-10"
+              className="bg-brand-green hover:bg-brand-greenDark text-white font-bold text-xs py-3 px-5 rounded-lg inline-flex items-center gap-2 self-start shadow-md group-hover:scale-105 transition-transform z-10"
             >
               <span>ORDER NOW</span>
               <ArrowRight className="w-3.5 h-3.5" />

@@ -59,7 +59,7 @@ export const ProductCard = ({ product }) => {
       {/* Top Row: Best Seller Pill + Star Rating */}
       <div className="flex items-center justify-between z-10 mb-2">
         {product.isBestSeller ? (
-          <span className="bg-black text-white font-bold text-[10px] px-2.5 py-0.5 rounded-full shadow-xs flex items-center gap-1 uppercase tracking-wider">
+          <span className="bg-brand-green text-white font-bold text-[10px] px-2.5 py-0.5 rounded-full shadow-xs flex items-center gap-1 uppercase tracking-wider">
             <Star className="w-2.5 h-2.5 text-amber-400 fill-amber-400" /> Best Seller
           </span>
         ) : (
@@ -95,7 +95,7 @@ export const ProductCard = ({ product }) => {
           aria-label="Save to Wishlist"
           className={`absolute top-2 right-2 p-2 rounded-full transition-all duration-200 z-10 min-h-[44px] min-w-[44px] flex items-center justify-center ${
             isSaved
-              ? 'bg-black text-white shadow-xs'
+              ? 'bg-brand-green text-white shadow-xs'
               : 'bg-white text-neutral-600 hover:text-black border border-[#E5E5E5]'
           }`}
         >
@@ -125,7 +125,7 @@ export const ProductCard = ({ product }) => {
                   }}
                   className={`w-[36px] h-[36px] rounded-lg text-xs font-bold flex items-center justify-center transition-all ${
                     selectedPackIndex === idx
-                      ? 'bg-black text-white shadow-xs'
+                      ? 'bg-brand-green text-white shadow-xs'
                       : 'border border-[#E5E5E5] bg-white text-neutral-800 hover:border-black'
                   }`}
                 >
@@ -160,8 +160,8 @@ export const ProductCard = ({ product }) => {
           <button
             onClick={handleQuickAdd}
             disabled={adding}
-            className={`w-full min-h-[48px] rounded-xl bg-black hover:bg-neutral-800 text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-sm disabled:opacity-50 ${
-              added ? 'bg-neutral-800' : ''
+            className={`w-full min-h-[48px] rounded-xl bg-brand-green hover:bg-brand-greenDark text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-sm disabled:opacity-50 ${
+              added ? 'bg-brand-greenDark' : ''
             }`}
           >
             {adding ? (

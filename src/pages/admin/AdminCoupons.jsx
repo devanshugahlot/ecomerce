@@ -59,34 +59,34 @@ export const AdminCoupons = () => {
   };
 
   return (
-    <div className="space-y-6 bg-dark-900 min-h-screen p-2 sm:p-6 text-slate-100">
+    <div className="space-y-6 bg-brand-greenDark min-h-screen p-2 sm:p-6 text-white">
       <SEO title="Admin — Hypril Coupon Management" />
 
-      <div className="bg-dark-800 p-6 rounded-3xl border border-dark-600 shadow-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="bg-brand-green p-6 rounded-3xl border border-white/20 shadow-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-white flex items-center gap-2.5">
             <Tag className="w-7 h-7 text-white" />
             Discount Coupons & Promos ({coupons.length})
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-white/80 mt-1">
             Coupons created here work live instantly on the Hypril cart drawer and checkout page.
           </p>
         </div>
       </div>
 
       {/* Create Coupon Form */}
-      <form onSubmit={handleCreate} className="p-6 bg-dark-800 rounded-3xl border border-dark-600 shadow-xl flex flex-col sm:flex-row gap-3 items-center">
+      <form onSubmit={handleCreate} className="p-6 bg-brand-green rounded-3xl border border-white/20 shadow-xl flex flex-col sm:flex-row gap-3 items-center">
         <input
           type="text"
           placeholder="Coupon Code (e.g. HYPRIL10)"
           value={code}
           onChange={(e) => setCode(e.target.value)}
-          className="bg-dark-700 border border-dark-600 rounded-2xl px-4 py-3 text-xs text-white uppercase placeholder-slate-500 focus:outline-none focus:border-white flex-1 w-full min-h-[44px]"
+          className="bg-brand-greenDark border border-white/20 rounded-2xl px-4 py-3 text-xs text-white uppercase placeholder-white/70 focus:outline-none focus:border-white flex-1 w-full min-h-[44px]"
         />
         <select
           value={discountType}
           onChange={(e) => setDiscountType(e.target.value)}
-          className="bg-dark-700 border border-dark-600 rounded-2xl px-4 py-3 text-xs text-white focus:outline-none focus:border-white min-h-[44px] w-full sm:w-auto"
+          className="bg-brand-greenDark border border-white/20 rounded-2xl px-4 py-3 text-xs text-white focus:outline-none focus:border-white min-h-[44px] w-full sm:w-auto"
         >
           <option value="percentage">Percentage (%)</option>
           <option value="fixed">Fixed Amount (₹)</option>
@@ -96,14 +96,14 @@ export const AdminCoupons = () => {
           placeholder="Discount Value"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          className="bg-dark-700 border border-dark-600 rounded-2xl px-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-white w-full sm:w-32 font-bold font-mono min-h-[44px]"
+          className="bg-brand-greenDark border border-white/20 rounded-2xl px-4 py-3 text-xs text-white placeholder-white/70 focus:outline-none focus:border-white w-full sm:w-32 font-bold font-mono min-h-[44px]"
         />
         <input
           type="number"
           placeholder="Min Order (₹)"
           value={minOrder}
           onChange={(e) => setMinOrder(e.target.value)}
-          className="bg-dark-700 border border-dark-600 rounded-2xl px-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-white w-full sm:w-32 min-h-[44px]"
+          className="bg-brand-greenDark border border-white/20 rounded-2xl px-4 py-3 text-xs text-white placeholder-white/70 focus:outline-none focus:border-white w-full sm:w-32 min-h-[44px]"
         />
         <button
           type="submit"
@@ -125,10 +125,10 @@ export const AdminCoupons = () => {
       </form>
 
       {/* Coupons List Table */}
-      <div className="bg-dark-800 rounded-3xl border border-dark-600 overflow-hidden shadow-2xl">
+      <div className="bg-brand-green rounded-3xl border border-white/20 overflow-hidden shadow-2xl">
         <div className="overflow-x-auto w-full">
-          <table className="w-full text-left text-xs text-slate-300 min-w-[500px]">
-            <thead className="bg-dark-700 text-white font-extrabold border-b border-dark-600 uppercase tracking-wider text-[10px]">
+          <table className="w-full text-left text-xs text-white/90 min-w-[500px]">
+            <thead className="bg-brand-greenDark text-white font-extrabold border-b border-white/10 uppercase tracking-wider text-[10px]">
               <tr>
                 <th className="p-4">Code</th>
                 <th className="p-4">Discount Type</th>
@@ -138,11 +138,11 @@ export const AdminCoupons = () => {
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-dark-600/70">
+            <tbody className="divide-y divide-white/10">
               {coupons.map((c) => {
                 const cId = c._id || c.id;
                 return (
-                  <tr key={cId} className="hover:bg-dark-700/50 transition-colors">
+                  <tr key={cId} className="hover:bg-brand-greenDark/50 transition-colors">
                     <td className="p-4 font-black text-white text-sm tracking-wider">{c.code}</td>
                     <td className="p-4 capitalize">{c.discountType}</td>
                     <td className="p-4 font-black text-white font-mono text-sm">
@@ -155,7 +155,7 @@ export const AdminCoupons = () => {
                         className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-extrabold border transition-all min-h-[36px] ${
                           c.isActive
                             ? 'bg-white/10 text-white border-white/30'
-                            : 'bg-white/5 text-slate-400 border-white/10'
+                            : 'bg-white/5 text-white/80 border-white/10'
                         }`}
                       >
                         {c.isActive ? (

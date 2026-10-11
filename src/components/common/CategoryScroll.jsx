@@ -21,7 +21,7 @@ export const CategoryScroll = ({ activeCategory, onSelectCategory }) => {
               className="flex flex-col items-center gap-1.5 group cursor-pointer text-center relative focus:outline-none"
             >
               {cat.badge && ['NEW', 'POPULAR', 'BEST SELLER'].includes(cat.badge.trim().toUpperCase()) && (
-                <span className="absolute -top-1 z-10 bg-black text-white text-[8px] font-black px-1.5 py-0.2 rounded-full uppercase tracking-tight scale-90">
+                <span className="absolute -top-1 z-10 bg-brand-green text-white text-[8px] font-black px-1.5 py-0.2 rounded-full uppercase tracking-tight scale-90">
                   {cat.badge.trim().toUpperCase()}
                 </span>
               )}
@@ -29,8 +29,8 @@ export const CategoryScroll = ({ activeCategory, onSelectCategory }) => {
               <div
                 className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full p-0.5 border-2 transition-all duration-200 shadow-xs ${
                   isSelected
-                    ? 'border-black ring-2 ring-black/15 scale-105'
-                    : 'border-[#E5E5E5] group-hover:border-black'
+                    ? 'border-brand-green ring-2 ring-brand-green/20 scale-105'
+                    : 'border-[#E5E5E5] group-hover:border-brand-green'
                 }`}
               >
                 <div className="w-full h-full rounded-full overflow-hidden bg-[#F5F5F5] flex items-center justify-center">

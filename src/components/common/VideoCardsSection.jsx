@@ -77,7 +77,7 @@ export const VideoCardsSection = () => {
           <button className="w-10 h-10 rounded-full border border-slate-300 text-slate-700 flex items-center justify-center hover:border-slate-900 hover:bg-slate-50 transition-all">
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <button className="w-10 h-10 rounded-full border border-slate-900 text-slate-900 flex items-center justify-center hover:bg-slate-900 hover:text-white transition-all">
+          <button className="w-10 h-10 rounded-full border border-slate-900 text-slate-900 flex items-center justify-center hover:bg-brand-green hover:text-white transition-all">
             <ChevronRight className="w-5 h-5" />
           </button>
         </div>
@@ -89,18 +89,18 @@ export const VideoCardsSection = () => {
           <div
             key={v.id}
             onClick={() => setActiveVideo(v)}
-            className="group relative aspect-video-portrait rounded-[20px] overflow-hidden bg-slate-900 cursor-pointer border border-slate-200 shadow-xs hover:shadow-xl transition-all duration-300"
+            className="group relative aspect-video-portrait rounded-[20px] overflow-hidden bg-brand-green cursor-pointer border border-slate-200 shadow-xs hover:shadow-xl transition-all duration-300"
           >
             <img
               src={v.thumbnail}
               alt={v.name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
 
             {/* Play Button Overlay */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-12 h-12 rounded-full bg-white/90 backdrop-blur-md text-[#0D472E] flex items-center justify-center group-hover:scale-110 group-hover:bg-[#0D472E] group-hover:text-white transition-all shadow-lg">
+              <div className="w-12 h-12 rounded-full bg-white/90 backdrop-blur-md text-brand-green flex items-center justify-center group-hover:scale-110 group-hover:bg-brand-green group-hover:text-white transition-all shadow-lg">
                 <Play className="w-5 h-5 fill-current ml-0.5" />
               </div>
             </div>
@@ -112,7 +112,7 @@ export const VideoCardsSection = () => {
                 <span className="font-bold text-white text-[11px]">{v.rating}.0 • Verified User</span>
               </div>
               <h4 className="font-heading font-bold text-xs line-clamp-2 leading-tight">{v.title}</h4>
-              <p className="text-[10px] text-slate-300 font-medium">{v.name} ({v.age})</p>
+              <p className="text-[10px] text-white/80 font-medium">{v.name} ({v.age})</p>
             </div>
           </div>
         ))}
@@ -120,24 +120,24 @@ export const VideoCardsSection = () => {
 
       {/* Video Popup Modal */}
       {activeVideo && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="relative bg-slate-900 rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl border border-slate-800">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="relative bg-brand-green rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl border border-white/20">
             <button
               onClick={() => setActiveVideo(null)}
-              className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black"
+              className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-brand-greenDark/80 text-white flex items-center justify-center hover:bg-brand-greenDark"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="aspect-video-portrait w-full bg-black relative">
+            <div className="aspect-video-portrait w-full bg-brand-greenDark relative">
               <video src={activeVideo.videoUrl} controls autoPlay className="w-full h-full object-cover"></video>
 
               <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-md p-3 rounded-2xl border border-slate-200 text-slate-900 flex items-center justify-between">
                 <div>
                   <h5 className="font-heading font-bold text-xs">{activeVideo.productName}</h5>
-                  <span className="text-xs font-black text-[#0D472E]">₹{activeVideo.price}</span>
+                  <span className="text-xs font-black text-brand-green">₹{activeVideo.price}</span>
                 </div>
-                <button onClick={() => setActiveVideo(null)} className="bg-[#0D472E] text-white text-xs py-2 px-4 rounded-full font-bold">
+                <button onClick={() => setActiveVideo(null)} className="bg-brand-green hover:bg-brand-greenDark text-white text-xs py-2 px-4 rounded-full font-bold">
                   View Product
                 </button>
               </div>

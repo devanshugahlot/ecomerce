@@ -183,27 +183,27 @@ export const AdminProducts = () => {
   };
 
   return (
-    <div className="space-y-6 bg-dark-900 min-h-screen p-2 sm:p-6 text-slate-100">
+    <div className="space-y-6 bg-brand-greenDark min-h-screen p-2 sm:p-6 text-white">
       <SEO title="Admin — Products & Banner Images" />
 
       {/* Admin Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-dark-800 p-6 rounded-3xl border border-dark-600 shadow-2xl">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-brand-green p-6 rounded-3xl border border-white/20 shadow-2xl">
         <div>
           <h1 className="text-2xl font-extrabold text-white flex items-center gap-2.5">
             <Package className="w-7 h-7 text-white" />
             Hypril Admin Catalog & Banners
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-white/80 mt-1">
             Upload images directly from device and manage live listings & banners.
           </p>
         </div>
 
         {/* Tab Selector */}
-        <div className="flex items-center gap-2 bg-dark-700 p-1.5 rounded-2xl border border-dark-600 w-full sm:w-auto">
+        <div className="flex items-center gap-2 bg-brand-greenDark p-1.5 rounded-2xl border border-white/20 w-full sm:w-auto">
           <button
             onClick={() => setActiveTab('products')}
             className={`flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs font-bold transition-all min-h-[44px] ${
-              activeTab === 'products' ? 'bg-white text-black shadow-md' : 'text-neutral-400 hover:text-white'
+              activeTab === 'products' ? 'bg-white text-black shadow-md' : 'text-white/80 hover:text-white'
             }`}
           >
             Products ({products.length})
@@ -211,7 +211,7 @@ export const AdminProducts = () => {
           <button
             onClick={() => setActiveTab('banners')}
             className={`flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs font-bold transition-all min-h-[44px] ${
-              activeTab === 'banners' ? 'bg-white text-black shadow-md' : 'text-neutral-400 hover:text-white'
+              activeTab === 'banners' ? 'bg-white text-black shadow-md' : 'text-white/80 hover:text-white'
             }`}
           >
             Site Banners
@@ -224,13 +224,13 @@ export const AdminProducts = () => {
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="max-w-md w-full relative">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-white/75 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search catalog..."
-                className="w-full bg-dark-800 border border-dark-600 rounded-2xl pl-10 pr-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-white min-h-[44px]"
+                className="w-full bg-brand-green border border-white/20 rounded-2xl pl-10 pr-4 py-3 text-xs text-white placeholder-white/70 focus:outline-none focus:border-white min-h-[44px]"
               />
             </div>
 
@@ -243,10 +243,10 @@ export const AdminProducts = () => {
             </button>
           </div>
 
-          <div className="bg-dark-800 rounded-3xl border border-dark-600 overflow-hidden shadow-2xl">
+          <div className="bg-brand-green rounded-3xl border border-white/20 overflow-hidden shadow-2xl">
             <div className="overflow-x-auto w-full">
-              <table className="w-full text-left text-xs text-slate-300 min-w-[600px]">
-                <thead className="bg-dark-700 text-neutral-400 font-extrabold border-b border-dark-600 uppercase tracking-wider text-[10px]">
+              <table className="w-full text-left text-xs text-white/90 min-w-[600px]">
+                <thead className="bg-brand-greenDark text-white font-extrabold border-b border-white/10 uppercase tracking-wider text-[10px]">
                   <tr>
                     <th className="p-4">Product</th>
                     <th className="p-4">Category</th>
@@ -255,43 +255,43 @@ export const AdminProducts = () => {
                     <th className="p-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-dark-600/70">
+                <tbody className="divide-y divide-white/10">
                   {filtered.map((p) => {
                     const pId = p._id || p.id;
                     const pImg = (p.images && p.images[0]) || p.image || '';
                     return (
-                      <tr key={pId} className="hover:bg-dark-700/50 transition-colors">
+                      <tr key={pId} className="hover:bg-brand-greenDark/50 transition-colors">
                         <td className="p-4">
                           <div className="flex items-center gap-3">
                             {pImg ? (
                               <img
                                 src={pImg}
                                 alt={p.name}
-                                className="w-12 h-12 rounded-xl object-cover bg-dark-700 border border-dark-600 shrink-0"
+                                className="w-12 h-12 rounded-xl object-cover bg-brand-greenDark border border-white/20 shrink-0"
                               />
                             ) : (
-                              <div className="w-12 h-12 rounded-xl bg-dark-700 border border-dark-600 flex items-center justify-center text-slate-500 shrink-0">
+                              <div className="w-12 h-12 rounded-xl bg-brand-greenDark border border-white/20 flex items-center justify-center text-white/60 shrink-0">
                                 <ImageIcon className="w-5 h-5" />
                               </div>
                             )}
                             <div>
                               <span className="font-extrabold text-white text-sm block leading-tight">{p.name}</span>
-                              <span className="text-[10px] text-slate-400 block line-clamp-1">{p.benefitSummary}</span>
+                              <span className="text-[10px] text-white/80 block line-clamp-1">{p.benefitSummary}</span>
                             </div>
                           </div>
                         </td>
                         <td className="p-4">
-                          <span className="px-3 py-1 rounded-full bg-dark-700 text-slate-300 border border-dark-600 text-[11px] font-semibold">
+                          <span className="px-3 py-1 rounded-full bg-brand-greenDark text-white border border-white/20 text-[11px] font-semibold">
                             {p.category}
                           </span>
                         </td>
                         <td className="p-4 font-black text-white font-mono text-sm">{formatCurrency(p.price)}</td>
-                        <td className="p-4 font-semibold text-slate-300">{p.stock} units</td>
+                        <td className="p-4 font-semibold text-white/80">{p.stock} units</td>
                         <td className="p-4 text-right">
                           <div className="flex items-center justify-end gap-2">
                             <button
                               onClick={() => handleOpenEdit(p)}
-                              className="p-2.5 rounded-xl bg-dark-700 hover:bg-dark-600 text-white border border-dark-600 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                              className="p-2.5 rounded-xl bg-brand-greenDark hover:bg-brand-green text-white border border-white/20 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                               title="Edit Product"
                             >
                               <Edit3 className="w-4 h-4" />
@@ -310,7 +310,7 @@ export const AdminProducts = () => {
                   })}
                   {filtered.length === 0 && (
                     <tr>
-                      <td colSpan="5" className="p-8 text-center text-slate-400">
+                      <td colSpan="5" className="p-8 text-center text-white/80">
                         No products added yet. Click "+ Add New Product" to create products.
                       </td>
                     </tr>
@@ -324,13 +324,13 @@ export const AdminProducts = () => {
 
       {/* TAB 2: SITE BANNERS MANAGEMENT */}
       {activeTab === 'banners' && (
-        <div className="bg-dark-800 rounded-3xl p-6 sm:p-8 border border-dark-600 shadow-2xl space-y-6 max-w-3xl">
+        <div className="bg-brand-green rounded-3xl p-6 sm:p-8 border border-white/20 shadow-2xl space-y-6 max-w-3xl">
           <div>
             <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
               <ImageIcon className="w-6 h-6 text-white" />
               Upload Website Banner Images From Device
             </h2>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-white/80 mt-1">
               Select image file directly from your computer or phone device.
             </p>
           </div>
@@ -338,24 +338,24 @@ export const AdminProducts = () => {
           <form onSubmit={handleSaveBanners} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Hero Section Banner Image (Desktop) */}
-              <div className="space-y-3 p-5 bg-dark-700/60 rounded-2xl border border-dark-600 flex flex-col justify-between">
+              <div className="space-y-3 p-5 bg-brand-greenDark rounded-2xl border border-white/20 flex flex-col justify-between">
                 <div className="space-y-3">
                   <div>
                     <label className="block text-sm font-bold text-white">
                       1. Main Top Hero Banner (Desktop)
                     </label>
-                    <p className="text-[11px] text-slate-400 mt-0.5">
+                    <p className="text-[11px] text-white/80 mt-0.5">
                       Main banner image displayed on desktop & tablet screens.
                     </p>
                   </div>
 
                   {bannersForm.heroBanner ? (
-                    <div className="aspect-[100/36] bg-dark-900 rounded-xl overflow-hidden border border-dark-600 relative">
-                      <img src={bannersForm.heroBanner} alt="Hero Banner Preview" className="w-full h-full object-contain bg-black/30" />
+                    <div className="aspect-[100/36] bg-brand-greenDark rounded-xl overflow-hidden border border-white/20 relative">
+                      <img src={bannersForm.heroBanner} alt="Hero Banner Preview" className="w-full h-full object-contain" />
                     </div>
                   ) : (
-                    <div className="p-8 border-2 border-dashed border-dark-500 rounded-xl text-center text-slate-400">
-                      <ImageIcon className="w-8 h-8 mx-auto mb-2 text-slate-500" />
+                    <div className="p-8 border-2 border-dashed border-white/20 rounded-xl text-center text-white/80">
+                      <ImageIcon className="w-8 h-8 mx-auto mb-2 text-white/80" />
                       <p className="text-xs">No desktop image selected yet</p>
                     </div>
                   )}
@@ -376,14 +376,14 @@ export const AdminProducts = () => {
               </div>
 
               {/* Hero Section Banner Image (Mobile - Optional) */}
-              <div className="space-y-3 p-5 bg-dark-700/60 rounded-2xl border border-dark-600 flex flex-col justify-between">
+              <div className="space-y-3 p-5 bg-brand-greenDark rounded-2xl border border-white/20 flex flex-col justify-between">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
                       <label className="block text-sm font-bold text-white">
                         2. Mobile Hero Banner (Optional)
                       </label>
-                      <p className="text-[11px] text-slate-400 mt-0.5">
+                      <p className="text-[11px] text-white/80 mt-0.5">
                         ~3:4 ratio. If empty, falls back to the desktop image.
                       </p>
                     </div>
@@ -391,7 +391,7 @@ export const AdminProducts = () => {
                       <button
                         type="button"
                         onClick={() => setBannersForm((prev) => ({ ...prev, heroBannerMobile: '' }))}
-                        className="text-xs text-rose-400 hover:text-rose-300 font-semibold"
+                        className="text-xs text-rose-300 hover:text-rose-200 font-semibold"
                       >
                         Clear
                       </button>
@@ -399,12 +399,12 @@ export const AdminProducts = () => {
                   </div>
 
                   {bannersForm.heroBannerMobile ? (
-                    <div className="aspect-[3/4] max-h-[160px] mx-auto bg-dark-900 rounded-xl overflow-hidden border border-dark-600 relative">
-                      <img src={bannersForm.heroBannerMobile} alt="Mobile Banner Preview" className="w-full h-full object-contain bg-black/30" />
+                    <div className="aspect-[3/4] max-h-[160px] mx-auto bg-brand-greenDark rounded-xl overflow-hidden border border-white/20 relative">
+                      <img src={bannersForm.heroBannerMobile} alt="Mobile Banner Preview" className="w-full h-full object-contain" />
                     </div>
                   ) : (
-                    <div className="p-8 border-2 border-dashed border-dark-500 rounded-xl text-center text-slate-400">
-                      <ImageIcon className="w-8 h-8 mx-auto mb-2 text-slate-500" />
+                    <div className="p-8 border-2 border-dashed border-white/20 rounded-xl text-center text-white/80">
+                      <ImageIcon className="w-8 h-8 mx-auto mb-2 text-white/80" />
                       <p className="text-xs">Optional: Falls back to desktop image</p>
                     </div>
                   )}
@@ -426,18 +426,18 @@ export const AdminProducts = () => {
             </div>
 
             {/* Promo Section Banner Image */}
-            <div className="space-y-3 p-5 bg-dark-700/60 rounded-2xl border border-dark-600">
+            <div className="space-y-3 p-5 bg-brand-greenDark rounded-2xl border border-white/20">
               <label className="block text-sm font-bold text-white">
                 3. Promo Section Banner Image
               </label>
 
               {bannersForm.promoBanner1 ? (
-                <div className="aspect-[21/9] bg-dark-900 rounded-xl overflow-hidden border border-dark-600 relative">
+                <div className="aspect-[21/9] bg-brand-greenDark rounded-xl overflow-hidden border border-white/20 relative">
                   <img src={bannersForm.promoBanner1} alt="Promo Banner Preview" className="w-full h-full object-cover" />
                 </div>
               ) : (
-                <div className="p-8 border-2 border-dashed border-dark-500 rounded-xl text-center text-slate-400">
-                  <ImageIcon className="w-8 h-8 mx-auto mb-2 text-slate-500" />
+                <div className="p-8 border-2 border-dashed border-white/20 rounded-xl text-center text-white/80">
+                  <ImageIcon className="w-8 h-8 mx-auto mb-2 text-white/80" />
                   <p className="text-xs">No image selected from device yet</p>
                 </div>
               )}
@@ -474,42 +474,42 @@ export const AdminProducts = () => {
 
       {/* Product Add / Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-dark-900/80 backdrop-blur-md">
-          <div className="bg-dark-800 border border-dark-600 rounded-3xl p-6 sm:p-8 max-w-xl w-full max-h-[90vh] overflow-y-auto space-y-6 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-dark-600 pb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+          <div className="bg-brand-green border border-white/20 rounded-3xl p-6 sm:p-8 max-w-xl w-full max-h-[90vh] overflow-y-auto space-y-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-white/20 pb-4">
               <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-white" />
                 {editingId ? 'Edit Product' : 'Add New Product'}
               </h2>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center">
+              <button onClick={() => setShowModal(false)} className="text-white/80 hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleSaveProduct} className="space-y-4 text-xs">
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Product Title</label>
+                <label className="block text-white font-semibold mb-1">Product Title</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Hypril Extended Delay Gel (50ml)"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
+                  className="w-full bg-brand-greenDark border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white min-h-[44px]"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Category</label>
+                  <label className="block text-white font-semibold mb-1">Category</label>
                   {categories && categories.length > 0 ? (
                     <select
                       value={form.category}
                       onChange={(e) => setForm({ ...form, category: e.target.value })}
-                      className="w-full bg-dark-700 border border-dark-600 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
+                      className="w-full bg-brand-greenDark border border-white/20 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
                     >
                       {categories.map((c) => (
-                        <option key={c.id || c.slug || c.name} value={c.name}>
+                        <option key={c.id || c.slug || c.name} value={c.name} className="bg-brand-greenDark text-white">
                           {c.name}
                         </option>
                       ))}
@@ -520,57 +520,57 @@ export const AdminProducts = () => {
                       placeholder="Category name"
                       value={form.category}
                       onChange={(e) => setForm({ ...form, category: e.target.value })}
-                      className="w-full bg-dark-700 border border-dark-600 rounded-xl px-3 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
+                      className="w-full bg-brand-greenDark border border-white/20 rounded-xl px-3 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white min-h-[44px]"
                     />
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Stock Units</label>
+                  <label className="block text-white font-semibold mb-1">Stock Units</label>
                   <input
                     type="number"
                     value={form.stock}
                     onChange={(e) => setForm({ ...form, stock: e.target.value })}
-                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
+                    className="w-full bg-brand-greenDark border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Selling Price (₹)</label>
+                  <label className="block text-white font-semibold mb-1">Selling Price (₹)</label>
                   <input
                     type="number"
                     required
                     placeholder="999"
                     value={form.price}
                     onChange={(e) => setForm({ ...form, price: e.target.value })}
-                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white font-mono min-h-[44px]"
+                    className="w-full bg-brand-greenDark border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white font-mono min-h-[44px]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Original MRP Price (₹)</label>
+                  <label className="block text-white font-semibold mb-1">Original MRP Price (₹)</label>
                   <input
                     type="number"
                     placeholder="1499"
                     value={form.comparePrice}
                     onChange={(e) => setForm({ ...form, comparePrice: e.target.value })}
-                    className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
+                    className="w-full bg-brand-greenDark border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Upload Product Image From Device</label>
-                <div className="border-2 border-dashed border-dark-600 rounded-2xl p-4 text-center bg-dark-700/60 relative">
+                <label className="block text-white font-semibold mb-1">Upload Product Image From Device</label>
+                <div className="border-2 border-dashed border-white/20 rounded-2xl p-4 text-center bg-brand-greenDark/60 relative">
                   {form.image ? (
                     <div className="flex flex-col items-center gap-2">
-                      <img src={form.image} alt="Product Preview" className="w-24 h-24 object-cover rounded-xl border border-dark-600" />
+                      <img src={form.image} alt="Product Preview" className="w-24 h-24 object-cover rounded-xl border border-white/20" />
                       <span className="text-[11px] text-white font-bold">Image selected! Click below to change file.</span>
                     </div>
                   ) : (
-                    <div className="space-y-1 text-slate-400">
+                    <div className="space-y-1 text-white/80">
                       <ImageIcon className="w-8 h-8 text-white mx-auto" />
                       <p className="text-xs">No image selected from device</p>
                     </div>
@@ -590,33 +590,33 @@ export const AdminProducts = () => {
               </div>
 
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Short Benefit Summary</label>
+                <label className="block text-white font-semibold mb-1">Short Benefit Summary</label>
                 <input
                   type="text"
                   placeholder="e.g. Non-transferable delay gel formula."
                   value={form.benefitSummary}
                   onChange={(e) => setForm({ ...form, benefitSummary: e.target.value })}
-                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-white min-h-[44px]"
+                  className="w-full bg-brand-greenDark border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white min-h-[44px]"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Full Description</label>
+                <label className="block text-white font-semibold mb-1">Full Description</label>
                 <textarea
                   rows="3"
                   placeholder="Detailed product description..."
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  className="w-full bg-dark-700 border border-dark-600 rounded-xl p-3 text-white placeholder-slate-500 focus:outline-none focus:border-white"
+                  className="w-full bg-brand-greenDark border border-white/20 rounded-xl p-3 text-white placeholder-white/50 focus:outline-none focus:border-white"
                 ></textarea>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-dark-600">
+              <div className="flex justify-end gap-3 pt-4 border-t border-white/20">
                 <button
                   type="button"
                   disabled={isSavingProduct}
                   onClick={() => setShowModal(false)}
-                  className="px-5 py-3 rounded-full bg-dark-700 text-slate-300 font-bold min-h-[44px] disabled:opacity-50"
+                  className="px-5 py-3 rounded-full bg-brand-greenDark text-white/80 hover:text-white font-bold min-h-[44px] disabled:opacity-50 border border-white/20"
                 >
                   Cancel
                 </button>

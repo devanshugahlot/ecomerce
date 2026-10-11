@@ -133,7 +133,7 @@ export const Shop = () => {
                 onClick={() => setSelectedCategory('')}
                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition-colors min-h-[40px] ${
                   !selectedCategory
-                    ? 'bg-black text-white font-black shadow-xs'
+                    ? 'bg-brand-green text-white font-black shadow-xs'
                     : 'text-neutral-700 hover:bg-[#F5F5F5]'
                 }`}
               >
@@ -148,7 +148,7 @@ export const Shop = () => {
                     onClick={() => setSelectedCategory(cName)}
                     className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center justify-between transition-colors min-h-[40px] ${
                       selectedCategory.toLowerCase() === cName.toLowerCase()
-                        ? 'bg-black text-white font-black shadow-xs'
+                        ? 'bg-brand-green text-white font-black shadow-xs'
                         : 'text-neutral-700 hover:bg-[#F5F5F5]'
                     }`}
                   >
@@ -263,7 +263,7 @@ export const Shop = () => {
               <p className="text-neutral-500 text-xs font-medium max-w-sm mx-auto">
                 No products found in catalog matching your filters. Try resetting your filters.
               </p>
-              <button onClick={resetFilters} className="btn-primary bg-black text-white text-xs font-bold py-3 px-6 rounded-full min-h-[48px] inline-flex">
+              <button onClick={resetFilters} className="btn-primary bg-brand-green hover:bg-brand-greenDark text-white text-xs font-bold py-3 px-6 rounded-full min-h-[48px] inline-flex">
                 Reset All Filters
               </button>
             </div>

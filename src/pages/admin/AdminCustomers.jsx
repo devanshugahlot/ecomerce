@@ -34,7 +34,7 @@ export const AdminCustomers = () => {
             <Users className="w-6 h-6 text-white" />
             Customer Directory ({customers.length})
           </h1>
-          <p className="text-xs text-slate-400">View registered website users connected to the backend database.</p>
+          <p className="text-xs text-white/80">View registered website users connected to the backend database.</p>
         </div>
         <button onClick={fetchCustomers} className="bg-white hover:bg-slate-200 text-black font-bold text-xs px-4 py-2.5 rounded-full flex items-center gap-2 min-h-[44px] shadow-md">
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -42,9 +42,9 @@ export const AdminCustomers = () => {
         </button>
       </div>
 
-      <div className="bg-dark-800 rounded-3xl border border-dark-600 overflow-hidden shadow-2xl">
-        <table className="w-full text-left text-xs text-slate-300">
-          <thead className="bg-dark-700 text-white font-semibold border-b border-dark-600 uppercase text-[10px]">
+      <div className="bg-brand-green rounded-3xl border border-white/20 overflow-hidden shadow-2xl">
+        <table className="w-full text-left text-xs text-white/90">
+          <thead className="bg-brand-greenDark text-white font-semibold border-b border-white/20 uppercase text-[10px]">
             <tr>
               <th className="p-4">Customer Name</th>
               <th className="p-4">Email</th>
@@ -52,13 +52,13 @@ export const AdminCustomers = () => {
               <th className="p-4">Registration Date</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-dark-600/60">
+          <tbody className="divide-y divide-white/10">
             {customers.map((c, i) => (
               <tr key={c._id || i}>
                 <td className="p-4 font-bold text-white">{c.name}</td>
-                <td className="p-4 text-slate-400">{c.email}</td>
-                <td className="p-4 text-slate-400">{c.phone || '+91 9876543210'}</td>
-                <td className="p-4 font-semibold text-slate-300 font-mono">
+                <td className="p-4 text-white/80">{c.email}</td>
+                <td className="p-4 text-white/80">{c.phone || '+91 9876543210'}</td>
+                <td className="p-4 font-semibold text-white/90 font-mono">
                   {c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-IN') : 'Recent'}
                 </td>
               </tr>

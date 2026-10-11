@@ -18,16 +18,16 @@ export const AdminReviews = () => {
   };
 
   return (
-    <div className="space-y-6 bg-dark-900 min-h-screen p-2 sm:p-6 text-slate-100">
+    <div className="space-y-6 bg-brand-green min-h-screen p-2 sm:p-6 text-white">
       <SEO title="Admin — Customer Review Moderation" />
 
-      <div className="flex justify-between items-center bg-dark-800 p-6 rounded-3xl border border-dark-600 shadow-2xl">
+      <div className="flex justify-between items-center bg-brand-green p-6 rounded-3xl border border-white/20 shadow-2xl">
         <div>
           <h1 className="text-2xl font-extrabold text-white flex items-center gap-2.5">
             <Star className="w-7 h-7 text-white fill-white" />
             Customer Reviews Moderation ({reviews.length})
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-white/80 mt-1">
             View all customer-submitted ratings & photo reviews. Click delete to remove any inappropriate review.
           </p>
         </div>
@@ -37,7 +37,7 @@ export const AdminReviews = () => {
         {reviews.map((r) => (
           <div
             key={r._id || r.id}
-            className="p-5 rounded-3xl bg-dark-800 border border-dark-600 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl"
+            className="p-5 rounded-3xl bg-brand-green border border-white/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl"
           >
             <div className="space-y-2 flex-1">
               <div className="flex items-center gap-3 flex-wrap">
@@ -47,23 +47,23 @@ export const AdminReviews = () => {
                     <Star key={i} className="w-3.5 h-3.5 fill-current" />
                   ))}
                 </div>
-                <span className="text-[10px] bg-dark-700 text-slate-300 px-2 py-0.5 rounded-full border border-dark-600 font-mono">
+                <span className="text-[10px] bg-brand-greenDark text-white/90 px-2 py-0.5 rounded-full border border-white/20 font-mono">
                   Product ID: {r.productIdStr || r.productId}
                 </span>
-                <span className="text-[11px] text-slate-400">
+                <span className="text-[11px] text-white/80">
                   {r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-IN') : 'Recent'}
                 </span>
               </div>
 
               {r.title && <h4 className="font-bold text-white text-xs">{r.title}</h4>}
-              <p className="text-xs text-slate-300 italic font-medium">"{r.comment}"</p>
+              <p className="text-xs text-white/90 italic font-medium">"{r.comment}"</p>
 
               {r.image && (
                 <div className="pt-2 flex items-center gap-2">
                   <span className="text-[10px] text-white font-bold flex items-center gap-1">
                     <ImageIcon className="w-3.5 h-3.5" /> Photo Attached:
                   </span>
-                  <img src={r.image} alt="Uploaded review photo" className="w-14 h-14 object-cover rounded-xl border border-dark-600" />
+                  <img src={r.image} alt="Uploaded review photo" className="w-14 h-14 object-cover rounded-xl border border-white/20" />
                 </div>
               )}
             </div>
@@ -79,10 +79,10 @@ export const AdminReviews = () => {
         ))}
 
         {reviews.length === 0 && (
-          <div className="text-center py-12 bg-dark-800 rounded-3xl border border-dark-600 p-8 space-y-2">
-            <MessageSquare className="w-8 h-8 text-slate-500 mx-auto" />
+          <div className="text-center py-12 bg-brand-green rounded-3xl border border-white/20 p-8 space-y-2">
+            <MessageSquare className="w-8 h-8 text-white/80 mx-auto" />
             <h4 className="font-bold text-white text-sm">No Customer Reviews Submitted Yet</h4>
-            <p className="text-xs text-slate-400">Reviews submitted by customers on product pages will appear here for moderation.</p>
+            <p className="text-xs text-white/80">Reviews submitted by customers on product pages will appear here for moderation.</p>
           </div>
         )}
       </div>

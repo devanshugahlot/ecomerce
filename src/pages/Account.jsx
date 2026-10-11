@@ -127,7 +127,7 @@ export const Account = () => {
       {/* Header Profile Summary */}
       <div className="bg-white p-6 sm:p-8 rounded-2xl border border-neutral-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-2xs">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-black text-white font-heading font-black text-2xl flex items-center justify-center shadow-xs">
+          <div className="w-16 h-16 rounded-2xl bg-brand-green text-white font-heading font-black text-2xl flex items-center justify-center shadow-xs">
             {user.name ? user.name[0].toUpperCase() : 'U'}
           </div>
           <div>
@@ -159,7 +159,7 @@ export const Account = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all min-h-[44px] ${
                   isActive
-                    ? 'bg-black text-white shadow-xs'
+                    ? 'bg-brand-green text-white shadow-xs'
                     : 'text-neutral-600 hover:bg-neutral-50 hover:text-black'
                 }`}
               >
@@ -236,7 +236,7 @@ export const Account = () => {
                               const isPassed = idx <= currentIdx;
                               return (
                                 <div key={step} className="space-y-1">
-                                  <div className={`h-1.5 rounded-full ${isPassed ? 'bg-black' : 'bg-neutral-200'}`}></div>
+                                  <div className={`h-1.5 rounded-full ${isPassed ? 'bg-brand-green' : 'bg-neutral-200'}`}></div>
                                   <span className={isPassed ? 'text-black font-bold' : 'text-neutral-400'}>{step}</span>
                                 </div>
                               );
@@ -317,7 +317,7 @@ export const Account = () => {
                 {addresses.map((addr) => (
                   <div key={addr.id} className="p-5 rounded-2xl bg-neutral-50 border border-neutral-200 space-y-2 relative">
                     {addr.isDefault && (
-                      <span className="text-[10px] font-bold text-white bg-black px-2.5 py-0.5 rounded-full inline-block">
+                      <span className="text-[10px] font-bold text-white bg-brand-green px-2.5 py-0.5 rounded-full inline-block">
                         Default Shipping Address
                       </span>
                     )}

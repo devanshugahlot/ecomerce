@@ -33,21 +33,21 @@ export const ToastProvider = ({ children }) => {
               exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
               className={`pointer-events-auto flex items-center justify-between p-4 rounded-xl shadow-2xl border backdrop-blur-md text-sm font-medium ${
                 toast.type === 'success'
-                  ? 'bg-dark-500/95 border-brand-500/50 text-white shadow-glow'
+                  ? 'bg-brand-green/95 border-emerald-400/40 text-white shadow-glow'
                   : toast.type === 'error'
-                  ? 'bg-dark-500/95 border-red-500/50 text-red-200'
-                  : 'bg-dark-500/95 border-dark-300 text-slate-200'
+                  ? 'bg-brand-green/95 border-red-500/50 text-white'
+                  : 'bg-brand-green/95 border-brand-greenDark text-white'
               }`}
             >
               <div className="flex items-center gap-3">
-                {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-brand-500 shrink-0" />}
+                {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />}
                 {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />}
-                {toast.type === 'info' && <Info className="w-5 h-5 text-brand-400 shrink-0" />}
-                <span>{toast.message}</span>
+                {toast.type === 'info' && <Info className="w-5 h-5 text-emerald-300 shrink-0" />}
+                <span className="text-white">{toast.message}</span>
               </div>
               <button
                 onClick={() => removeToast(toast.id)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg transition-colors ml-2"
+                className="text-white/80 hover:text-white p-1 rounded-lg transition-colors ml-2"
               >
                 <X className="w-4 h-4" />
               </button>

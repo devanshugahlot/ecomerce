@@ -17,7 +17,7 @@ export const WhatsAppFloat = () => {
       <button
         onClick={handleOpenConsult}
         aria-label="Contact us on WhatsApp"
-        className="w-13 h-13 rounded-full bg-black hover:bg-neutral-800 text-white flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 shrink-0 relative border border-neutral-700 min-h-[48px] min-w-[48px]"
+        className="w-13 h-13 rounded-full bg-brand-green hover:bg-brand-greenDark text-white flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 shrink-0 relative border border-brand-greenDark min-h-[48px] min-w-[48px]"
       >
         <svg
           className="w-7 h-7 fill-current text-white"

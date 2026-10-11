@@ -220,7 +220,7 @@ export const Checkout = () => {
           <div className="bg-white rounded-2xl p-6 border border-neutral-200 space-y-4 shadow-2xs">
             <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
               <h2 className="font-heading font-bold text-lg text-black flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-black text-white font-black text-xs flex items-center justify-center">1</span>
+                <span className="w-6 h-6 rounded-full bg-brand-green text-white font-black text-xs flex items-center justify-center">1</span>
                 Shipping Address
               </h2>
               {step > 1 && (
@@ -307,7 +307,7 @@ export const Checkout = () => {
             <div className="bg-white rounded-2xl p-6 border border-neutral-200 space-y-4 shadow-2xs">
               <div className="border-b border-neutral-100 pb-3">
                 <h2 className="font-heading font-bold text-lg text-black flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-black text-white font-black text-xs flex items-center justify-center">2</span>
+                  <span className="w-6 h-6 rounded-full bg-brand-green text-white font-black text-xs flex items-center justify-center">2</span>
                   Payment Method
                 </h2>
               </div>
@@ -329,7 +329,7 @@ export const Checkout = () => {
                   <p className="text-xs text-neutral-600 font-medium">
                     UPI (Google Pay, PhonePe, Paytm), Cards & NetBanking.
                   </p>
-                  <span className="inline-block text-[10px] text-white font-bold bg-black px-2.5 py-0.5 rounded-full">
+                  <span className="inline-block text-[10px] text-white font-bold bg-brand-green px-2.5 py-0.5 rounded-full">
                     Instant Confirmation
                   </span>
                 </div>

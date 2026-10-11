@@ -102,7 +102,7 @@ export const Navbar = ({ onOpenSearch }) => {
               <div className="relative" onMouseLeave={() => setUserDropdown(false)}>
                 <button
                   onClick={() => setUserDropdown(!userDropdown)}
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black text-white font-bold text-xs flex items-center justify-center shadow-xs focus:outline-none min-h-[44px] min-w-[44px]"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-brand-green text-white font-bold text-xs flex items-center justify-center shadow-xs focus:outline-none min-h-[44px] min-w-[44px]"
                   aria-label="User Menu"
                 >
                   {user?.name ? user.name[0].toUpperCase() : 'U'}
@@ -141,7 +141,7 @@ export const Navbar = ({ onOpenSearch }) => {
             >
               <ShoppingBag className="w-5 h-5 sm:w-5.5 sm:h-5.5 stroke-[1.8]" />
               {itemCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-black text-white text-[10px] font-extrabold flex items-center justify-center">
+                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-brand-green text-white text-[10px] font-extrabold flex items-center justify-center">
                   {itemCount}
                 </span>
               )}

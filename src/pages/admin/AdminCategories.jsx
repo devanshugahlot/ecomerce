@@ -93,16 +93,16 @@ export const AdminCategories = () => {
   };
 
   return (
-    <div className="space-y-6 bg-dark-900 min-h-screen p-2 sm:p-6 text-slate-100">
+    <div className="space-y-6 bg-brand-green min-h-screen p-2 sm:p-6 text-white">
       <SEO title="Admin — Categories Management" />
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-dark-800 p-6 rounded-3xl border border-dark-600 shadow-2xl">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-brand-green p-6 rounded-3xl border border-white/20 shadow-2xl">
         <div>
           <h1 className="text-2xl font-extrabold text-white flex items-center gap-2.5">
             <FolderTree className="w-7 h-7 text-white" />
             Website Categories ({categories.length})
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-white/80 mt-1">
             Categories start empty. Any category created here will automatically display on the website!
           </p>
         </div>
@@ -121,9 +121,9 @@ export const AdminCategories = () => {
         {categories.map((c) => {
           const cId = c.id || c._id || c.slug;
           return (
-            <div key={cId} className="p-5 rounded-3xl bg-dark-800 border border-dark-600 space-y-4 shadow-xl flex flex-col justify-between">
+            <div key={cId} className="p-5 rounded-3xl bg-brand-green border border-white/20 space-y-4 shadow-xl flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-dark-700 border border-dark-600 relative">
+                <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-brand-greenDark border border-white/20 relative">
                   {c.image ? (
                     <img
                       src={c.image}
@@ -131,12 +131,12 @@ export const AdminCategories = () => {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-slate-500">
+                    <div className="w-full h-full flex items-center justify-center text-white/80">
                       <ImageIcon className="w-8 h-8" />
                     </div>
                   )}
                   {c.badge && ['NEW', 'POPULAR', 'BEST SELLER'].includes(c.badge.trim().toUpperCase()) && (
-                    <span className="absolute top-2 left-2 bg-black text-white border border-white/20 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">
+                    <span className="absolute top-2 left-2 bg-brand-green text-white border border-white/20 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">
                       {c.badge.trim().toUpperCase()}
                     </span>
                   )}
@@ -144,14 +144,14 @@ export const AdminCategories = () => {
 
                 <div>
                   <h3 className="font-extrabold text-base text-white">{c.name}</h3>
-                  <p className="text-[11px] text-slate-400 font-mono">Slug: {c.slug || c.name}</p>
+                  <p className="text-[11px] text-white/80 font-mono">Slug: {c.slug || c.name}</p>
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-dark-600">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-white/20">
                 <button
                   onClick={() => handleOpenEdit(c)}
-                  className="p-2 rounded-xl bg-dark-700 hover:bg-dark-600 text-white border border-dark-600 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="p-2 rounded-xl bg-brand-greenDark hover:bg-brand-green text-white border border-white/20 min-h-[44px] min-w-[44px] flex items-center justify-center"
                   title="Edit Category"
                 >
                   <Edit2 className="w-4 h-4" />
@@ -169,66 +169,66 @@ export const AdminCategories = () => {
         })}
 
         {categories.length === 0 && (
-          <div className="col-span-full text-center py-12 bg-dark-800 rounded-3xl border border-dark-600 p-8 space-y-2">
-            <FolderTree className="w-10 h-10 text-slate-500 mx-auto" />
+          <div className="col-span-full text-center py-12 bg-brand-green rounded-3xl border border-white/20 p-8 space-y-2">
+            <FolderTree className="w-10 h-10 text-white/80 mx-auto" />
             <h4 className="font-bold text-white text-base">No Categories Created Yet</h4>
-            <p className="text-xs text-slate-400">Click "+ Add New Category" above to create categories from your device.</p>
+            <p className="text-xs text-white/80">Click "+ Add New Category" above to create categories from your device.</p>
           </div>
         )}
       </div>
 
       {/* Add / Edit Category Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-dark-900/80 backdrop-blur-md">
-          <div className="bg-dark-800 border border-dark-600 rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-6 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-dark-600 pb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+          <div className="bg-brand-green border border-white/20 rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-white/20 pb-4">
               <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-white" />
                 {editingId ? 'Edit Category' : 'Add New Category'}
               </h2>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-white p-1">
+              <button onClick={() => setShowModal(false)} className="text-white/80 hover:text-white p-1">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Category Name</label>
+                <label className="block text-white font-semibold mb-1">Category Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Sexual Wellness"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
+                  className="w-full bg-brand-greenDark border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-white min-h-[44px]"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Badge Tag</label>
+                <label className="block text-white font-semibold mb-1">Badge Tag</label>
                 <select
                   value={form.badge}
                   onChange={(e) => setForm({ ...form, badge: e.target.value })}
-                  className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
+                  className="w-full bg-brand-greenDark border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
                 >
-                  <option value="">None (No badge)</option>
-                  <option value="NEW">NEW</option>
-                  <option value="POPULAR">POPULAR</option>
-                  <option value="BEST SELLER">BEST SELLER</option>
+                  <option value="" className="bg-brand-greenDark text-white">None (No badge)</option>
+                  <option value="NEW" className="bg-brand-greenDark text-white">NEW</option>
+                  <option value="POPULAR" className="bg-brand-greenDark text-white">POPULAR</option>
+                  <option value="BEST SELLER" className="bg-brand-greenDark text-white">BEST SELLER</option>
                 </select>
               </div>
 
               {/* Upload Category Image from Device */}
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Upload Category Image From Device</label>
-                <div className="border-2 border-dashed border-dark-600 rounded-2xl p-4 text-center bg-dark-700/60 relative">
+                <label className="block text-white font-semibold mb-1">Upload Category Image From Device</label>
+                <div className="border-2 border-dashed border-white/20 rounded-2xl p-4 text-center bg-brand-greenDark/60 relative">
                   {form.image ? (
                     <div className="flex flex-col items-center gap-2">
-                      <img src={form.image} alt="Preview" className="w-20 h-20 object-cover rounded-xl border border-dark-600" />
+                      <img src={form.image} alt="Preview" className="w-20 h-20 object-cover rounded-xl border border-white/20" />
                       <span className="text-[11px] text-white font-bold">Image selected! Click below to change file.</span>
                     </div>
                   ) : (
-                    <div className="space-y-1 text-slate-400">
+                    <div className="space-y-1 text-white/80">
                       <ImageIcon className="w-8 h-8 text-white mx-auto" />
                       <p className="text-xs">No image selected from device</p>
                     </div>
@@ -247,12 +247,12 @@ export const AdminCategories = () => {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-dark-600">
+              <div className="flex justify-end gap-3 pt-4 border-t border-white/20">
                 <button
                   type="button"
                   disabled={isSaving}
                   onClick={() => setShowModal(false)}
-                  className="px-5 py-3 rounded-full bg-dark-700 text-slate-300 font-bold disabled:opacity-50 min-h-[44px]"
+                  className="px-5 py-3 rounded-full bg-brand-greenDark text-white/80 hover:text-white font-bold disabled:opacity-50 min-h-[44px] border border-white/20"
                 >
                   Cancel
                 </button>

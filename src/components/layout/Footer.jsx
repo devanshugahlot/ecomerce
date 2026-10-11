@@ -19,48 +19,48 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="bg-black text-white pt-16 pb-24 lg:pb-12 text-xs border-t border-neutral-900">
+    <footer className="bg-brand-green text-white pt-16 pb-24 lg:pb-12 text-xs border-t border-brand-greenDark">
       <div className="max-w-[1536px] mx-auto px-4 sm:px-8 space-y-12">
         
         {/* Top Feature Highlights Strip */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pb-12 border-b border-neutral-800">
-          <div className="flex items-start gap-4 p-4 rounded-2xl bg-neutral-900/60 border border-neutral-800">
-            <div className="p-3 rounded-xl bg-neutral-800 text-white shrink-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pb-12 border-b border-white/10">
+          <div className="flex items-start gap-4 p-4 rounded-2xl bg-brand-greenDark/60 border border-white/10">
+            <div className="p-3 rounded-xl bg-brand-greenDark text-white shrink-0">
               <PackageCheck className="w-5 h-5" />
             </div>
             <div className="space-y-0.5">
               <h4 className="font-heading font-bold text-sm text-white">100% Plain Box Packaging</h4>
-              <p className="text-xs text-neutral-400 font-medium">Plain unmarked box with zero product names printed.</p>
+              <p className="text-xs text-white/80 font-medium">Plain unmarked box with zero product names printed.</p>
             </div>
           </div>
 
-          <div className="flex items-start gap-4 p-4 rounded-2xl bg-neutral-900/60 border border-neutral-800">
-            <div className="p-3 rounded-xl bg-neutral-800 text-white shrink-0">
+          <div className="flex items-start gap-4 p-4 rounded-2xl bg-brand-greenDark/60 border border-white/10">
+            <div className="p-3 rounded-xl bg-brand-greenDark text-white shrink-0">
               <Truck className="w-5 h-5" />
             </div>
             <div className="space-y-0.5">
               <h4 className="font-heading font-bold text-sm text-white">Free & Fast Dispatch</h4>
-              <p className="text-xs text-neutral-400 font-medium">Dispatched within 24 hours in plain unbranded boxes.</p>
+              <p className="text-xs text-white/80 font-medium">Dispatched within 24 hours in plain unbranded boxes.</p>
             </div>
           </div>
 
-          <div className="flex items-start gap-4 p-4 rounded-2xl bg-neutral-900/60 border border-neutral-800">
-            <div className="p-3 rounded-xl bg-neutral-800 text-white shrink-0">
+          <div className="flex items-start gap-4 p-4 rounded-2xl bg-brand-greenDark/60 border border-white/10">
+            <div className="p-3 rounded-xl bg-brand-greenDark text-white shrink-0">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div className="space-y-0.5">
               <h4 className="font-heading font-bold text-sm text-white">Quality Certified</h4>
-              <p className="text-xs text-neutral-400 font-medium">Manufactured in certified quality facilities.</p>
+              <p className="text-xs text-white/80 font-medium">Manufactured in certified quality facilities.</p>
             </div>
           </div>
 
-          <div className="flex items-start gap-4 p-4 rounded-2xl bg-neutral-900/60 border border-neutral-800">
-            <div className="p-3 rounded-xl bg-neutral-800 text-white shrink-0">
+          <div className="flex items-start gap-4 p-4 rounded-2xl bg-brand-greenDark/60 border border-white/10">
+            <div className="p-3 rounded-xl bg-brand-greenDark text-white shrink-0">
               <Lock className="w-5 h-5" />
             </div>
             <div className="space-y-0.5">
               <h4 className="font-heading font-bold text-sm text-white">Secure Payments & COD</h4>
-              <p className="text-xs text-neutral-400 font-medium">UPI, Cards & Cash on Delivery available.</p>
+              <p className="text-xs text-white/80 font-medium">UPI, Cards & Cash on Delivery available.</p>
             </div>
           </div>
         </div>
@@ -79,12 +79,12 @@ export const Footer = () => {
               </span>
             </Link>
             
-            <p className="text-xs text-neutral-400 max-w-sm leading-relaxed font-medium">
+            <p className="text-xs text-white/80 max-w-sm leading-relaxed font-medium">
               Premium men's wellness formulations. Delivering pure botanical extracts, Himalayan Shilajit resin, and wellness solutions discreetly to your doorstep.
             </p>
 
             <form onSubmit={handleSubscribe} className="space-y-2 pt-2 max-w-sm">
-              <label className="text-[11px] font-bold uppercase text-neutral-400 tracking-wider block">
+              <label className="text-[11px] font-bold uppercase text-white/80 tracking-wider block">
                 Get 10% OFF Code (Use Code: HYPRIL10)
               </label>
               <div className="flex flex-col sm:flex-row gap-2">
@@ -93,7 +93,7 @@ export const Footer = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email address"
-                  className="flex-1 bg-black border border-white rounded-full px-4 py-2.5 text-xs text-white placeholder-neutral-400 focus:outline-none focus:ring-1 focus:ring-white min-h-[44px]"
+                  className="flex-1 bg-brand-greenDark border border-white/40 rounded-full px-4 py-2.5 text-xs text-white placeholder-white/70 focus:outline-none focus:ring-1 focus:ring-white min-h-[44px]"
                 />
                 <button type="submit" className="bg-white hover:bg-neutral-200 text-black py-2.5 px-6 text-xs font-bold rounded-full shrink-0 transition-colors min-h-[44px]">
                   Subscribe
@@ -105,7 +105,7 @@ export const Footer = () => {
           {/* Column 1: Shop */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold text-white uppercase tracking-wider">Shop Categories</h4>
-            <ul className="space-y-2 font-medium text-neutral-400">
+            <ul className="space-y-2 font-medium text-white/80">
               <li><Link to="/shop" className="hover:text-white transition-colors">All Products</Link></li>
               <li><Link to="/shop?category=Performance" className="hover:text-white transition-colors">Performance & Shilajit</Link></li>
               <li><Link to="/shop?category=Daily" className="hover:text-white transition-colors">Daily Wellness</Link></li>
@@ -116,7 +116,7 @@ export const Footer = () => {
           {/* Column 2: Customer Support */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold text-white uppercase tracking-wider">Customer Care</h4>
-            <ul className="space-y-2 font-medium text-neutral-400">
+            <ul className="space-y-2 font-medium text-white/80">
               <li><a href="#contact" className="hover:text-white transition-colors">Contact Support</a></li>
               <li><Link to="/account" className="hover:text-white transition-colors">Track Your Order</Link></li>
               <li><a href="#faq" className="hover:text-white transition-colors">Privacy & FAQs</a></li>
@@ -127,14 +127,14 @@ export const Footer = () => {
           {/* Column 3: Contact & Address */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold text-white uppercase tracking-wider">Contact Us</h4>
-            <div className="space-y-2 text-neutral-400 font-medium">
+            <div className="space-y-2 text-white/80 font-medium">
               <p className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-white" /> support@hypril.com
               </p>
               <p className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-white" /> +91 1800-HYPRIL-CARE
               </p>
-              <p className="pt-1 text-[11px] text-neutral-500 leading-tight">
+              <p className="pt-1 text-[11px] text-white/75 leading-tight">
                 Hypril Healthcare Pvt. Ltd.<br />
                 Bengaluru, Karnataka, India.
               </p>
@@ -143,7 +143,7 @@ export const Footer = () => {
         </div>
 
         {/* Legal Disclaimer */}
-        <div className="pt-8 border-t border-neutral-800 text-[10px] text-neutral-500 leading-relaxed space-y-2">
+        <div className="pt-8 border-t border-white/10 text-[10px] text-white/75 leading-relaxed space-y-2">
           <p>
             <strong>Medical Disclaimer:</strong> Formulations and dietary supplements have been evaluated for safety. Products are intended for adult wellness enhancement. Consult a physician if you have specific medical concerns.
           </p>
@@ -153,9 +153,9 @@ export const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-6 border-t border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-neutral-400 font-medium">
+        <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-white/80 font-medium">
           <p>© {new Date().getFullYear()} Hypril. All rights reserved. Free & Discreet Delivery.</p>
-          <div className="flex items-center gap-3 text-neutral-300 font-medium">
+          <div className="flex items-center gap-3 text-white/80 font-medium">
             <span>UPI / GPay / Paytm</span>
             <span>•</span>
             <span>Cards</span>

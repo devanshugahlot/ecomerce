@@ -103,7 +103,7 @@ export const ReviewsSection = ({ productId }) => {
               <div key={bar.stars} className="flex items-center gap-2">
                 <span className="w-10 text-[11px] font-bold text-neutral-500">{bar.stars}</span>
                 <div className="flex-1 h-2 bg-neutral-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-neutral-900 rounded-full" style={{ width: bar.pct }}></div>
+                  <div className="h-full bg-brand-green rounded-full" style={{ width: bar.pct }}></div>
                 </div>
                 <span className="w-8 text-right text-[11px] text-neutral-400">{bar.pct}</span>
               </div>
@@ -187,7 +187,7 @@ export const ReviewsSection = ({ productId }) => {
           <div className="relative max-w-lg w-full bg-white rounded-2xl overflow-hidden p-2">
             <button
               onClick={() => setPreviewModalImg(null)}
-              className="absolute top-4 right-4 bg-black/60 text-white rounded-full p-2 hover:bg-black"
+              className="absolute top-4 right-4 bg-brand-greenDark/80 text-white rounded-full p-2 hover:bg-brand-greenDark"
             >
               <X className="w-5 h-5" />
             </button>

@@ -13,15 +13,15 @@ export const AnnouncementBar = () => {
   const marqueeItems = [...items, ...items, ...items, ...items];
 
   return (
-    <div className="bg-black text-white py-2.5 overflow-hidden border-b border-neutral-900 relative z-40 select-none">
+    <div className="bg-brand-green text-white py-2.5 overflow-hidden border-b border-brand-greenDark relative z-40 select-none">
       <div className="animate-marquee flex items-center">
         {marqueeItems.map((item, index) => {
           const Icon = item.icon;
           return (
             <div key={index} className="flex items-center gap-2.5 mx-6 shrink-0 text-xs font-medium tracking-wide">
-              <Icon className="w-3.5 h-3.5 text-neutral-300 shrink-0" />
+              <Icon className="w-3.5 h-3.5 text-white/80 shrink-0" />
               <span className="text-white font-medium">{item.text}</span>
-              <span className="text-neutral-600 ml-4">•</span>
+              <span className="text-white/40 ml-4">•</span>
             </div>
           );
         })}

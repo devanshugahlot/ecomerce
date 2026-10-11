@@ -117,7 +117,7 @@ export const Home = () => {
 
             {/* Black Shop Now button (kept because the banner image has no button) */}
             <div className={`absolute bottom-2 left-3 sm:bottom-2.5 sm:left-5 md:bottom-4 md:left-6 pointer-events-none ${siteBanners?.heroBannerMobile ? 'flex' : 'hidden sm:flex'}`}>
-              <span className="bg-black hover:bg-neutral-800 text-white font-bold px-3.5 py-1.5 sm:px-5 sm:py-2 md:px-7 md:py-2.5 rounded-full inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs md:text-sm tracking-wide shadow-xl border border-white/20 transition-transform active:scale-[0.98]">
+              <span className="bg-brand-green hover:bg-brand-greenDark text-white font-bold px-3.5 py-1.5 sm:px-5 sm:py-2 md:px-7 md:py-2.5 rounded-full inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs md:text-sm tracking-wide shadow-xl border border-white/20 transition-transform active:scale-[0.98]">
                 <span>Shop Now</span>
                 <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
               </span>
@@ -148,7 +148,7 @@ export const Home = () => {
                     }}
                     className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap min-h-[36px] ${
                       selectedBestsellerCategory === cat
-                        ? 'bg-black text-white shadow-xs'
+                        ? 'bg-brand-green text-white shadow-xs'
                         : 'bg-[#F5F5F5] text-neutral-800 hover:bg-[#E5E5E5]'
                     }`}
                   >
@@ -168,7 +168,7 @@ export const Home = () => {
                   </button>
                   <button
                     onClick={handleNextBestseller}
-                    className="w-10 h-10 rounded-full border border-black bg-black text-white flex items-center justify-center hover:bg-neutral-800 transition-colors"
+                    className="w-10 h-10 rounded-full border border-brand-green bg-brand-green text-white flex items-center justify-center hover:bg-brand-greenDark transition-colors"
                     aria-label="Next bestsellers"
                   >
                     <ChevronRight className="w-5 h-5" />
@@ -197,10 +197,10 @@ export const Home = () => {
 
       {/* SECTION 3: YOUR NIGHT, YOUR RULES SUMMARY BAR */}
       <section className="max-w-[1536px] mx-auto px-4 sm:px-8">
-        <div className="bg-black text-white rounded-2xl sm:rounded-3xl p-6 sm:p-10 text-center space-y-2 border border-neutral-900 shadow-sm">
-          <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">PREMIUM WELLNESS</span>
+        <div className="bg-brand-green text-white rounded-2xl sm:rounded-3xl p-6 sm:p-10 text-center space-y-2 border border-brand-greenDark shadow-sm">
+          <span className="text-xs font-bold uppercase tracking-widest text-white/80">PREMIUM WELLNESS</span>
           <h2 className="text-2xl sm:text-3xl font-heading font-black">Your Night, Your Rules.</h2>
-          <p className="text-xs sm:text-sm text-neutral-300 max-w-lg mx-auto font-medium">
+          <p className="text-xs sm:text-sm text-white/80 max-w-lg mx-auto font-medium">
             100% Plain Box Discreet Packaging Across India
           </p>
         </div>
@@ -324,7 +324,7 @@ export const Home = () => {
             />
             <button
               type="submit"
-              className="btn-primary bg-black hover:bg-neutral-800 text-white text-xs font-bold py-3 px-8 rounded-full min-h-[48px] shrink-0"
+              className="btn-primary bg-brand-green hover:bg-brand-greenDark text-white text-xs font-bold py-3 px-8 rounded-full min-h-[48px] shrink-0"
             >
               Subscribe
             </button>
