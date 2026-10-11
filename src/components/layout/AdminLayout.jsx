@@ -19,6 +19,77 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { BRAND_NAME } from '../../utils/constants';
 
+class AdminErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("Admin Error Boundary Caught:", error, errorInfo);
+  }
+
+  resetError = () => {
+    this.setState({ hasError: false, error: null });
+  };
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="bg-dark-800 border border-red-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 max-w-2xl mx-auto my-8">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center shrink-0">
+              <ShieldAlert className="w-6 h-6" />
+            </div>
+            <div className="space-y-1 flex-1">
+              <h2 className="text-lg font-bold text-white">Something went wrong in this section</h2>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                An unexpected display error occurred while rendering this admin screen. You can retry or navigate to another section using the sidebar.
+              </p>
+            </div>
+          </div>
+
+          {this.state.error && (
+            <div className="bg-dark-900/80 border border-dark-600 rounded-2xl p-4 text-left">
+              <p className="text-[10px] uppercase font-bold text-slate-400 mb-1">Error Details</p>
+              <p className="text-xs font-mono text-red-400 break-words">
+                {this.state.error?.toString() || 'Unknown runtime error'}
+              </p>
+            </div>
+          )}
+
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <button
+              onClick={this.resetError}
+              className="px-5 py-2.5 rounded-full bg-amber-500 hover:bg-amber-600 text-dark-900 font-extrabold text-xs transition-colors min-h-[44px]"
+            >
+              Try Again
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-5 py-2.5 rounded-full bg-dark-700 hover:bg-dark-600 text-slate-200 font-bold text-xs transition-colors border border-dark-600 min-h-[44px]"
+            >
+              Reload Page
+            </button>
+            <Link
+              to="/admin"
+              onClick={this.resetError}
+              className="px-5 py-2.5 rounded-full bg-dark-700 hover:bg-dark-600 text-slate-200 font-bold text-xs transition-colors border border-dark-600 min-h-[44px] inline-flex items-center"
+            >
+              Back to Dashboard
+            </Link>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export const AdminLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -173,7 +244,9 @@ export const AdminLayout = () => {
 
         {/* Page Content Outlet */}
         <div className="p-4 sm:p-6 flex-1 max-w-7xl w-full mx-auto min-w-0">
-          <Outlet />
+          <AdminErrorBoundary key={location.pathname}>
+            <Outlet />
+          </AdminErrorBoundary>
         </div>
       </main>
     </div>

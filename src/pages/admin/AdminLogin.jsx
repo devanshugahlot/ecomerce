@@ -5,8 +5,8 @@ import { SEO } from '../../components/common/SEO';
 import { useAuth } from '../../context/AuthContext';
 
 export const AdminLogin = () => {
-  const [email, setEmail] = useState('admin@hypril.com');
-  const [password, setPassword] = useState('Admin@123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -68,12 +68,6 @@ export const AdminLogin = () => {
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
-
-        <div className="p-3.5 rounded-xl bg-dark-700/80 border border-dark-600 text-[11px] text-slate-300 space-y-1">
-          <p className="font-semibold text-amber-400">Demo Admin Credentials:</p>
-          <p>Email: <strong className="text-white">admin@hypril.com</strong></p>
-          <p>Password: <strong className="text-white">Admin@123</strong></p>
-        </div>
       </div>
     </div>
   );

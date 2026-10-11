@@ -7,6 +7,7 @@ import { useProducts } from '../../context/ProductContext';
 export const AdminCoupons = () => {
   const { coupons, addCoupon, toggleCouponStatus, deleteCoupon } = useProducts();
   const [code, setCode] = useState('');
+  const [discountType, setDiscountType] = useState('percentage');
   const [value, setValue] = useState('');
   const [minOrder, setMinOrder] = useState('');
   const [isCreating, setIsCreating] = useState(false);
