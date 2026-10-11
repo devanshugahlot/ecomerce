@@ -75,7 +75,7 @@ export const Home = () => {
     <div className="bg-white min-h-screen py-2 sm:py-4 space-y-6 sm:space-y-10 text-[#0A0A0A]">
       <SEO
         title={`${BRAND_NAME} — Premium Men's Wellness`}
-        description="Doctor-backed performance formulations. 100% discreet packaging, Cash on Delivery available."
+        description="Premium men's wellness formulations. 100% discreet packaging, Cash on Delivery available."
       />
 
       {/* 3. ROUND CATEGORY ICONS STRIP (REAL CATEGORIES) */}
@@ -185,7 +185,7 @@ export const Home = () => {
       {/* SECTION 3: YOUR NIGHT, YOUR RULES SUMMARY BAR */}
       <section className="max-w-[1536px] mx-auto px-4 sm:px-8">
         <div className="bg-black text-white rounded-2xl sm:rounded-3xl p-6 sm:p-10 text-center space-y-2 border border-neutral-900 shadow-sm">
-          <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">CLINICAL WELLNESS</span>
+          <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">PREMIUM WELLNESS</span>
           <h2 className="text-2xl sm:text-3xl font-heading font-black">Your Night, Your Rules.</h2>
           <p className="text-xs sm:text-sm text-neutral-300 max-w-lg mx-auto font-medium">
             100% Plain Box Discreet Packaging Across India
@@ -293,7 +293,7 @@ export const Home = () => {
             Stay in the loop with our weekly newsletter
           </h2>
           <p className="text-xs text-neutral-600 font-medium max-w-md mx-auto">
-            Get exclusive wellness tips, doctor guides, and special discount codes delivered straight to your inbox.
+            Get exclusive wellness tips, product guides, and special discount codes delivered straight to your inbox.
           </p>
 
           <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row max-w-md mx-auto gap-2 pt-2">

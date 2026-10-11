@@ -421,7 +421,7 @@ export const AdminProducts = () => {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Hypril™ Extended Delay Gel (50ml)"
+                  placeholder="e.g. Hypril Extended Delay Gel (50ml)"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"

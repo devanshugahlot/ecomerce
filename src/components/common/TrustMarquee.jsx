@@ -3,10 +3,9 @@ import { ShieldCheck, Truck, Users, Award, Lock } from 'lucide-react';
 
 const CLAIMS = [
   { icon: Truck, text: 'Free & Discreet Shipping across India' },
-  { icon: ShieldCheck, text: '100% AYUSH Formulated & Lab Tested' },
-  { icon: Users, text: 'Trusted by 50,000+ Verified Customers' },
-  { icon: Award, text: 'Doctor Recommended Formulations' },
+  { icon: ShieldCheck, text: '100% Plain Box Discreet Packaging' },
   { icon: Lock, text: 'Cash on Delivery (COD) Available' },
+  { icon: ShieldCheck, text: 'Secure Payments & Privacy Protected' },
 ];
 
 export const TrustMarquee = () => {

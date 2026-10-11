@@ -25,7 +25,7 @@ const demoCategories = [
 
 const demoProducts = [
   {
-    name: "Hypril™ Enlargement Oil (100ml)",
+    name: "Hypril Enlargement Oil (100ml)",
     slug: "hypril-enlargement-oil-100ml",
     category: "Enlargement Oils",
     price: 1299,
@@ -35,20 +35,20 @@ const demoProducts = [
     reviewCount: 328,
     isBestSeller: true,
     isFeatured: true,
-    benefitSummary: "Bigger size, stronger performance & improved blood flow for men.",
-    description: "Doctor-formulated Hypril™ Enlargement Oil (100ml) engineered with pure herbal botanical extracts to boost circulation, tissue responsiveness, and stamina during intimate moments.",
+    benefitSummary: "Stronger performance & improved blood flow for men.",
+    description: "Pure herbal botanical extracts formulation engineered to boost circulation, tissue responsiveness, and stamina during intimate moments.",
     images: ["/images/hypril_oil.jpg"],
     image: "/images/hypril_oil.jpg",
     ingredients: "Gokshura, Ashwagandha, Jaiphal Oil, Malkangani Oil, Clove Oil, Sesame Base Oil.",
     usage: "Take 5-10 drops, massage gently twice daily till fully absorbed.",
   },
   {
-    name: "Hypril™ Extended Delay Gel (50ml)",
+    name: "Hypril Extended Delay Gel (50ml)",
     slug: "hypril-extended-delay-gel-50ml",
     category: "Delay Gels",
     price: 999,
     comparePrice: 1499,
-    stock: 40,
+    stock: 50,
     rating: 4.95,
     reviewCount: 245,
     isBestSeller: true,
@@ -61,7 +61,7 @@ const demoProducts = [
     usage: "Apply small pump 10-15 minutes prior to intimate activity.",
   },
   {
-    name: "Hypril™ Surge Stamina Capsules (60 Caps)",
+    name: "Hypril Surge Stamina Capsules (60 Caps)",
     slug: "hypril-surge-stamina-capsules-60-caps",
     category: "Stamina Boosters",
     price: 1199,
@@ -71,15 +71,15 @@ const demoProducts = [
     reviewCount: 189,
     isBestSeller: true,
     isFeatured: true,
-    benefitSummary: "Natural energy, testosterone support & daily vitality booster.",
-    description: "Clinical grade herbal formulation designed for daily stamina, energy restoration, and vitality support.",
+    benefitSummary: "Natural energy, vitality & daily herbal support.",
+    description: "Herbal botanical formulation designed for daily stamina, energy restoration, and vitality support.",
     images: ["/images/cat_surge.png"],
     image: "/images/cat_surge.png",
     ingredients: "Shilajit, Safed Musli, Ashwagandha, Kaunch Beej.",
     usage: "Take 1 capsule twice daily with milk or water after meals.",
   },
   {
-    name: "Hypril™ Alpha Shilajit Gold Resin (20g)",
+    name: "Hypril Alpha Shilajit Gold Resin (20g)",
     slug: "hypril-alpha-shilajit-gold-resin-20g",
     category: "Stamina Boosters",
     price: 1499,
@@ -90,14 +90,14 @@ const demoProducts = [
     isBestSeller: true,
     isFeatured: true,
     benefitSummary: "100% pure Himalayan Shilajit resin with Gold Vark & Fulvic Acid 80%+.",
-    description: "Purified Himalayan Shilajit resin enriched with Swarna Bhasma for peak energy, stamina, and anti-fatigue performance.",
+    description: "Purified Himalayan Shilajit resin enriched with Swarna Bhasma for energy, stamina, and anti-fatigue support.",
     images: ["/images/cat_shilajit.png"],
     image: "/images/cat_shilajit.png",
     ingredients: "Pure Himalayan Shilajit, Swarna Bhasma (Gold Vark), Rajat Bhasma.",
     usage: "Dissolve pea-sized portion (300-500mg) in warm milk or tea daily.",
   },
   {
-    name: "Hypril™ Hair Regrowth Serum (60ml)",
+    name: "Hypril Hair Regrowth Serum (60ml)",
     slug: "hypril-hair-regrowth-serum-60ml",
     category: "Hair Care",
     price: 899,
@@ -144,19 +144,6 @@ export const seedData = async () => {
       console.log('✔ Admin user created');
     } else {
       console.log('✔ Admin user already exists');
-    }
-
-    // 2. Seed Customer User
-    const existingCustomer = await User.findOne({ email: 'user@hypril.com' });
-    if (!existingCustomer) {
-      await User.create({
-        name: 'Vikram Rao',
-        email: 'user@hypril.com',
-        phone: '+91 9876543211',
-        password: 'User@123',
-        role: 'user',
-      });
-      console.log('✔ Default customer user created');
     }
 
     // 3. Seed Categories

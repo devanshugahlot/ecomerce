@@ -5,8 +5,8 @@ export const AnnouncementBar = () => {
   const items = [
     { text: "Free & Discreet Delivery", icon: Truck },
     { text: "Cash on Delivery Available", icon: CheckCircle2 },
-    { text: "Secure Payments & 100% Privacy", icon: ShieldCheck },
-    { text: "Doctor-Backed Formulations", icon: Sparkles },
+    { text: "Secure Payments", icon: ShieldCheck },
+    { text: "100% Plain Box Packaging", icon: ShieldCheck },
   ];
 
   // Duplicate items array 4 times for seamless 100% infinite marquee loop

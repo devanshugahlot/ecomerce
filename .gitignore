@@ -9,5 +9,8 @@ db_store.json
 backend/data/
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
 .DS_Store
+screenshots/
+verify_redesign.cjs
+capture_detail.cjs
+*.cjs

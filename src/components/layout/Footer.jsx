@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { PackageCheck, ShieldCheck, Stethoscope, Lock, Mail, Phone } from 'lucide-react';
+import { PackageCheck, ShieldCheck, Truck, Lock, Mail, Phone } from 'lucide-react';
 import { useToast } from '../../context/ToastContext';
 import { BRAND_NAME } from '../../utils/constants';
 
@@ -36,11 +36,11 @@ export const Footer = () => {
 
           <div className="flex items-start gap-4 p-4 rounded-2xl bg-neutral-900/60 border border-neutral-800">
             <div className="p-3 rounded-xl bg-neutral-800 text-white shrink-0">
-              <Stethoscope className="w-5 h-5" />
+              <Truck className="w-5 h-5" />
             </div>
             <div className="space-y-0.5">
-              <h4 className="font-heading font-bold text-sm text-white">Doctor Formulated</h4>
-              <p className="text-xs text-neutral-400 font-medium">Standardized extracts & batch verified dosages.</p>
+              <h4 className="font-heading font-bold text-sm text-white">Free & Fast Dispatch</h4>
+              <p className="text-xs text-neutral-400 font-medium">Dispatched within 24 hours in plain unbranded boxes.</p>
             </div>
           </div>
 
@@ -80,7 +80,7 @@ export const Footer = () => {
             </Link>
             
             <p className="text-xs text-neutral-400 max-w-sm leading-relaxed font-medium">
-              Premium men's wellness formulations. Delivering doctor-backed botanical extracts, Shilajit resin, and performance solutions discreetly to your doorstep.
+              Premium men's wellness formulations. Delivering pure botanical extracts, Himalayan Shilajit resin, and wellness solutions discreetly to your doorstep.
             </p>
 
             <form onSubmit={handleSubscribe} className="space-y-2 pt-2 max-w-sm">

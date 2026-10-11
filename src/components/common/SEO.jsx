@@ -8,8 +8,8 @@ export const SEO = ({
   noIndex = false,
   jsonLd = null
 }) => {
-  const defaultTitle = "Hypril: Premium Men's Sexual Wellness, Enlargement Oil & Delay Gel in India";
-  const defaultDesc = "Shop doctor-formulated Hypril Enlargement Oil & Extended Delay Gel online in India. 100% discreet shipping, cash on delivery & clinical grade formula.";
+  const defaultTitle = "Hypril: Premium Men's Wellness, Enlargement Oil & Delay Gel in India";
+  const defaultDesc = "Shop Hypril Enlargement Oil & Extended Delay Gel online in India. 100% discreet shipping, cash on delivery & secure payments.";
 
   useEffect(() => {
     // 1. Page Title

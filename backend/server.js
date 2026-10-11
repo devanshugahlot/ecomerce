@@ -28,8 +28,30 @@ const app = express();
 
 // Performance & Security Middlewares
 app.use(compression());
+// Strict CORS: Frontend URL and localhost development ports only
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.FRONTEND_URL,
+  'http://localhost:5173',
+  'http://localhost:4173',
+  'http://localhost:3000',
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const isAllowed = allowedOrigins.some((allowed) => origin === allowed || origin.startsWith(allowed));
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} is not allowed by CORS policy`));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(helmet());
-app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ limit: '25mb', extended: true }));
 

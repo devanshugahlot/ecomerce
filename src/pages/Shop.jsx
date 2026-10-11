@@ -79,20 +79,20 @@ export const Shop = () => {
     <div className="bg-white min-h-screen py-6 space-y-6 text-[#0A0A0A]">
       <SEO
         title={`Buy ${BRAND_NAME} Formulations Online — Official Store`}
-        description="Browse doctor-backed performance catalog. Free discreet shipping & cash on delivery across India."
+        description="Browse premium men's wellness catalog. Free discreet shipping & cash on delivery across India."
       />
 
       {/* Header Banner Section Card */}
       <div className="section-card-float flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-[#F5F5F5] border border-[#E5E5E5]">
         <div className="space-y-2 max-w-xl">
           <span className="eyebrow-label text-[#6B6B6B]">
-            CLINICAL CATALOG
+            WELLNESS CATALOG
           </span>
           <h1 className="text-3xl sm:text-4xl font-heading font-black text-black">
             {BRAND_NAME} Storefront
           </h1>
           <p className="text-xs sm:text-sm text-neutral-600 font-medium flex items-center gap-1.5">
-            <PackageCheck className="w-4 h-4 text-black" /> Formulated with clinical ingredients. Delivered in plain unmarked boxes.
+            <PackageCheck className="w-4 h-4 text-black" /> Formulated with pure botanical extracts. Delivered in plain unmarked boxes.
           </p>
         </div>
 

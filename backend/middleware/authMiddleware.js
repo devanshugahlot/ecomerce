@@ -5,13 +5,11 @@ export const protect = (req, res, next) => {
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
       token = req.headers.authorization.split(' ')[1];
-      const jwtSecret = process.env.JWT_SECRET || 'hypril_super_secret_jwt_key_2026_mens_wellness';
-      let decoded;
-      try {
-        decoded = jwt.verify(token, jwtSecret);
-      } catch (err) {
-        decoded = jwt.verify(token, 'vyro_super_secret_jwt_key_2026_mens_wellness');
+      if (!process.env.JWT_SECRET) {
+        console.error('[Auth Error] JWT_SECRET environment variable is missing.');
+        return res.status(500).json({ message: 'Server configuration error: JWT_SECRET not configured' });
       }
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decoded;
       return next();
     } catch (error) {

@@ -46,9 +46,9 @@ export const TRUST_BADGES = [
     icon: "PackageCheck"
   },
   {
-    title: "Clinically Validated & Skin-Safe",
-    desc: "100% Dermatologically tested botanical & FDA approved formulas.",
-    icon: "Stethoscope"
+    title: "Pure Herbal Botanical Extracts",
+    desc: "Carefully formulated with natural herbs and skin-safe ingredients.",
+    icon: "ShieldCheck"
   },
   {
     title: "Fast 2-Day Express Shipping",

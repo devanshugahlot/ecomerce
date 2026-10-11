@@ -2,9 +2,12 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models/User.js';
 
 const generateToken = (id, role, name, email) => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET environment variable is not configured');
+  }
   return jwt.sign(
     { id: id.toString(), role, name, email },
-    process.env.JWT_SECRET || 'hypril_super_secret_jwt_key_2026_mens_wellness',
+    process.env.JWT_SECRET,
     { expiresIn: '30d' }
   );
 };

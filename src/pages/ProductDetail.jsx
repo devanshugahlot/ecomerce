@@ -51,7 +51,7 @@ export const ProductDetail = () => {
     return (
       <div className="min-h-[60vh] bg-white flex flex-col items-center justify-center p-8 text-center space-y-4">
         <div className="w-8 h-8 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-xs text-neutral-500 font-medium">Loading clinical formulation...</p>
+        <p className="text-xs text-neutral-500 font-medium">Loading product details...</p>
       </div>
     );
   }
