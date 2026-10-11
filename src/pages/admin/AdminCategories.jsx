@@ -135,9 +135,9 @@ export const AdminCategories = () => {
                       <ImageIcon className="w-8 h-8" />
                     </div>
                   )}
-                  {c.badge && (
+                  {c.badge && ['NEW', 'POPULAR', 'BEST SELLER'].includes(c.badge.trim().toUpperCase()) && (
                     <span className="absolute top-2 left-2 bg-black text-white border border-white/20 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">
-                      {c.badge}
+                      {c.badge.trim().toUpperCase()}
                     </span>
                   )}
                 </div>
@@ -205,14 +205,17 @@ export const AdminCategories = () => {
               </div>
 
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Badge Tag (e.g. HOT, NEW, POPULAR)</label>
-                <input
-                  type="text"
-                  placeholder="POPULAR"
+                <label className="block text-slate-300 font-semibold mb-1">Badge Tag</label>
+                <select
                   value={form.badge}
                   onChange={(e) => setForm({ ...form, badge: e.target.value })}
                   className="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white min-h-[44px]"
-                />
+                >
+                  <option value="">None (No badge)</option>
+                  <option value="NEW">NEW</option>
+                  <option value="POPULAR">POPULAR</option>
+                  <option value="BEST SELLER">BEST SELLER</option>
+                </select>
               </div>
 
               {/* Upload Category Image from Device */}

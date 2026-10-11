@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const bannerSchema = new mongoose.Schema(
   {
     heroBanner: { type: String, default: '' },
+    heroBannerMobile: { type: String, default: '' },
     promoBanner1: { type: String, default: '' },
   },
   { timestamps: true }

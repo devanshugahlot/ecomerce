@@ -19,7 +19,7 @@ dotenv.config();
 const demoCategories = [
   { name: 'Enlargement Oils', slug: 'enlargement-oils', badge: 'POPULAR', image: '/images/cat_shilajit.png' },
   { name: 'Delay Gels', slug: 'delay-gels', badge: 'BEST SELLER', image: '/images/cat_extend.png' },
-  { name: 'Stamina Boosters', slug: 'stamina-boosters', badge: 'CLINICAL', image: '/images/cat_surge.png' },
+  { name: 'Stamina Boosters', slug: 'stamina-boosters', badge: '', image: '/images/cat_surge.png' },
   { name: 'Hair Care', slug: 'hair-care', badge: 'NEW', image: '/images/cat_hair.png' },
 ];
 

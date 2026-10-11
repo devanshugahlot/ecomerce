@@ -6,7 +6,7 @@ const ProductContext = createContext();
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [siteBanners, setSiteBanners] = useState({ heroBanner: '', promoBanner1: '' });
+  const [siteBanners, setSiteBanners] = useState({ heroBanner: '', heroBannerMobile: '', promoBanner1: '' });
   const [coupons, setCoupons] = useState([]);
   const [orders, setOrders] = useState([]);
   const [reviews, setReviews] = useState([]);

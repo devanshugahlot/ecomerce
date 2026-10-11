@@ -20,9 +20,9 @@ export const CategoryScroll = ({ activeCategory, onSelectCategory }) => {
               onClick={() => onSelectCategory && onSelectCategory(isSelected ? 'All' : (cat.slug || cat.name))}
               className="flex flex-col items-center gap-1.5 group cursor-pointer text-center relative focus:outline-none"
             >
-              {cat.badge && (
+              {cat.badge && ['NEW', 'POPULAR', 'BEST SELLER'].includes(cat.badge.trim().toUpperCase()) && (
                 <span className="absolute -top-1 z-10 bg-black text-white text-[8px] font-black px-1.5 py-0.2 rounded-full uppercase tracking-tight scale-90">
-                  {cat.badge}
+                  {cat.badge.trim().toUpperCase()}
                 </span>
               )}
 
@@ -37,6 +37,10 @@ export const CategoryScroll = ({ activeCategory, onSelectCategory }) => {
                   <img
                     src={cat.image || '/images/cat_bestsellers.png'}
                     alt={cat.name}
+                    width="80"
+                    height="80"
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover rounded-full"
                     onError={(e) => {
                       e.target.onerror = null;
@@ -47,7 +51,7 @@ export const CategoryScroll = ({ activeCategory, onSelectCategory }) => {
               </div>
 
               <span
-                className={`text-[11px] sm:text-xs max-w-[72px] sm:max-w-[84px] truncate block transition-colors ${
+                className={`text-[11px] sm:text-xs max-w-[72px] sm:max-w-[100px] truncate sm:whitespace-normal sm:line-clamp-2 leading-tight block text-center transition-colors ${
                   isSelected ? 'text-black font-bold' : 'text-neutral-700 group-hover:text-black font-medium'
                 }`}
                 title={cat.name}

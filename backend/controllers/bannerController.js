@@ -6,11 +6,12 @@ export const getBanners = async (req, res) => {
     if (bannerDoc) {
       return res.json({
         heroBanner: bannerDoc.heroBanner || '',
+        heroBannerMobile: bannerDoc.heroBannerMobile || '',
         promoBanner1: bannerDoc.promoBanner1 || '',
       });
     }
 
-    return res.json({ heroBanner: '', promoBanner1: '' });
+    return res.json({ heroBanner: '', heroBannerMobile: '', promoBanner1: '' });
   } catch (error) {
     console.error('[Banner Controller Error - getBanners]:', error);
     res.status(500).json({ message: error.message || 'Failed to fetch site banners' });
@@ -29,6 +30,7 @@ export const updateBanners = async (req, res) => {
 
     return res.json({
       heroBanner: bannerDoc.heroBanner || '',
+      heroBannerMobile: bannerDoc.heroBannerMobile || '',
       promoBanner1: bannerDoc.promoBanner1 || '',
     });
   } catch (error) {

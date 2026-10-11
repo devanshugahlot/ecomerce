@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Package, Plus, Search, Edit3, Trash2, Check, X, Sparkles, Image as ImageIcon, Upload, Layers } from 'lucide-react';
 import { SEO } from '../../components/common/SEO';
 import { formatCurrency } from '../../utils/currency';
@@ -16,8 +16,19 @@ export const AdminProducts = () => {
 
   const [bannersForm, setBannersForm] = useState({
     heroBanner: siteBanners?.heroBanner || '',
+    heroBannerMobile: siteBanners?.heroBannerMobile || '',
     promoBanner1: siteBanners?.promoBanner1 || '',
   });
+
+  useEffect(() => {
+    if (siteBanners) {
+      setBannersForm({
+        heroBanner: siteBanners.heroBanner || '',
+        heroBannerMobile: siteBanners.heroBannerMobile || '',
+        promoBanner1: siteBanners.promoBanner1 || '',
+      });
+    }
+  }, [siteBanners]);
 
   const [form, setForm] = useState({
     name: '',
@@ -325,39 +336,99 @@ export const AdminProducts = () => {
           </div>
 
           <form onSubmit={handleSaveBanners} className="space-y-6">
-            {/* Hero Section Banner Image */}
-            <div className="space-y-3 p-5 bg-dark-700/60 rounded-2xl border border-dark-600">
-              <label className="block text-sm font-bold text-white">
-                1. Main Top Hero Banner Image
-              </label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Hero Section Banner Image (Desktop) */}
+              <div className="space-y-3 p-5 bg-dark-700/60 rounded-2xl border border-dark-600 flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-bold text-white">
+                      1. Main Top Hero Banner (Desktop)
+                    </label>
+                    <p className="text-[11px] text-slate-400 mt-0.5">
+                      Main banner image displayed on desktop & tablet screens.
+                    </p>
+                  </div>
 
-              {bannersForm.heroBanner ? (
-                <div className="aspect-[100/27] bg-dark-900 rounded-xl overflow-hidden border border-dark-600 relative">
-                  <img src={bannersForm.heroBanner} alt="Hero Banner Preview" className="w-full h-full object-cover" />
+                  {bannersForm.heroBanner ? (
+                    <div className="aspect-[100/36] bg-dark-900 rounded-xl overflow-hidden border border-dark-600 relative">
+                      <img src={bannersForm.heroBanner} alt="Hero Banner Preview" className="w-full h-full object-contain bg-black/30" />
+                    </div>
+                  ) : (
+                    <div className="p-8 border-2 border-dashed border-dark-500 rounded-xl text-center text-slate-400">
+                      <ImageIcon className="w-8 h-8 mx-auto mb-2 text-slate-500" />
+                      <p className="text-xs">No desktop image selected yet</p>
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <div className="p-8 border-2 border-dashed border-dark-500 rounded-xl text-center text-slate-400">
-                  <ImageIcon className="w-8 h-8 mx-auto mb-2 text-slate-500" />
-                  <p className="text-xs">No image selected from device yet</p>
-                </div>
-              )}
 
-              <label className="bg-white hover:bg-slate-200 text-black font-extrabold text-xs py-3 px-6 rounded-full cursor-pointer inline-flex items-center gap-2 shadow-md min-h-[44px]">
-                <Upload className="w-4 h-4" />
-                <span>Choose Hero Banner Image from Device</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleImageUpload(e, 'heroBanner')}
-                  className="hidden"
-                />
-              </label>
+                <div className="pt-2">
+                  <label className="bg-white hover:bg-slate-200 text-black font-extrabold text-xs py-3 px-6 rounded-full cursor-pointer inline-flex items-center gap-2 shadow-md min-h-[44px]">
+                    <Upload className="w-4 h-4" />
+                    <span>Choose Hero Banner Image</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, 'heroBanner')}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {/* Hero Section Banner Image (Mobile - Optional) */}
+              <div className="space-y-3 p-5 bg-dark-700/60 rounded-2xl border border-dark-600 flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <label className="block text-sm font-bold text-white">
+                        2. Mobile Hero Banner (Optional)
+                      </label>
+                      <p className="text-[11px] text-slate-400 mt-0.5">
+                        ~3:4 ratio. If empty, falls back to the desktop image.
+                      </p>
+                    </div>
+                    {bannersForm.heroBannerMobile && (
+                      <button
+                        type="button"
+                        onClick={() => setBannersForm((prev) => ({ ...prev, heroBannerMobile: '' }))}
+                        className="text-xs text-rose-400 hover:text-rose-300 font-semibold"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
+
+                  {bannersForm.heroBannerMobile ? (
+                    <div className="aspect-[3/4] max-h-[160px] mx-auto bg-dark-900 rounded-xl overflow-hidden border border-dark-600 relative">
+                      <img src={bannersForm.heroBannerMobile} alt="Mobile Banner Preview" className="w-full h-full object-contain bg-black/30" />
+                    </div>
+                  ) : (
+                    <div className="p-8 border-2 border-dashed border-dark-500 rounded-xl text-center text-slate-400">
+                      <ImageIcon className="w-8 h-8 mx-auto mb-2 text-slate-500" />
+                      <p className="text-xs">Optional: Falls back to desktop image</p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-2">
+                  <label className="bg-white hover:bg-slate-200 text-black font-extrabold text-xs py-3 px-6 rounded-full cursor-pointer inline-flex items-center gap-2 shadow-md min-h-[44px]">
+                    <Upload className="w-4 h-4" />
+                    <span>Choose Mobile Banner Image</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, 'heroBannerMobile')}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              </div>
             </div>
 
             {/* Promo Section Banner Image */}
             <div className="space-y-3 p-5 bg-dark-700/60 rounded-2xl border border-dark-600">
               <label className="block text-sm font-bold text-white">
-                2. Promo Section Banner Image
+                3. Promo Section Banner Image
               </label>
 
               {bannersForm.promoBanner1 ? (

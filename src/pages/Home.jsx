@@ -72,7 +72,7 @@ export const Home = () => {
   ];
 
   return (
-    <div className="bg-white min-h-screen py-2 sm:py-4 space-y-6 sm:space-y-10 text-[#0A0A0A]">
+    <div className="bg-white min-h-screen py-2 sm:py-3 space-y-4 sm:space-y-6 text-[#0A0A0A] overflow-x-hidden">
       <SEO
         title={`${BRAND_NAME} — Premium Men's Wellness`}
         description="Premium men's wellness formulations. 100% discreet packaging, Cash on Delivery available."
@@ -80,7 +80,7 @@ export const Home = () => {
 
       {/* 3. ROUND CATEGORY ICONS STRIP (REAL CATEGORIES) */}
       {categories && categories.length > 0 && (
-        <section className="max-w-[1536px] mx-auto">
+        <section className="max-w-[1400px] mx-auto px-4 sm:px-6">
           <CategoryScroll
             activeCategory={selectedBestsellerCategory}
             onSelectCategory={(cat) => setSelectedBestsellerCategory(cat)}
@@ -88,28 +88,41 @@ export const Home = () => {
         </section>
       )}
 
-      {/* 4. HERO BANNER: Tall on mobile (4:5 ratio) and wide on desktop */}
-      <section className="max-w-[1536px] mx-auto px-4 sm:px-8">
-        <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs border border-[#E5E5E5] bg-neutral-900 group">
-          <div className="w-full aspect-[4/5] sm:aspect-[16/7] lg:aspect-[21/9] max-h-[580px] overflow-hidden relative">
-            <img
-              src={siteBanners?.heroBanner || '/images/hero_banner.png'}
-              alt="Hypril Hero Banner"
-              className="w-full h-full object-cover object-center group-hover:scale-[1.01] transition-transform duration-500"
-            />
-            {/* Overlay with Shop Now button */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end p-6 sm:p-10">
-              <div className="space-y-3">
-                <Link
-                  to="/shop"
-                  className="bg-black hover:bg-neutral-800 text-white font-bold px-8 py-3.5 rounded-full inline-flex items-center gap-2 text-xs sm:text-sm tracking-wide shadow-lg border border-white/20 min-h-[48px] transition-all active:scale-[0.98]"
-                >
-                  <span>Shop Now</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
+      {/* 4. HERO BANNER: Centered container, natural ratio capped at 480px, no cropping */}
+      <section className="max-w-[1400px] mx-auto px-4 sm:px-6">
+        <div className="relative rounded-2xl sm:rounded-[20px] overflow-hidden shadow-xs border border-[#E5E5E5] bg-[#F5F5F5] group">
+          <Link to="/shop" className="block relative w-full overflow-hidden">
+            <picture className="w-full block">
+              {siteBanners?.heroBannerMobile ? (
+                <source
+                  media="(max-width: 767px)"
+                  srcSet={siteBanners.heroBannerMobile}
+                  width="600"
+                  height="800"
+                />
+              ) : null}
+              <img
+                src={siteBanners?.heroBanner || '/images/hero_banner.png'}
+                alt="Hypril Men's Wellness Hero Banner"
+                width="1200"
+                height="436"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                className={`w-full h-auto max-h-[480px] object-contain block mx-auto transition-transform duration-500 group-hover:scale-[1.008] ${
+                  siteBanners?.heroBannerMobile ? 'max-md:aspect-[3/4] max-md:object-cover' : ''
+                }`}
+              />
+            </picture>
+
+            {/* Black Shop Now button (kept because the banner image has no button) */}
+            <div className={`absolute bottom-2 left-3 sm:bottom-2.5 sm:left-5 md:bottom-4 md:left-6 pointer-events-none ${siteBanners?.heroBannerMobile ? 'flex' : 'hidden sm:flex'}`}>
+              <span className="bg-black hover:bg-neutral-800 text-white font-bold px-3.5 py-1.5 sm:px-5 sm:py-2 md:px-7 md:py-2.5 rounded-full inline-flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs md:text-sm tracking-wide shadow-xl border border-white/20 transition-transform active:scale-[0.98]">
+                <span>Shop Now</span>
+                <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" />
+              </span>
             </div>
-          </div>
+          </Link>
         </div>
       </section>
 
@@ -214,6 +227,8 @@ export const Home = () => {
                   <img
                     src={cat.image}
                     alt={cat.name}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 ) : (
@@ -240,6 +255,8 @@ export const Home = () => {
             <img
               src={siteBanners.promoBanner1}
               alt="Promo Banner"
+              loading="lazy"
+              decoding="async"
               className="w-full h-auto max-h-[320px] object-cover rounded-2xl sm:rounded-3xl group-hover:scale-[1.01] transition-transform duration-500"
             />
           </Link>
